@@ -1,0 +1,7 @@
+drwxr-xr-x  4 fred  staff  136 Mar  1 15:35 src
+bin
+.metadata
+*~
+target/
+.DS_Store
+._*
