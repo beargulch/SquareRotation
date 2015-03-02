@@ -47,34 +47,34 @@ Singles Square Rotation Notes
 
     <li>Present
 
-    <p>This check box is used to indicate whether a dancer is currently present and available to dance.  The value of
-    “Present” can be changed here, or can also be changed on the main dancer screen.</p></li><br/>
+    <p>This check box is used to indicate whether a dancer is currently present and available to dance.  The 
+    value of "Present" can be changed here, or can also be changed on the main dancer screen.</p></li><br/>
 
     <li>Dancer 1 Outs
 
-    <p>Dancers Outs is used by the program to select dancers for the next tip (dancers with higher Out counts will be
-    selected first when building the squares in a tip).  This field is normally computed by the program and should not
-    be changed, but during program development it was determined that there was a bug computing this field if a square
-    is regenerated.  It was added to this screen so the Out count can be adjusted if the bug reappears, but will
-    likely be removed in future releases as the code stabilizes.</p></li><br/>
+    <p>Dancers Outs is used by the program to select dancers for the next tip (dancers with higher Out counts 
+    will be selected first when building the squares in a tip).  This field is normally computed by the program
+    and should not be changed, but during program development it was determined that there was a bug computing
+    this field if a square is regenerated.  It was added to this screen so the Out count can be adjusted if the
+    bug reappears, but will likely be removed in future releases as the code stabilizes.</p></li><br/>
 
     <li>Must Dance
 
-    <p>This check box is used to indicate if a Dancer must be selected to dance in the next tip.  It’s important to
-    note, however, that it’s possible to remain out even if this box has been checked.  If, for example, the
-    dancer is single and has chosen to dance a specific role, and there are no available partners to pair with that
-    role (i.e., the dancer is a Belle, and the only single dancers available are also Belles), the unavailability
-    of a partner will override the “Must Dance” setting.</p></li><br/>
+    <p>This check box is used to indicate if a Dancer must be selected to dance in the next tip.  It’s important
+    to note, however, that it’s possible to remain out even if this box has been checked.  If, for example, the
+    dancer is single and has chosen to dance a specific role, and there are no available partners to pair with
+    that role (i.e., the dancer is a Belle, and the only single dancers available are also Belles), the
+    unavailability of a partner will override the "Must Dance" setting.</p></li><br/>
 
     <li>Willing to fill in as single if couple is out
 
-    <p>This check box applies to dancers who are coupled with another dancer.  It should be checked if the couple is
-    willing to be split apart and paired with a single if the couple would otherwise not be selected to dance in a
-    tip.  Note that the setting is per dancer, so one dancer in a couple can indicate a willingness to dance with
-    singles, while the other dancer in the couple can choose to remain sitting out if their couple is not selected to
-    dance in a tip.</p></li><br/>
+    <p>This check box applies to dancers who are coupled with another dancer.  It should be checked if the couple
+    is willing to be split apart and paired with a single if the couple would otherwise not be selected to dance
+    in a tip.  Note that the setting is per dancer, so one dancer in a couple can indicate a willingness to dance
+    with singles, while the other dancer in the couple can choose to remain sitting out if their couple is not
+    selected to dance in a tip.</p></li><br/>
 
-      <li>Preferred position as single
+    <li>Preferred position as single
 
     <ul>
       <li>Select Beau if the dancer will only dance Beau</li>
@@ -82,11 +82,11 @@ Singles Square Rotation Notes
       <li>Select Either if the dancer is willing to dance either Beau or Belle</li>
     </ul>
 
-    <p>This field is used to pair single dancers.  If all the single dancers choose a specific role (all “Belle” or all "Beau"),
-    the program will never pair them, and no singles will ever dance.  The more dancers there are who are willing to dance
-    "Either" role, the more chance singles will be selected to dance.  If there is an uneven mix of roles, say 4 Belles and 2
-    Beaux, then the role in the minority (Beau, in this case) will dance more often than the role in the majority (Belle).
-    </p></li><br/>
+    <p>This field is used to pair single dancers.  If all the single dancers choose a specific role (all "Belle"
+    or all "Beau"), the program will never pair them, and no singles will ever dance.  The more dancers there are
+    who are willing to dance "Either" role, the more chance singles will be selected to dance.  If there is an
+    uneven mix of roles, say 4 Belles and 2 Beaux, then the role in the minority (Beau, in this case) will dance
+    more often than the role in the majority (Belle).</p></li><br/>
 
     <li>Delete 1
 
@@ -96,8 +96,8 @@ Singles Square Rotation Notes
 
     <li>Are Dancer 1 and Dancer 2 dance partners?
 
-    <p>Check this check box if Dancer 1 and Dancer 2 will be dancing together as partners.  Leave the box unchecked if
-    Dancer 1 and Dancer 2 are singles.</p></li><br/>
+    <p>Check this check box if Dancer 1 and Dancer 2 will be dancing together as partners.  Leave the box
+    unchecked if Dancer 1 and Dancer 2 are singles.</p></li><br/>
 
     </ul>
 
