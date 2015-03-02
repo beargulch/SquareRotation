@@ -30,7 +30,7 @@ Singles Square Rotation Notes
     
   </ul>
 
-<li>Fields on the "Edit Dancer" dialog box</li><br/>
+<li>Fields on the "Edit Dancer" dialog box</li><br/><br/><br/><br/>
 
   <ul>
 
