@@ -1,9 +1,9 @@
 # SquareRotation
 Singles Square Rotation Notes
 
-<ol>
+<ul>
 
-<li>To add a dancer or a couple, press the “Add dancer” button.</li>
+<li>1.  To add a dancer or a couple, press the “Add dancer” button.</li>
 
   <ul>
   
@@ -30,7 +30,7 @@ Singles Square Rotation Notes
     
   </ul>
 
-<li>2. Fields on the "Edit Dancer" dialog box</li><br/><br/>
+<li>2.  Fields on the "Edit Dancer" dialog box</li><br/><br/>
 
   <ul>
 
@@ -74,7 +74,7 @@ Singles Square Rotation Notes
     with singles, while the other dancer in the couple can choose to remain sitting out if their couple is not
     selected to dance in a tip.</p></li>
 
-    <li>Preferred position as single
+    <li>Preferred position as single<br/>
 
     <ul>
       <li>Select Beau if the dancer will only dance Beau</li>
@@ -90,7 +90,7 @@ Singles Square Rotation Notes
 
     <li>Delete 1
 
-    <p>Use this button to delete dancer 1.</p></li><br/>
+    <p>Use this button to delete dancer 1.</p></li>
 
     <li>The fields above are repeated for Dancer 2.</li><br/>
 
@@ -99,29 +99,30 @@ Singles Square Rotation Notes
     <p>Check this check box if Dancer 1 and Dancer 2 will be dancing together as partners.  Leave the box
     unchecked if Dancer 1 and Dancer 2 are singles.</p></li>
 
-    </ul>
+    </ul><br/>
 
 <li>3. Fields on the Main screen.</li><br/>
 
-<p>The Main screen is the one with buttons down the left side (Open, Save, Generate New Tip, Regenerate Tip, etc.),
-and the display of dancers on the right.</p>
+<p>The Main screen is the one with buttons down the left side (Open, Save, Generate New Tip, Regenerate Tip,
+etc.), and the display of dancers on the right.</p>
 
 <p>Buttons down the left column of the Main screen are:</p>
 
   <ul>
+  
   <li>Open
 
-  <p>The Open button makes it possible to open a previously-saved file of dancers.  Only files that have been saved
-  using the Save button described below should be opened with this button.</p></li><br/>
+  <p>The Open button makes it possible to open a previously-saved file of dancers.  Only files that have been
+  saved using the Save button described below should be opened with this button.</p></li>
 
   <li>Save
 
-  <p>The Save button makes it possible to save dancers that have been entered.</p></li><br/>
+  <p>The Save button makes it possible to save dancers that have been entered.</p></li>
 
   <li>Generate New Tip
 
   <p>After all the dancers have been entered, press the Generate New Tip button to generate and display the square
-  and partner assignments for the next tip.</p></li><br/>
+  and partner assignments for the next tip.</p></li>
 
   <li>Regenerate Tip
 
@@ -133,54 +134,78 @@ and the display of dancers on the right.</p>
   uses the “out counts” from the last tip to determine who should be chosen first for the current tip.  If
   you use the Generate New Tip button to generate a new tip when the current tip has not actually been danced,
   the “out counts” will no longer accurately reflect the number of times a dancer has actually been out, which
-  affects dancer rotation.</p></li><br/>
+  affects dancer rotation.</p></li>
 
   <li>Display Current Tip
 
   <p>The Generate New Tip and Regenerate Tip will automatically cause the Tip screen to display.  If the Tip
   screen is dismissed, you can press the Display Current Tip button to re-display it without generating or
-  regenerating a new tip.</p></li><br/>
+  regenerating a new tip.</p></li>
 
   <li>Edit Dancer
 
   <p>The Edit Dancer button will bring up the Edit Dancer dialog box described in 2 above.  If dancers are
   present, and one of the dancer rows is highlighted, that dancer will appear in the Dancer 1 portion of
   the Edit Dancer dialog box.  If that dancer has a partner, the partner will appear in the Dancer 2
-  portion of the Edit Dancer dialog box.</p></li><br/>
+  portion of the Edit Dancer dialog box.</p></li>
 
-<li>Add Dancer
+  <li>Add Dancer
 
-The Add Dancer button will bring up a blank version of the Edit Dancer dialog box described in 2 above.  1 or 2 dancers can be added by filling out the dialog box.  If 2 dancers are entered, they can be 2 singles or a couple.
+  <p>The Add Dancer button will bring up a blank version of the Edit Dancer dialog box described in 2 above.  1 or
+  2 dancers can be added by filling out the dialog box.  If 2 dancers are entered, they can be 2 singles or a
+  couple.</p></li>
 
-<li>Reset to Tip 1
+  <li>Reset to Tip 1
 
-This button will cause all counts — the current tip count, and all “out” counts — to be reset to their initial values, as if no tips have yet been danced.
+  <p>This button will cause all counts — the current tip count, and all “out” counts — to be reset to their
+  initial values, as if no tips have yet been danced.</p></li>
+  
+  </ul>
+  
+  <p>Some column headings on the right hand side of the Main screen can be used to order the display.  If you
+  click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will
+  reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.</p>
+  
+  <p>Columns down the right of the the Main screen are:</p>
 
-<li>Columns down the right of the the Main screen are:
+  <ul>
+  <li>Name
 
-Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
+  <p>Dancer name.  A double-click on a dancer name will bring up the Edit Dancer dialog box with the dancer in 
+  the Dancer 1 area.  If the selected dancer has a partner, the partner will appear in the Dancer 2 area.  Either
+  dancer can then be edited.</p></li>
 
-<li>Name
+  <li>Beau/Belle
 
-Dancer name.  A double-click on a dancer name will bring up the Edit Dancer dialog box with the dancer in the Dancer 1 area.  If the selected dancer has a partner, the partner will appear in the Dancer 2 area.  Either dancer can then be edited.
+  <p>Indicates whether a dancer dances only Beau, only Belle, or Either.  Used during tip generation to pair
+  singles.</p></li>
 
-Beau/Belle
+  <li>Partner
 
-Indicates whether a dancer dances only Beau, only Belle, or Either.  Used during tip generation to pair singles.
+  <p>If this dancer is not a single, this column will contain the dancer’s partner.  If a dancer is single, the
+  column will be blank.</p>
 
-Partner
+  <p>This column can also be used to pair and un-pair dancers, and to assign new partners:</p><br/>
+  
+   <ul>
 
-If this dancer is not a single, this column will contain the dancer’s partner.  If a dancer is single, the column will be blank.
+   <li>If the column is blank, double-click on it to get a list of dancers who are currently single and can be
+   paired with the current dancer.  Dancers who are currently coupled will not appear in the list, so if every
+   other dancer is paired with another dancer, the list will be empty.  Click on a dancer to make the assignment.
+   The selected dancer will then appear in this column for the current dancer, and the current dancer will appear
+   in the Partner column of the selected dancer.</li>
 
-This column can also be used to pair and un-pair dancers, and to assign new partners:
+   <li>If the column is not blank, double-click on the column to bring up a list of dancers.  Click on "(No
+   Partner)" to uncouple the current dance partner, making both dancers single.</li>
 
-If the column is blank, double-click on it to get a list of dancers who are currently single and can be paired with the current dancer.  Dancers who are currently coupled will not appear in the list, so if every other dancer is paired with another dancer, the list will be empty.  Click on a dancer to make the assignment.  The selected dancer will then appear in this column for the current dancer, and the current dancer will appear in the Partner column of the selected dancer.
+   <li>You can also use this column to change partners:  click on the column to bring up a list of dancers, and
+   click on the dancer who should be partnered with the current dancer.  If the selected dancer is different from
+   the current partner, the old partner will become single, and the selected dancer will become the current
+   dancer’s new partner.</li>
+   
+   </ul></li?<br/>
 
-If the column is not blank, double-click on the column to bring up a list of dancers.  Click on “(No Partner)” to uncouple the current dance partner, making both dancers single.
-
-You can also use this column to change partners:  click on the column to bring up a list of dancers, and click on the dancer who should be partnered with the current dancer.  If the selected dancer is different from the current partner, the old partner will become single, and the selected dancer will become the current dancer’s new partner.
-
-Present
+ <li>Present
 
 If a dancer leaves or wishes to sit out during a tip, click on the Present button to change the dancer’s status to Absent.  If the dancer has a partner, the partner will also be marked Absent.  Dancers marked absent will be excluded from the tip generation process.
 
