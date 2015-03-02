@@ -27,10 +27,10 @@ Singles Square Rotation Notes
     <li>Dancers who are incorrectly paired with another dancer, or who should be paired with their partner but are
     not, can easily be paired or un-paired after they have been entered and the “Add dancer” dialog box has been
     dismissed.</li>
-
+    
   </ul>
 
-<li>Fields on the "Edit Dancer" dialog box</li>
+<li>Fields on the "Edit Dancer" dialog box</li><br/>
 
   <ul>
 
