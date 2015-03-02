@@ -30,7 +30,7 @@ Singles Square Rotation Notes
     
   </ul>
 
-<li>Fields on the "Edit Dancer" dialog box</li><br/><br/>
+<li>2. Fields on the "Edit Dancer" dialog box</li><br/><br/>
 
   <ul>
 
@@ -43,12 +43,12 @@ Singles Square Rotation Notes
 
     <p>The program will disallow 2 dancers with identical names, so add something like a last initial to the names
     to make them unique:  "Michael L" and "Michael W", for example.  If there are 2  Michaels with a last name
-    that begins with "L", add as many characters as necessary to establish uniqueness.</p></li><br/>
+    that begins with "L", add as many characters as necessary to establish uniqueness.</p></li>
 
     <li>Present
 
     <p>This check box is used to indicate whether a dancer is currently present and available to dance.  The 
-    value of "Present" can be changed here, or can also be changed on the main dancer screen.</p></li><br/>
+    value of "Present" can be changed here, or can also be changed on the main dancer screen.</p></li>
 
     <li>Dancer 1 Outs
 
@@ -56,7 +56,7 @@ Singles Square Rotation Notes
     will be selected first when building the squares in a tip).  This field is normally computed by the program
     and should not be changed, but during program development it was determined that there was a bug computing
     this field if a square is regenerated.  It was added to this screen so the Out count can be adjusted if the
-    bug reappears, but will likely be removed in future releases as the code stabilizes.</p></li><br/>
+    bug reappears, but will likely be removed in future releases as the code stabilizes.</p></li>
 
     <li>Must Dance
 
@@ -64,7 +64,7 @@ Singles Square Rotation Notes
     to note, however, that it’s possible to remain out even if this box has been checked.  If, for example, the
     dancer is single and has chosen to dance a specific role, and there are no available partners to pair with
     that role (i.e., the dancer is a Belle, and the only single dancers available are also Belles), the
-    unavailability of a partner will override the "Must Dance" setting.</p></li><br/>
+    unavailability of a partner will override the "Must Dance" setting.</p></li>
 
     <li>Willing to fill in as single if couple is out
 
@@ -72,7 +72,7 @@ Singles Square Rotation Notes
     is willing to be split apart and paired with a single if the couple would otherwise not be selected to dance
     in a tip.  Note that the setting is per dancer, so one dancer in a couple can indicate a willingness to dance
     with singles, while the other dancer in the couple can choose to remain sitting out if their couple is not
-    selected to dance in a tip.</p></li><br/>
+    selected to dance in a tip.</p></li>
 
     <li>Preferred position as single
 
@@ -86,7 +86,7 @@ Singles Square Rotation Notes
     or all "Beau"), the program will never pair them, and no singles will ever dance.  The more dancers there are
     who are willing to dance "Either" role, the more chance singles will be selected to dance.  If there is an
     uneven mix of roles, say 4 Belles and 2 Beaux, then the role in the minority (Beau, in this case) will dance
-    more often than the role in the majority (Belle).</p></li><br/>
+    more often than the role in the majority (Belle).</p></li>
 
     <li>Delete 1
 
@@ -97,11 +97,11 @@ Singles Square Rotation Notes
     <li>Are Dancer 1 and Dancer 2 dance partners?
 
     <p>Check this check box if Dancer 1 and Dancer 2 will be dancing together as partners.  Leave the box
-    unchecked if Dancer 1 and Dancer 2 are singles.</p></li><br/>
+    unchecked if Dancer 1 and Dancer 2 are singles.</p></li>
 
     </ul>
 
-<li>Fields on the Main screen.</li><br/>
+<li>3. Fields on the Main screen.</li><br/>
 
 <p>The Main screen is the one with buttons down the left side (Open, Save, Generate New Tip, Regenerate Tip, etc.),
 and the display of dancers on the right.</p>
