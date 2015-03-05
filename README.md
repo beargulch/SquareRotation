@@ -58,9 +58,9 @@
 
 3. Fields on the Main screen.
 
-The Main screen is the one with buttons down the left side (Open, Save, Generate New Tip, Regenerate Tip, etc.), and the display of dancers on the right.
+  The Main screen is the one with buttons down the left side (Open, Save, Generate New Tip, Regenerate Tip, etc.), and the display of dancers on the right.
 
-Buttons down the left column of the Main screen are:
+  Buttons down the left column of the Main screen are:
 
   - Open
 
@@ -96,9 +96,9 @@ Buttons down the left column of the Main screen are:
 
     This button will cause all counts — the current tip count, and all “out” counts — to be reset to their initial values, as if no tips have yet been danced.
 
-Columns down the right of the the Main screen are:
+  Columns down the right of the the Main screen are:
 
-  Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
+    Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
 
   - Name
 
@@ -140,17 +140,17 @@ Columns down the right of the the Main screen are:
 
 4. Tip Display Screen
 
-This screen is used to display the squares generated for the current tip, listing square numbers and the dancers assigned to them.  Dancers are list in alphabetical order, both in the overall list, and within each couple.  
+  This screen is used to display the squares generated for the current tip, listing square numbers and the dancers assigned to them.  Dancers are list in alphabetical order, both in the overall list, and within each couple.  
 
-Because dancers are listed alphabetically within a couple, the position of single dancers in the overall list can change depending on which dancer they are paired with.  If Jim is paired with Anne, the couple will appear on the page as “Anne & Jim”, and “Anne” will place them towards the beginning of the page.  If Jim is paired with Steve, the couple will appear on this page as “Jim & Steve”, and “Jim” will place them towards the middle of the page.  Because singles can move around the page depending on who they are paired with, their names are highlighted in blue to make them easier to spot.
+  Because dancers are listed alphabetically within a couple, the position of single dancers in the overall list can change depending on which dancer they are paired with.  If Jim is paired with Anne, the couple will appear on the page as “Anne & Jim”, and “Anne” will place them towards the beginning of the page.  If Jim is paired with Steve, the couple will appear on this page as “Jim & Steve”, and “Jim” will place them towards the middle of the page.  Because singles can move around the page depending on who they are paired with, their names are highlighted in blue to make them easier to spot.
 
-If the tip display screen is accidentally dismissed, it can be brought back without generating a new tip by pressing the “Display Current Tip” button on the main screen.
+  If the tip display screen is accidentally dismissed, it can be brought back without generating a new tip by pressing the “Display Current Tip” button on the main screen.
 
 5. Tip Generation Options (Some options still experimental)
 
-The menu bar at the top of the screen includes an item labeled Tools.  The last menu item in the list under Tools is “Set Options”.  If you select “Set Options”, you are presented with a dialog box with a drop-down list labeled “Singles Handling” that gives 2 choices for handling singles when tips are generated.  
+  The menu bar at the top of the screen includes an item labeled Tools.  The last menu item in the list under Tools is “Set Options”.  If you select “Set Options”, you are presented with a dialog box with a drop-down list labeled “Singles Handling” that gives 2 choices for handling singles when tips are generated.  
 
-The 2 choices are:
+  The 2 choices are:
 
   - Singles dance only with singles.
 
