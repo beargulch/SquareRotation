@@ -96,9 +96,9 @@
 
     This button will cause all counts — the current tip count, and all “out” counts — to be reset to their initial values, as if no tips have yet been danced.
 
+  Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
+    
   Columns down the right of the the Main screen are:
-
-      Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
 
   - Name
 
