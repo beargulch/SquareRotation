@@ -56,9 +56,7 @@
 
     Check this check box if Dancer 1 and Dancer 2 will be dancing together as partners.  Leave the box unchecked if Dancer 1 and Dancer 2 are singles.
 
-=========
-
-3.  Fields on the Main screen.
+3. Fields on the Main screen.
 
 The Main screen is the one with buttons down the left side (Open, Save, Generate New Tip, Regenerate Tip, etc.), and the display of dancers on the right.
 
