@@ -146,7 +146,7 @@
 
   If the tip display screen is accidentally dismissed, it can be brought back without generating a new tip by pressing the “Display Current Tip” button on the main screen.
 
-5. Tip Generation Options (Some options still experimental)
+5. Tip Generation Options
 
   The menu bar at the top of the screen includes an item labeled Tools.  The last menu item in the list under Tools is “Set Options”.  If you select “Set Options”, you are presented with a dialog box with a drop-down list labeled “Singles Handling” that gives 2 choices for handling singles when tips are generated.  
 
@@ -158,4 +158,7 @@
 
   - Singles can dance with Out Couples.
 
-    This choice is the default option, and is currently the option that is most thoroughly tested and believed to be working well.  If this choice is selected, couples will always remain couples, and singles will be assigned to dance only with other singles.  Couples will will never be “taken apart” to dance with singles, even if one or both dancers in the couple is marked as “Willing to fill in as single if couple is out”.
+    If this choice is selected, tip generation will take place in two phases.  The first phase will proceed as usual, scanning through the list of available dancers, selecting couples and pairing singles as usual, without “taking apart” any couples.  At the completion of this phase, it is possible that there will be enough “out” dancers to make a square, but only if some couples are split apart (for example:  3 couples, some of whom can dance “Either” and are willing to be split apart if they happen to be out, plus 2 singles who dance “belle” only so cannot be matched to each other.).
+
+    In the second phase, an attempt is made to match the single dancers who are out by “taking apart” couples who are also out to see if it’s possible to make a square.
+
