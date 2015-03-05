@@ -16,7 +16,7 @@
 
 2. Fields on the “Edit Dancer” dialog box
 
-  - Dancer 1 Name:
+  - Dancer 1 Name
   
     Enter the name of the dancer as it will appear in the display.  IMPORTANT:  because the program pairs single dancers, names must be unique so single dancers can tell who they are paired with.  If there are 2 single Michaels, for example, a display that shows “Michael and Sue” and “Michael and Jane” would be ambiguous.  
 
@@ -26,11 +26,11 @@
 
     This check box is used to indicate whether a dancer is currently present and available to dance.  The value of “Present” can be changed here, or can also be changed on the main dancer screen.
 
-  - Dancer 1 Outs:
+  - Dancer 1 Outs
 
     Dancers Outs is used by the program to select dancers for the next tip (dancers with higher Out counts will be selected first when building the squares in a tip).  This field is normally computed by the program and should not be changed, but during program development it was determined that there was a bug computing this field if a square is regenerated.  It was added to this screen so the Out count can be adjusted if the bug reappears, but will likely be removed in future releases as the code stabilizes.
 
-  - Must Dance:
+  - Must Dance
 
     This check box is used to indicate if a Dancer must be selected to dance in the next tip.  It’s important to note, however, that it’s possible to remain out even if this box has been checked.  If, for example, the dancer is single and has chosen to dance a specific role, and there are no available partners to pair with that role (i.e., the dancer is a Belle, and the only single dancers available are also Belles), the unavailability of a partner will override the “Must Dance” setting.
 
@@ -38,7 +38,7 @@
 
     This check box applies to dancers who are coupled with another dancer.  It should be checked if the couple is willing to be split apart and paired with a single if the couple would otherwise not be selected to dance in a tip.  Note that the setting is per dancer, so one dancer in a couple can indicate a willingness to dance with singles, while the other dancer in the couple can choose to remain sitting out if their couple is not selected to dance in a tip.
 
-  - Preferred position as single:
+  - Preferred position as single
 
     - Select Beau if the dancer will only dance Beau
     - Select Belle if the dancer will only dance Belle
@@ -98,7 +98,7 @@
 
   Columns down the right of the the Main screen are:
 
-    Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
+      Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
 
   - Name
 
