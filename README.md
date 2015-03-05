@@ -160,5 +160,5 @@
 
     If this choice is selected, tip generation will take place in two phases.  The first phase will proceed as usual, scanning through the list of available dancers, selecting couples and pairing singles as usual, without “taking apart” any couples.  At the completion of this phase, it is possible that there will be enough “out” dancers to make a square, but only if some couples are split apart (for example:  3 couples, some of whom can dance “Either” and are willing to be split apart if they happen to be out, plus 2 singles who dance “belle” only so cannot be matched to each other.).
 
-    In the second phase, an attempt is made to match the single dancers who are out by “taking apart” couples who are also out to see if it’s possible to make a square.
+    In the second phase, an attempt is made to match the single dancers who are out by “taking apart” couples who are also out to see if it’s possible to make a square.  As development progressed, it became evident that this option only works when there are couples made up of dancers who both dance "Either," and who both are willing to dance single, so it has limited utility.
 
