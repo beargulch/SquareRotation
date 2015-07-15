@@ -119,8 +119,7 @@ public class Tip implements Serializable
 		random = new Random(System.nanoTime());
 		this.noOfTips = 20;
 
-		allocateArrays();	
-		allocateTips();
+		allocateArrays();
 	}
 	
 	public static Tip getInstance()
@@ -133,11 +132,14 @@ public class Tip implements Serializable
 		return instance;
 	}
 
-	//@Override
 	public void tableModelChanged(int lastRow) 
 	{ 
 		// partnerCt must be same size as dancerCt so we only check one size to adjust both.
-		if(lastRow < 0 || lastRow == Integer.MAX_VALUE || lastRow < dancerCt.size()) return;
+		if(lastRow < 0 || lastRow == Integer.MAX_VALUE || lastRow < dancerCt.size()) 
+		{
+			Globals.getInstance().getMainFrame().setDancerStatistics();
+			return;
+		}
 		
 		int oldCapacity = dancerCt.size();
 		int newCapacity = oldCapacity + (lastRow + 1 - dancerCt.size());
@@ -167,6 +169,7 @@ public class Tip implements Serializable
 			    }
 			}
 		}
+		Globals.getInstance().getMainFrame().setDancerStatistics();
 	}
 	
 	public void tipLoadedFromSerializedForm()
@@ -175,23 +178,18 @@ public class Tip implements Serializable
 		
 		if(dancerData.size() > 0 && (partnerCt.size() == 0 || dancerCt.size() == 0))
 		{
-			allocateArrays();	
-			allocateTips();
+			allocateArrays();
 			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
 		}
 	}
 	
-	public void resetCounts()
-	{
-		allocateArrays();
-		allocateTips();
-	}
-	
-	private void allocateArrays() 
+	public void allocateArrays() 
 	{	
 		this.noOfTips		= 20;
 		this.currentTip 	=  0;
 		this.noOfSquares	=  0;
+
+		System.out.println("allocateArrays(), Globals.getInstance().getDancersJTable().getRowCount() = " + Globals.getInstance().getDancersJTable().getRowCount());
 		
 		dancerCt  = new ArrayList<ArrayList<Short>>(Globals.getInstance().getDancersJTable().getRowCount());
 		partnerCt = new ArrayList<ArrayList<Short>>(Globals.getInstance().getDancersJTable().getRowCount());
@@ -205,14 +203,11 @@ public class Tip implements Serializable
 		    	partnerCt.get(ix).add((short)0);
 		    }
 		}	
-	}
 	
-	public void allocateTips()
-	{
-		if(this.noOfTips < 1 || Globals.getInstance().getDancersJTable().getRowCount() < 1) return;
+		//if(this.noOfTips < 1 || Globals.getInstance().getDancersJTable().getRowCount() < 1) return;
 		
 		this.couplesInSquare = new ArrayList<ArrayList<Short>>(this.noOfTips);
-		initializeCouplesInSquare(0);
+		initializeCouplesInSquare();
 	}
 	
 	public void setCurrentTip(short currentTip) 
@@ -397,16 +392,14 @@ public class Tip implements Serializable
 		
 		if(this.currentTip >= this.couplesInSquare.size())
 		{
-			int sizeFrom = this.couplesInSquare.size();
-			
 			this.noOfTips += 10;
 			this.couplesInSquare.ensureCapacity(this.noOfTips);
 			
-			initializeCouplesInSquare(sizeFrom);
+			initializeCouplesInSquare();
 		}
 	}
 	
-	private void initializeCouplesInSquare(int beginIx)
+	private void initializeCouplesInSquare()
 	{
 		// note that squaresPerTip is pretty much the same as this.noOfSquares, but
 		// this.noOfSquares is computed in makeCouples, and may not be available at
@@ -1180,6 +1173,10 @@ public class Tip implements Serializable
 					}
 					else					// if partner already selected, choose this one instead if they've danced together less
 					{
+						System.out.println("ix: " + ix + "jx: " + jx);
+						System.out.println("selectedPartner" + selectedPartner);
+						System.out.println("partnerCt.get(ix).get(jx): " + partnerCt.get(ix).get(jx));
+						System.out.println("partnerCt.get(ix).get(selectedPartner): " + partnerCt.get(ix).get(selectedPartner));
 						if(partnerCt.get(ix).get(jx) < partnerCt.get(ix).get(selectedPartner))
 						{
 							System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " re-matched with " + dancerData.get(jx).get(Dancer.NAME_IX));

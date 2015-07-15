@@ -157,6 +157,6 @@ public class FileOpenListener implements ActionListener
 			return;
 		}
 
-		Globals.getInstance().getTip().resetCounts();
+		Globals.getInstance().getTip().allocateArrays();
 	}
 }

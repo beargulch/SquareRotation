@@ -40,7 +40,7 @@ public class ResetListener implements ActionListener
 		
 		if(Globals.getInstance().getTip() != null)
 		{
-			Globals.getInstance().getTip().resetCounts();
+			Globals.getInstance().getTip().allocateArrays();
 
 			Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
