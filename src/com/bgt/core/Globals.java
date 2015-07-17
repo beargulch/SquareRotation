@@ -85,10 +85,10 @@ public class Globals
 	public final static Color MEDIUM_BLUE     = new Color(  0,   0, 255,  36);
 	public final static Color LIGHT_YELLOW    = new Color(255, 255,   0,  30);
 	
-	private static int singlesHandling = SINGLES_ROTATE_ONLY_WITH_SINGLES;
-	private static int selectedOption  = 0;
-	private static TipFrame tipFrame   = null;
-	private static int tipFrameHeight  = 0;
+	private static int selectedOption		  = SINGLES_ROTATE_ONLY_WITH_SINGLES;
+	private static boolean countVountaryOuts  = false;
+	private static TipFrame tipFrame  		  = null;
+	private static int tipFrameHeight  		  = 0;
 	
 	private static SquareGenerator	squareGenerator;
 	private static Tip				tip;
@@ -157,16 +157,6 @@ public class Globals
 		return (DancersTableModel)dancersJTable.getModel();
 	}
 	
-	public int getSinglesHandling()
-	{
-		return singlesHandling;
-	}
-	
-	public void setSinglesHandling(int pSinglesHandling)
-	{
-		singlesHandling = pSinglesHandling;
-	}
-	
 	public static void setSelectedOption(int pSelectedOption)
 	{
 		selectedOption = pSelectedOption;
@@ -190,6 +180,16 @@ public class Globals
 	public static boolean singlesRotationCanTakeCouplesOut()
 	{
 		return selectedOption == SINGLES_ROTATION_CAN_TAKE_COUPLES_OUT;
+	}
+	
+	public static void setCountVountaryOuts(boolean pCountVountaryOuts)
+	{
+		countVountaryOuts = pCountVountaryOuts;
+	}
+	
+	public static boolean getCountVountaryOuts()
+	{
+		return countVountaryOuts;
 	}
 	
 	public static TipFrame getTipFrame()

@@ -19,6 +19,7 @@ package com.bgt.frame;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +27,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,12 +39,13 @@ public class OptionsFrame extends JFrame
 {
 	private static final long     serialVersionUID = 1L;
 	
-	private static final String[] singleOptions = {	"Singles dance only with Singles", 
-													"Singles can dance with Out Couples"
+	private static final String[] singleOptions = {	"Singles rotate only with Singles", 
+													"Singles can rotate with Out Couples",
+													"Singles can rotate with Any Couple"
 												  };
-	// "Singles can dance with Any Couple"  -- deprecated option
 	
 	private JComboBox<String>optionsBox = new JComboBox<String>(singleOptions);
+	private JCheckBox jCountVountaryOuts;
 	
 	public OptionsFrame()
 	{
@@ -51,6 +54,8 @@ public class OptionsFrame extends JFrame
 
 	private void setUpPanel()
 	{
+		jCountVountaryOuts = new JCheckBox("Voluntary out counts as involuntary out");
+		
 		JPanel mainPanel   = new JPanel(new GridBagLayout());
 		Dimension minSize  = new Dimension(10, 18);
 		Dimension prefSize = new Dimension(10, 18);
@@ -68,6 +73,11 @@ public class OptionsFrame extends JFrame
 		pane1.add(new JLabel("Singles Handling"));
 		pane1.add(optionsBox);
 		mainPanel.add(pane1);
+		
+		GridBagConstraints c1 = new GridBagConstraints();
+	    c1.gridy  = 3;
+	    c1.anchor = GridBagConstraints.LINE_START;
+		mainPanel.add(jCountVountaryOuts, c1);
 		
 		JPanel pane2 = new JPanel();
 		pane2.setLayout(new BoxLayout(pane2, BoxLayout.LINE_AXIS));
@@ -87,6 +97,7 @@ public class OptionsFrame extends JFrame
 	    	public void actionPerformed(ActionEvent e) 
 	    	{	
 	    		Globals.setSelectedOption(getFrame().getOptionsBox().getSelectedIndex());
+	    		Globals.setCountVountaryOuts(getFrame().getCountVountaryOuts().isSelected());
 	    		getFrame().dispose();
 	    	}
 	    });
@@ -111,10 +122,14 @@ public class OptionsFrame extends JFrame
 	    this.setVisible(true);
 	}
 	
-    //@SuppressWarnings("rawtypes")
 	public JComboBox<String>getOptionsBox()
     {
     	return this.optionsBox;
+    }
+	
+    public JCheckBox getCountVountaryOuts()
+    {
+    	return this.jCountVountaryOuts;
     }
     
     public OptionsFrame getFrame()

@@ -550,10 +550,6 @@ public class Tip implements Serializable
 		// this is the most common way to select dancers -- couples stay couples,
 		// and singles rotate only with other singles.
 					
-		System.out.println("First pass through select Dancers:  doNotbreakUpCouples, doSinglesAndCouples");
-		selectDancers(doNotbreakUpCouples, doSinglesAndCouples);	// first pass at selecting dancers to make couples. 'doNotbreakUpCouples'
-																	// means that we do not attempt to break up couples to make a square.
-		/*
 		if(Globals.singlesRotationCanTakeCouplesOut())
 		{
 			// this option is the most aggressive in terms of breaking apart couples:
@@ -578,7 +574,6 @@ public class Tip implements Serializable
 			selectDancers(doNotbreakUpCouples, doSinglesAndCouples);	// first pass at selecting dancers to make couples. 'doNotbreakUpCouples'
 																		// means that we do not attempt to break up couples to make a square.
 		}
-		*/	
 
 		/*====================================================================================*/
 		

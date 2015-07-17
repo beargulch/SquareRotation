@@ -60,6 +60,10 @@ public class SelectDancerListener implements ActionListener
 				frame.getJPresent2().setSelected(true);       
 			else 
 				frame.getJPresent2().setSelected(false);
+			if((Boolean)dancer2Row.get(Dancer.DANCER_AT_DANCE_IX)) 
+				frame.getJAtDance2().setSelected(true);       
+			else 
+				frame.getJAtDance2().setSelected(false);
 			if((Boolean)dancer2Row.get(Dancer.MUST_DANCE_IX)) 
 				frame.getJMustDance2().setSelected(true);     
 			else 
@@ -74,6 +78,7 @@ public class SelectDancerListener implements ActionListener
 		else
 		{
 			frame.getJPresent2().setSelected(false);
+			frame.getJAtDance2().setSelected(false);
 			frame.getJMustDance2().setSelected(false);
 			frame.getJWillingSingle2().setSelected(false);
 			frame.getBeauBelleBox2().setSelectedIndex(0);

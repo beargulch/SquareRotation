@@ -25,16 +25,17 @@ public class Dancer extends Vector
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final int    NAME_IX			   = 0;
-	public static final int    ROLE_IX			   = 1;
-	public static final int    PARTNER_IX		   = 2;
-	public static final int    PRESENT_IX		   = 3;
-	public static final int    MUST_DANCE_IX	   = 4;
-	public static final int    WILLING_SINGLE_IX   = 5;
-	public static final int    DANCER_OUTS_IX      = 6;
-	public static final int    DANCER_DELETED_IX   = 7;
-	public static final int    DANCER_DANCED_IX    = 8;
-	public static final int    DANCER_SELECTED_IX  = 9;
+	public static final int    NAME_IX			   =  0;
+	public static final int    ROLE_IX			   =  1;
+	public static final int    PARTNER_IX		   =  2;
+	public static final int    PRESENT_IX		   =  3;
+	public static final int    MUST_DANCE_IX	   =  4;
+	public static final int    WILLING_SINGLE_IX   =  5;
+	public static final int    DANCER_OUTS_IX      =  6;
+	public static final int    DANCER_AT_DANCE_IX  =  7;
+	public static final int    DANCER_DELETED_IX   =  8;
+	public static final int    DANCER_DANCED_IX    =  9;
+	public static final int    DANCER_SELECTED_IX  = 10;
 
 	public static final String NAME_STR		   	   = "Name";
 	public static final String ROLE_STR		   	   = "Beau/Belle";
@@ -43,6 +44,7 @@ public class Dancer extends Vector
 	public static final String MUST_DANCE_STR	   = "Must Dance";
 	public static final String WILLING_SINGLE_STR  = "Willing Single";
 	public static final String DANCER_OUTS_STR     = "Dancer Outs";
+	public static final String DANCER_AT_DANCE_STR = "At the Dance";
 	public static final String DANCER_DELETED_STR  = "Deleted";
 	public static final String DANCER_DANCED_STR   = "Has Danced";
 	public static final String DANCER_SELECTED_STR = "Selected This Tip";
@@ -63,6 +65,7 @@ public class Dancer extends Vector
 					   	   MUST_DANCE_STR, 		// "Must Dance"
 					   	   WILLING_SINGLE_STR,	// "Willing Single"
 					   	   DANCER_OUTS_STR,		// "Dancer Outs"
+					   	   DANCER_AT_DANCE_STR, // "At the Dance"
 					   	   DANCER_DELETED_STR,  // "Deleted"
 					   	   DANCER_DANCED_STR,	// "Has Danced"
 					   	   DANCER_SELECTED_STR, // "Selected This Tip"
@@ -92,6 +95,7 @@ public class Dancer extends Vector
             case DANCER_DELETED_IX:
             case DANCER_DANCED_IX:
             case DANCER_SELECTED_IX:
+            case DANCER_AT_DANCE_IX:
             	return Boolean.class;
             	
         	case ROLE_IX:
@@ -119,6 +123,7 @@ public class Dancer extends Vector
             case PRESENT_IX:
             case MUST_DANCE_IX:
             case WILLING_SINGLE_IX:
+            case DANCER_AT_DANCE_IX:
             	return true;
         	default:
         		System.out.println("DancersTableModel.isCellEditable, invalid column " + column);

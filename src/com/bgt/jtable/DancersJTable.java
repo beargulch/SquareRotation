@@ -30,6 +30,7 @@ import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
+import com.bgt.action.AtDanceAction;
 import com.bgt.action.MustDanceAction;
 import com.bgt.action.PresentAction;
 import com.bgt.core.Dancer;
@@ -109,6 +110,7 @@ public class DancersJTable extends JTable implements MouseListener
 		sorter.setSortable(Dancer.MUST_DANCE_IX, false);
 		sorter.setSortable(Dancer.WILLING_SINGLE_IX, false);
 		sorter.setSortable(Dancer.DANCER_OUTS_IX, false);
+		sorter.setSortable(Dancer.DANCER_AT_DANCE_IX, false);
 		sorter.setComparator(Dancer.PARTNER_IX, new Comparator()
 		{
 			@Override
@@ -156,17 +158,20 @@ public class DancersJTable extends JTable implements MouseListener
 		jcEditor.setClickCountToStart(2);
 		this.getColumn(Dancer.PARTNER_STR).setCellEditor(jcEditor);
 		
-		// Present is a radio button
-		this.getColumn(Dancer.PRESENT_STR).setCellEditor(new ButtonColumnEditor(this, new PresentAction(), Dancer.PRESENT_IX, "Present", "Absent", Globals.HIGHLIGHT_OFF_BTN));
+		// Present is a button
+		this.getColumn(Dancer.PRESENT_STR).setCellEditor(new ButtonColumnEditor(this, new PresentAction(), Dancer.PRESENT_IX, "Dancing", "Out", Globals.HIGHLIGHT_OFF_BTN));
 		
 		// Must Dance is a radio button
 		this.getColumn(Dancer.MUST_DANCE_STR).setCellEditor(new ButtonColumnEditor(this, new MustDanceAction(), Dancer.MUST_DANCE_IX, "Dance!", "Normal", Globals.HIGHLIGHT_ON_BTN));
 		
-		// Dancer Outs is a simple text field
+		// Willing Single is a checkbox
 		this.getColumn(Dancer.WILLING_SINGLE_STR).setCellRenderer(new JCheckBoxRenderer());
 		
 		// Dancer Outs is a simple text field, with text centered
 		this.getColumn(Dancer.DANCER_OUTS_STR).setCellRenderer(new JTextFieldRenderer(true));
+		
+		// At Dance is a radio button
+		this.getColumn(Dancer.DANCER_AT_DANCE_STR).setCellEditor(new ButtonColumnEditor(this, new AtDanceAction(), Dancer.DANCER_AT_DANCE_IX, "Yes", "No", Globals.HIGHLIGHT_OFF_BTN));
 		
 		// set custom row height; the default height does not accommodate radio buttons 
 		this.setRowHeight(30);

@@ -131,12 +131,12 @@ public class ButtonColumnEditor extends AbstractCellEditor implements TableCellR
 		int modelRow = jTable.convertRowIndexToModel(row);
 		Boolean colValue = (Boolean)((Vector)((DancersTableModel)jTable.getModel()).getDataVector().get(modelRow)).get(column);
 		
-		//System.out.println("colValue is " + colValue + " ,this.off is " + this.off + ", this.on is " + this.on + 
-		//		           ", row = " + row + ", col = " + column + ", modelRow = " + modelRow);
+		System.out.println("colValue is " + colValue + ", this.off is " + this.off + ", this.on is " + this.on + 
+				           ", row = " + row + ", col = " + column + ", modelRow = " + modelRow);
 		
 		if(colValue == null || !colValue)
 		{
-			// System.out.println("1 setText off");
+			System.out.println("1 setText off");
 			
 			if(highlightSpec == Globals.HIGHLIGHT_OFF_BTN)
 				renderButton.setBackground(Globals.VERY_LIGHT_RED);
@@ -148,7 +148,7 @@ public class ButtonColumnEditor extends AbstractCellEditor implements TableCellR
 		}
 		else
 		{
-			// System.out.println("1 setText on");
+			System.out.println("1 setText on");
 			
             if(highlightSpec == Globals.HIGHLIGHT_ON_BTN)
             	renderButton.setBackground(Globals.VERY_LIGHT_RED);

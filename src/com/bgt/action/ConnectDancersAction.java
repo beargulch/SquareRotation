@@ -49,9 +49,10 @@ public class ConnectDancersAction extends AbstractAction
 		{
 			if(frame.getDancer1Row() != null && frame.getDancer2Row() != null)
 			{
-				frame.getDancer1Row().set(Dancer.PARTNER_IX, frame.getDancer2RowIX());
-				frame.getDancer2Row().set(Dancer.PARTNER_IX, frame.getDancer1RowIX());
-				frame.getDancer2Row().set(Dancer.PRESENT_IX, frame.getDancer1Row().get(Dancer.PRESENT_IX));	// partners must both be in or out
+				frame.getDancer1Row().set(Dancer.PARTNER_IX, 		 frame.getDancer2RowIX());
+				frame.getDancer2Row().set(Dancer.PARTNER_IX, 		 frame.getDancer1RowIX());
+				frame.getDancer2Row().set(Dancer.PRESENT_IX, 		 frame.getDancer1Row().get(Dancer.PRESENT_IX));			// partners must both be in or out
+				frame.getDancer2Row().set(Dancer.DANCER_AT_DANCE_IX, frame.getDancer1Row().get(Dancer.DANCER_AT_DANCE_IX));	// partners must both be at dance, or not
 			}
 			else
 				clearPartners();

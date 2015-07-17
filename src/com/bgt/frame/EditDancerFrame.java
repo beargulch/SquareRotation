@@ -60,6 +60,7 @@ public class EditDancerFrame extends JFrame
 	private JPanel 	   mainPanel;
 	private JTextField dancer1;
 	private JCheckBox  jPresent1;
+	private JCheckBox  jAtDance1;
 	private JTextField outs1;
 	private JCheckBox  jMustDance1;
 	private JCheckBox  jWillingSingle1;
@@ -67,6 +68,7 @@ public class EditDancerFrame extends JFrame
 	private JTextField dancer2;
 	private JTextField outs2;
 	private JCheckBox  jPresent2;
+	private JCheckBox  jAtDance2;
 	private JCheckBox  jMustDance2;
 	private JCheckBox  jWillingSingle2;
 	private JLabel 	   dancerError;
@@ -114,7 +116,8 @@ public class EditDancerFrame extends JFrame
 		mainPanel 		= new JPanel(new GridBagLayout());
 		
 		dancer1  		= new JTextField("", 20);
-		jPresent1 		= new JCheckBox("Present");
+		jPresent1 		= new JCheckBox("Dancing");
+		jAtDance1 		= new JCheckBox("At the Dance");
 		outs1  			= new JTextField(2);
 		jMustDance1 	= new JCheckBox("Must Dance");
 		jWillingSingle1 = new JCheckBox("Willing to fill in as single if couple is out");
@@ -123,7 +126,8 @@ public class EditDancerFrame extends JFrame
 		jPartners 		= new JCheckBox("Are Dancer 1 and Dancer 2 dance partners?");
 		dancer2 		= new JTextField(20);
 		partnerBox		= new JComboBox<String>();
-		jPresent2 		= new JCheckBox("Present");
+		jPresent2 		= new JCheckBox("Dancing");
+		jAtDance2 		= new JCheckBox("At the Dance");
 		outs2  			= new JTextField(2);
 		jMustDance2 	= new JCheckBox("Must Dance");
 		jWillingSingle2 = new JCheckBox("Willing to fill in as single if couple is out");
@@ -151,54 +155,66 @@ public class EditDancerFrame extends JFrame
 		mainPanel.add(pane1, c1);
 
 		JPanel pane2 = new JPanel(new GridBagLayout());
+		
 		GridBagConstraints c2a = new GridBagConstraints();
-	    c2a.gridx  = 0;
 	    c2a.insets = new Insets(0,0,0,100);  //right padding
 		pane2.add(jPresent1, c2a);
+		
 		GridBagConstraints c2b = new GridBagConstraints();
-	    c2b.gridx = 1;
+	    c2b.gridx = 2;
 	    pane2.add(new JLabel("Dancer 1 Outs: "), c2b);
+	    
 	    GridBagConstraints c2c = new GridBagConstraints();
-	    c2c.gridx = 2;
+	    c2c.gridx = 3;
 	    outs1.setMaximumSize(new Dimension  (45,30));
 	    outs1.setPreferredSize(new Dimension(45,30));
 	    outs1.setMinimumSize(new Dimension  (45,30));
 		pane2.add(outs1, c2c);
+		
 		GridBagConstraints c2 = new GridBagConstraints();
-		c2.gridx   = 0;
 		c2.gridy   = 2;
 	    c2.weightx = 1;
 	    c2.anchor  = GridBagConstraints.LINE_START;
 		mainPanel.add(pane2, c2);
 		
+		GridBagConstraints c3a = new GridBagConstraints();
+	    c3a.gridy  = 3;
+	    c3a.anchor = GridBagConstraints.LINE_START;
+	    mainPanel.add(jAtDance1, c3a);
+		
 		GridBagConstraints c3 = new GridBagConstraints();
-	    c3.gridy  = 3;
+	    c3.gridy  = 4;
 	    c3.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(jMustDance1, c3);
 		
 		GridBagConstraints c4 = new GridBagConstraints();
-	    c4.gridy  = 4;
+	    c4.gridy  = 5;
 	    c4.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(jWillingSingle1, c4);
 		
 		JPanel pane5 = new JPanel();
 		pane5.setLayout(new BoxLayout(pane5, BoxLayout.LINE_AXIS));
 		pane5.setAlignmentX(Component.LEFT_ALIGNMENT);
-		beauBelleBox1.setMaximumSize(new Dimension(100,30));
+		beauBelleBox1.setMinimumSize  (new Dimension(100,30));
+		beauBelleBox1.setMaximumSize  (new Dimension(100,30));
+		beauBelleBox1.setPreferredSize(new Dimension(100,30));
 		pane5.add(new Box.Filler(minSize, prefSize, maxSize));
 		pane5.add(new JLabel("Preferred position as single: "));
 		pane5.add(beauBelleBox1);
 		pane5.add(btnd1);
 		GridBagConstraints c5 = new GridBagConstraints();
-	    c5.gridy  = 5;
+	    c5.gridy  = 6;
 	    c5.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(pane5, c5);
 		
-		GridBagConstraints cSd = new GridBagConstraints();
-		cSd.gridy = 6;
-		cSd.insets = new Insets(10,0,10,0);
-	    cSd.fill = GridBagConstraints.HORIZONTAL;
-		mainPanel.add(new JSeparator(JSeparator.HORIZONTAL), cSd);
+		GridBagConstraints cS1 = new GridBagConstraints();
+		cS1.gridy = 7;
+		JSeparator sep1 = new JSeparator(JSeparator.HORIZONTAL);
+		sep1.setMinimumSize(new Dimension  (400, 15));
+		sep1.setMaximumSize(new Dimension  (400, 15));
+		sep1.setPreferredSize(new Dimension(400, 15));
+		sep1.setBackground(Color.LIGHT_GRAY);
+	    mainPanel.add(sep1, cS1);
 
 		// if partner is not currently set, display a drop-down to
 		// allow user to choose a partner from that current list of 
@@ -241,100 +257,119 @@ public class EditDancerFrame extends JFrame
 		}
 		else
 		{
-			dancer2.setMaximumSize(new Dimension(300,30));
+			dancer2.setMaximumSize  (new Dimension(300,30));
 			dancer2.setPreferredSize(new Dimension(300,30));
-			dancer2.setMinimumSize(new Dimension(300,30));
+			dancer2.setMinimumSize  (new Dimension(300,30));
 			pane6.add(new Box.Filler(minSize, prefSize, maxSize));
 			pane6.add(new JLabel("Dancer 2 Name: "));
 			pane6.add(dancer2);
 			this.dancer2TextBox = true;
 		}
 		GridBagConstraints c6 = new GridBagConstraints();
-	    c6.gridy = 7;
+	    c6.gridy  = 8;
 	    c6.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(pane6, c6);
 		
 		JPanel pane7 = new JPanel(new GridBagLayout());
+		
 		GridBagConstraints c7a = new GridBagConstraints();
+		c7a.gridx  = 0;
 	    c7a.insets = new Insets(0,0,0,100);
 		pane7.add(jPresent2, c7a);	
-		GridBagConstraints c7b = new GridBagConstraints();
-	    c7b.gridx = 1;
-	    pane7.add(new JLabel("Dancer 2 Outs: "), c7b);
-	    GridBagConstraints c7c = new GridBagConstraints();
+		
+		GridBagConstraints c7c = new GridBagConstraints();
 	    c7c.gridx = 2;
-	    outs2.setMaximumSize(new Dimension  (45,30));
+	    pane7.add(new JLabel("Dancer 2 Outs: "), c7c);
+	    
+	    GridBagConstraints c7d = new GridBagConstraints();
+	    c7d.gridx = 3;
+	    outs2.setMaximumSize  (new Dimension(45,30));
 	    outs2.setPreferredSize(new Dimension(45,30));
-	    outs2.setMinimumSize(new Dimension  (45,30));
-		pane7.add(outs2, c7c);
+	    outs2.setMinimumSize  (new Dimension(45,30));
+		pane7.add(outs2, c7d);
+		
 		GridBagConstraints c7 = new GridBagConstraints();
-		c7.gridy   = 8;
+		c7.gridy   = 9;
 	    c7.weightx = 1;
 	    c7.anchor  = GridBagConstraints.LINE_START;
-		mainPanel.add(pane7, c7);
+		
+	    mainPanel.add(pane7, c7);
+		
+		GridBagConstraints c8a = new GridBagConstraints();
+		c8a.gridy  = 10;
+	    c8a.anchor = GridBagConstraints.LINE_START;
+		pane7.add(jAtDance2, c8a);
 
 		GridBagConstraints c8 = new GridBagConstraints();
-	    c8.gridy  = 9;
+	    c8.gridy  = 11;
 	    c8.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(jMustDance2, c8);
 
 		GridBagConstraints c9 = new GridBagConstraints();
-	    c9.gridy  = 10;
+	    c9.gridy  = 12;
 	    c9.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(jWillingSingle2, c9);
 		
 		JPanel pane10 = new JPanel();
 		pane10.setLayout(new BoxLayout(pane10, BoxLayout.LINE_AXIS));
 		pane10.setAlignmentX(Component.LEFT_ALIGNMENT);
-		beauBelleBox2.setMaximumSize(new Dimension(100,30));
+		beauBelleBox2.setMinimumSize  (new Dimension(100,30));
+		beauBelleBox2.setMaximumSize  (new Dimension(100,30));
+		beauBelleBox2.setPreferredSize(new Dimension(100,30));
 		beauBelleBox2.setSelectedIndex(1);
 		pane10.add(new Box.Filler(minSize, prefSize, maxSize));
 		pane10.add(new JLabel("Preferred position as single: "));
 		pane10.add(beauBelleBox2);
 		pane10.add(btnd2);
 		GridBagConstraints c10 = new GridBagConstraints();
-	    c10.gridy  = 11;
+	    c10.gridy  = 13;
 	    c10.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(pane10, c10);
 		
-		GridBagConstraints cSa = new GridBagConstraints();
-		cSa.gridy = 12;
-		cSd.insets = new Insets(10,0,10,0);
-	    cSa.fill = GridBagConstraints.HORIZONTAL;
-		mainPanel.add(new JSeparator(JSeparator.HORIZONTAL), cSa);
-		
+		GridBagConstraints cS2 = new GridBagConstraints();
+		cS2.gridy = 14;
+		JSeparator sep2 = new JSeparator(JSeparator.HORIZONTAL);
+		sep2.setMinimumSize  (new Dimension(400, 15));
+		sep2.setMaximumSize  (new Dimension(400, 15));
+		sep2.setPreferredSize(new Dimension(400, 15));
+		sep2.setBackground(Color.LIGHT_GRAY);
+	    mainPanel.add(sep2, cS2);
+	    
         JPanel pane5a = new JPanel();
         pane5a.setLayout(new BoxLayout(pane5a, BoxLayout.LINE_AXIS));
         pane5a.setAlignmentX(Component.LEFT_ALIGNMENT);
         pane5a.add(jPartners);
 		GridBagConstraints c5a = new GridBagConstraints();
-	    c5a.gridy = 13;
+	    c5a.gridy = 15;
 		mainPanel.add(pane5a, c5a);
 
-	    GridBagConstraints cSb = new GridBagConstraints();
-		cSb.gridy = 14;
-	    cSb.fill = GridBagConstraints.HORIZONTAL;
-		mainPanel.add(new JSeparator(JSeparator.HORIZONTAL), cSb);
+	    GridBagConstraints cS3 = new GridBagConstraints();
+		cS3.gridy = 16;
+		JSeparator sep3 = new JSeparator(JSeparator.HORIZONTAL);
+		sep3.setMinimumSize  (new Dimension(400, 30));
+		sep3.setMaximumSize  (new Dimension(400, 30));
+		sep3.setPreferredSize(new Dimension(400, 30));
+		sep3.setBackground(Color.LIGHT_GRAY);
+	    mainPanel.add(sep3, cS3);
 		
 		JPanel pane11 = new JPanel();
 		pane11.setLayout(new BoxLayout(pane11, BoxLayout.LINE_AXIS));
 		pane11.setAlignmentX(Component.CENTER_ALIGNMENT);
         JButton btn1 = new JButton("Save");
         JButton btn2 = new JButton("Cancel");
-		pane11.add(new Box.Filler(new Dimension(90, 60), new Dimension(90, 60), new Dimension(90, 60)));
         pane11.add(btn1);
         pane11.add(btn2);
 		GridBagConstraints c11 = new GridBagConstraints();
-	    c11.gridy  = 15; 
-	    c11.insets = new Insets(0,0,0,100);  //right padding
+	    c11.gridy = 17; 
 	    c11.anchor = GridBagConstraints.CENTER;
 		mainPanel.add(pane11, c11);
 		
         // populate fields with data
 		
-
 		jPresent1.setSelected(true);
-		jPresent2.setSelected(true);       
+		jAtDance1.setSelected(true);
+		jPresent2.setSelected(true);
+		jAtDance2.setSelected(true);       
         
 		if(this.dancer1RowIX > -1)
 		{
@@ -343,6 +378,10 @@ public class EditDancerFrame extends JFrame
 				jPresent1.setSelected(true);       
 			else 
 				jPresent1.setSelected(false);
+			if((Boolean)dancer1Row.get(Dancer.DANCER_AT_DANCE_IX)) 
+				jAtDance1.setSelected(true);       
+			else 
+				jAtDance1.setSelected(false);
 			if((Boolean)dancer1Row.get(Dancer.MUST_DANCE_IX)) 
 				jMustDance1.setSelected(true);     
 			else 
@@ -363,6 +402,10 @@ public class EditDancerFrame extends JFrame
 				jPresent2.setSelected(true);       
 			else 
 				jPresent2.setSelected(false);
+			if((Boolean)dancer2Row.get(Dancer.DANCER_AT_DANCE_IX)) 
+				jAtDance2.setSelected(true);       
+			else 
+				jAtDance2.setSelected(false);
 			if((Boolean)dancer2Row.get(Dancer.MUST_DANCE_IX)) 
 				jMustDance2.setSelected(true);     
 			else 
@@ -411,7 +454,7 @@ public class EditDancerFrame extends JFrame
 		
 	    // add content to the window.
 	    this.add(mainPanel);
-	    this.setPreferredSize(new Dimension(430,470));   
+	    this.setPreferredSize(new Dimension(430,500));   
 	    
 	    // display the window
 	    this.pack();
@@ -474,6 +517,10 @@ public class EditDancerFrame extends JFrame
     {
     	return this.jPresent1;
     }
+    public JCheckBox getJAtDance1()
+    {
+    	return this.jAtDance1;
+    }
     public JCheckBox getJMustDance1()
     {
     	return this.jMustDance1;
@@ -509,6 +556,10 @@ public class EditDancerFrame extends JFrame
     public JCheckBox getJPresent2()
     {
     	return this.jPresent2;
+    }
+    public JCheckBox getJAtDance2()
+    {
+    	return this.jAtDance2;
     }
     public JCheckBox getJMustDance2()
     {

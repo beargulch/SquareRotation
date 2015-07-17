@@ -69,6 +69,7 @@ public class SaveDancerListener implements ActionListener
 				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJMustDance1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.MUST_DANCE_IX);
 				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJWillingSingle1().isSelected(), 	  this.frame.getDancer1RowIX(), Dancer.WILLING_SINGLE_IX);
 				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getBeauBelleBox1().getSelectedIndex(), this.frame.getDancer1RowIX(), Dancer.ROLE_IX);
+				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJAtDance1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.DANCER_AT_DANCE_IX);
 			}
 		}
 		else	// adding new dancer 1
@@ -90,12 +91,12 @@ public class SaveDancerListener implements ActionListener
 							dancerData.get(rowCt).set(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox1().getSelectedIndex()));
 							dancerData.get(rowCt).set(Dancer.PARTNER_IX, 			new Integer(-1));
 							dancerData.get(rowCt).set(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
-							dancerData.get(rowCt).set(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance1().isSelected()));
 							dancerData.get(rowCt).set(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
+							dancerData.get(rowCt).set(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
 							dancerData.get(rowCt).set(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
 							dancerData.get(rowCt).set(Dancer.DANCER_DANCED_IX,		new Boolean(false));
 							dancerData.get(rowCt).set(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-
+							
 							((DancersTableModel)Globals.getInstance().getDancersJTable().getModel()).fireTableDataChanged();
 						}
 						else
@@ -121,6 +122,7 @@ public class SaveDancerListener implements ActionListener
 					v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance1().isSelected()));
 					v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
 					v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
+					v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
 					v.add(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
 					v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
 					v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
@@ -164,6 +166,7 @@ public class SaveDancerListener implements ActionListener
 				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJMustDance2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.MUST_DANCE_IX);
 				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJWillingSingle2().isSelected(), 	  this.frame.getDancer2RowIX(), Dancer.WILLING_SINGLE_IX);
 				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getBeauBelleBox2().getSelectedIndex(), this.frame.getDancer2RowIX(), Dancer.ROLE_IX);
+				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJAtDance2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.DANCER_AT_DANCE_IX);
 			}
 		}
 		else	// adding new dancer 2
@@ -187,6 +190,7 @@ public class SaveDancerListener implements ActionListener
 							dancerData.get(rowCt).set(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
 							dancerData.get(rowCt).set(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
 							dancerData.get(rowCt).set(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
+							dancerData.get(rowCt).set(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
 							dancerData.get(rowCt).set(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
 							dancerData.get(rowCt).set(Dancer.DANCER_DANCED_IX,		new Boolean(false));
 							dancerData.get(rowCt).set(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
@@ -216,6 +220,7 @@ public class SaveDancerListener implements ActionListener
 					v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
 					v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
 					v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
+					v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
 					v.add(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
 					v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
 					v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
