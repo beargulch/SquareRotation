@@ -25,7 +25,6 @@ import java.util.Vector;
 import com.bgt.core.Dancer;
 import com.bgt.core.Globals;
 import com.bgt.frame.EditDancerFrame;
-import com.bgt.model.DancersTableModel;
 
 public class SaveDancerListener implements ActionListener 
 {	
@@ -74,61 +73,22 @@ public class SaveDancerListener implements ActionListener
 		}
 		else	// adding new dancer 1
 		{
-			boolean resinstateDeletedDancer = false;
 			String name = this.frame.getDancer1().getText();
 			if(name != null && !name.equals(""))
 			{
-				for(int rowCt = 0; rowCt < dancerData.size(); rowCt++)
-				{
-					if(name.equals((String)dancerData.get(rowCt).get(Dancer.NAME_IX)))	// adding a dancer who was previously deleted
-					{
-						if((Boolean)dancerData.get(rowCt).get(Dancer.DANCER_DELETED_IX))
-						{
-							resinstateDeletedDancer = true;
-							
-							this.frame.setDancer1RowIX(rowCt);
-
-							dancerData.get(rowCt).set(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox1().getSelectedIndex()));
-							dancerData.get(rowCt).set(Dancer.PARTNER_IX, 			new Integer(-1));
-							dancerData.get(rowCt).set(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
-							dancerData.get(rowCt).set(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
-							dancerData.get(rowCt).set(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
-							dancerData.get(rowCt).set(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
-							dancerData.get(rowCt).set(Dancer.DANCER_DANCED_IX,		new Boolean(false));
-							dancerData.get(rowCt).set(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-							
-							((DancersTableModel)Globals.getInstance().getDancersJTable().getModel()).fireTableDataChanged();
-						}
-						else
-						{
-							err1 = true;
-						}
-						break;
-					}
-				}
-				if(err1)
-				{
-					this.frame.dancer1Error();
-					this.frame.validate();
-					this.frame.repaint();
-				}
-				else if(!resinstateDeletedDancer)
-				{
-					Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
-					v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer1().getText());
-					v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox1().getSelectedIndex()));
-					v.add(Dancer.PARTNER_IX, 			new Integer(-1));
-					v.add(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
-					v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance1().isSelected()));
-					v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
-					v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
-					v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
-					v.add(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
-					v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
-					v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-					Globals.getInstance().getDancersTableModel().addRow(v);
-					this.frame.setDancer1RowIX(Globals.getInstance().getDancersTableModel().getLastRow());
-				}
+				Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
+				v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer1().getText());
+				v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox1().getSelectedIndex()));
+				v.add(Dancer.PARTNER_IX, 			new Integer(-1));
+				v.add(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
+				v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance1().isSelected()));
+				v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
+				v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
+				v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
+				v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
+				v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
+				Globals.getInstance().getDancersTableModel().addRow(v);
+				this.frame.setDancer1RowIX(Globals.getInstance().getDancersTableModel().getLastRow());
 			}
 		}
 
@@ -171,62 +131,22 @@ public class SaveDancerListener implements ActionListener
 		}
 		else	// adding new dancer 2
 		{
-			boolean resinstateDeletedDancer = false;
 			String name = this.frame.getDancer2().getText();
 			if(name != null && !name.equals(""))
 			{
-				for(int rowCt = 0; rowCt < dancerData.size(); rowCt++)
-				{
-					if(name.equals((String)dancerData.get(rowCt).get(Dancer.NAME_IX)))
-					{
-						if((Boolean)dancerData.get(rowCt).get(Dancer.DANCER_DELETED_IX))
-						{
-							resinstateDeletedDancer = true;
-							
-							this.frame.setDancer2RowIX(rowCt);
-
-							dancerData.get(rowCt).set(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox2().getSelectedIndex()));
-							dancerData.get(rowCt).set(Dancer.PARTNER_IX, 			new Integer(-1));
-							dancerData.get(rowCt).set(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
-							dancerData.get(rowCt).set(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
-							dancerData.get(rowCt).set(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
-							dancerData.get(rowCt).set(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
-							dancerData.get(rowCt).set(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
-							dancerData.get(rowCt).set(Dancer.DANCER_DANCED_IX,		new Boolean(false));
-							dancerData.get(rowCt).set(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-
-							((DancersTableModel)Globals.getInstance().getDancersJTable().getModel()).fireTableDataChanged();
-						}
-						else
-						{
-							err2 = true;
-							break;
-						}
-					}
-				}
-				if(err2)
-				{
-					this.frame.dancer2Error();
-					this.frame.validate();
-					this.frame.repaint();
-				}
-				else if(!resinstateDeletedDancer)
-				{
-					Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
-					v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer2().getText());
-					v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox2().getSelectedIndex()));
-					v.add(Dancer.PARTNER_IX, 			new Integer(-1));
-					v.add(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
-					v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
-					v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
-					v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
-					v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
-					v.add(Dancer.DANCER_DELETED_IX, 	new Boolean(false));
-					v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
-					v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-					Globals.getInstance().getDancersTableModel().addRow(v);
-					this.frame.setDancer2RowIX(Globals.getInstance().getDancersTableModel().getLastRow());
-				}
+				Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
+				v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer2().getText());
+				v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox2().getSelectedIndex()));
+				v.add(Dancer.PARTNER_IX, 			new Integer(-1));
+				v.add(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
+				v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
+				v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
+				v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
+				v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
+				v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
+				v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
+				Globals.getInstance().getDancersTableModel().addRow(v);
+				this.frame.setDancer2RowIX(Globals.getInstance().getDancersTableModel().getLastRow());
 			}
 		}
 		

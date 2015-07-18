@@ -77,7 +77,8 @@ public class Globals
 	public static final int HIGHLIGHT_ON_BTN  = 1;
 	public static final int HIGHLIGHT_OFF_BTN = 2;
 	
-	public static final String OUT = "Out";
+	public static final String OUT            = "Out";
+	public static final String REQUESTED_OUT  = "Req";
 	
 	public final static Color VERY_LIGHT_RED  = new Color(255,   0,   0,  30);	
 	public final static Color VERY_LIGHT_GREY = new Color(235, 235, 235     );

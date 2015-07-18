@@ -39,11 +39,8 @@ public class AtDanceAction extends AbstractAction
 	    // toggle the At Dance setting
 	    
 	    Boolean atDance = (Boolean)dancersTmdl.getValueAt(jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.DANCER_AT_DANCE_IX);
-
-	    System.out.println("B atTheDance action:  " + atDance);
 	    atDance = !atDance;		// toggle value
 
-	    System.out.println("A atTheDance action:  " + atDance);
 	    dancersTmdl.setValueAt((Boolean)atDance, jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.DANCER_AT_DANCE_IX);
 	    
 	    // if this dancer has a partner, set the partner present/absent value to match.
@@ -64,7 +61,6 @@ public class AtDanceAction extends AbstractAction
 	    	}
 	    	
 	    }
-	    jTable.validate();
-	    jTable.repaint();
+	    dancersTmdl.fireTableDataChanged();
     }
 }

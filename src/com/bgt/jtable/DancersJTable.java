@@ -27,7 +27,6 @@ import java.util.Vector;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 
 import com.bgt.action.AtDanceAction;
@@ -93,19 +92,21 @@ public class DancersJTable extends JTable implements MouseListener
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setUpTablePresentation()
 	{
-		//this.setAutoCreateRowSorter(true);
+		TableRowSorter<DancersTableModel>sorter = new TableRowSorter<DancersTableModel>(dancersTmdl);
 		
+		/*
 		RowFilter<DancersTableModel, Integer> activeFilter = new RowFilter<DancersTableModel, Integer>() 
 		{
 			public boolean include(RowFilter.Entry entry)
 			{
-				if ((Boolean)entry.getValue(Dancer.DANCER_DELETED_IX)) return false;	// don't show deleted dancer
+				if (!(Boolean)entry.getValue(Dancer.DANCER_AT_DANCE_IX)) return false;	// don't show dancer not at dance
 				
 				return true;	// do show active dancer
 			}
 		};
-		TableRowSorter<DancersTableModel>sorter = new TableRowSorter<DancersTableModel>(dancersTmdl);
 		sorter.setRowFilter(activeFilter);
+		*/
+		
 		sorter.setSortable(Dancer.PRESENT_IX, false);
 		sorter.setSortable(Dancer.MUST_DANCE_IX, false);
 		sorter.setSortable(Dancer.WILLING_SINGLE_IX, false);
@@ -179,7 +180,6 @@ public class DancersJTable extends JTable implements MouseListener
 		this.getTableHeader().setDefaultRenderer(new HeaderCellRenderer(true, 14f));
 		
 		// remove from the JTable (but not from the table model) things we don't want to display
-		this.removeColumn(this.getColumn(Dancer.DANCER_DELETED_STR));
 		this.removeColumn(this.getColumn(Dancer.DANCER_DANCED_STR));
 		this.removeColumn(this.getColumn(Dancer.DANCER_SELECTED_STR));
 	}	

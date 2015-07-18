@@ -60,7 +60,6 @@ public class PresentAction extends AbstractAction
 	    	}
 	    	
 	    }
-	    jTable.validate();
-	    jTable.repaint();
+	    dancersTmdl.fireTableDataChanged();
     }
 }

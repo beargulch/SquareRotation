@@ -86,7 +86,7 @@ public class JTipTextFieldRenderer implements TableCellRenderer
 			jTextField.setBackground(Globals.LIGHT_YELLOW);
 		}		
 		else
-		if(value.toString().equals("Out"))
+		if(value.toString().equals(Globals.OUT) || value.toString().equals(Globals.REQUESTED_OUT))
 		{
 			jTextField.setText(value.toString());
 			jTextField.setBackground(Globals.LIGHT_YELLOW);

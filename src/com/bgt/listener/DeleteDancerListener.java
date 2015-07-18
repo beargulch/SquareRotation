@@ -20,6 +20,7 @@ package com.bgt.listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
@@ -52,37 +53,56 @@ public class DeleteDancerListener implements ActionListener
 	{
 		int returnVal = JOptionPane.showConfirmDialog(null, "Are you certain you wish to delete dancer " + 
 						Globals.getInstance().getDancersTableModel().getDataVector().get(row).get(Dancer.NAME_IX) + 
-						"?", "Delete dancer " + dancer, JOptionPane.OK_CANCEL_OPTION);
+						"?  This will delete all data associated with this dancer (outs, etc.), and is unrecoverable.", 
+						"Delete dancer " + dancer, JOptionPane.OK_CANCEL_OPTION);
 		if(returnVal != JOptionPane.OK_OPTION) return;
 		
-		Globals.getInstance().getDancersTableModel().getDataVector().get(row).set(Dancer.DANCER_DELETED_IX, new Boolean(true));
-		clearEditFrameFields(dancer);
-		Globals.getInstance().getDancersTableModel().fireTableDataChanged();
-	
-		int partnerRow = (Integer)Globals.getInstance().getDancersTableModel().getDataVector().get(row).get(Dancer.PARTNER_IX);
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		
+		String deletedDancerName = (String)Globals.getInstance().getDancersTableModel().getDataVector().get(row).get(Dancer.NAME_IX);
+		int partnerRow = (Integer)dancerData.get(row).get(Dancer.PARTNER_IX);
+		if(partnerRow > row) partnerRow -= 1;
+		
+		dancerData.remove(row);
+		Globals.getInstance().getDancersTableModel().fireTableRowsDeleted(row, row);
+		Globals.getInstance().getTip().deleteDancer(row);
+		for(int ix = 0; ix < dancerData.size(); ix++)
+		{
+			if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > row)
+				dancerData.get(ix).set(Dancer.PARTNER_IX, (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)-1);
+		}
+		clearEditFrameFields(dancer);
+
 		if(partnerRow > -1)
 		{
 			// if there is a partner, break the link between them regardless of whether
 			// the partner will also be deleted.
-			Globals.getInstance().getDancersTableModel().getDataVector().get(row).set(Dancer.PARTNER_IX, -1);
-			Globals.getInstance().getDancersTableModel().getDataVector().get(partnerRow).set(Dancer.PARTNER_IX, -1);
+			
+			dancerData.get(partnerRow).set(Dancer.PARTNER_IX, -1);
 			frame.getJPartners().setSelected(false);
 			
-			returnVal = JOptionPane.showConfirmDialog(null, "Do you wish to also delete dancer " + 
-			            Globals.getInstance().getDancersTableModel().getDataVector().get(row).get(Dancer.NAME_IX) + "'s partner, " + 
+			returnVal = JOptionPane.showConfirmDialog(null, "Do you wish to also delete dancer " + deletedDancerName + "'s partner, " + 
 			            Globals.getInstance().getDancersTableModel().getDataVector().get(partnerRow).get(Dancer.NAME_IX) +
-			            "?", "Delete dancer " + dancer + "'s partner", JOptionPane.OK_CANCEL_OPTION);
-			if(returnVal != JOptionPane.OK_OPTION) return;
-	
-			// delete the partner as well
-			Globals.getInstance().getDancersTableModel().getDataVector().get(partnerRow).set(Dancer.DANCER_DELETED_IX, new Boolean(true));
-			clearEditFrameFields(3-dancer);	// change 1 to 2, or 2 to 1.
-			Globals.getInstance().getDancersTableModel().fireTableDataChanged();
-			frame.dispose();
+			            "?  This will delete all data associated with this dancer (outs, etc.), and is unrecoverable.", 
+			            "Delete dancer " + dancer + "'s partner", JOptionPane.OK_CANCEL_OPTION);
+			
+			if(returnVal == JOptionPane.OK_OPTION) {
+				
+				// delete the partner as well
+				dancerData.remove(partnerRow);
+				Globals.getInstance().getDancersTableModel().fireTableRowsDeleted(partnerRow, partnerRow);
+				Globals.getInstance().getTip().deleteDancer(partnerRow);
+				for(int ix = 0; ix < dancerData.size(); ix++)
+				{
+					if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > partnerRow)
+						dancerData.get(ix).set(Dancer.PARTNER_IX, (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)-1);
+				}
+				clearEditFrameFields(3-dancer);	// change 1 to 2, or 2 to 1.
+			}
 		}
-		else
-			frame.dispose();
+		
+		Globals.getInstance().getDancersTableModel().fireTableDataChanged();
+		frame.dispose();
 	}
 	
 	private void clearEditFrameFields(int whichDancer)

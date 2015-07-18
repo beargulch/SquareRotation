@@ -195,7 +195,7 @@ public class MainFrame extends JFrame
     	txtDancersOut.setPreferredSize(new Dimension(40,30));
     	txtDancersOut.setMaximumSize  (new Dimension(40,30));
     	txtDancersOut.setHorizontalAlignment(JTextField.CENTER);
-        JLabel dancersOutLable = new JLabel("Dancers Out");
+        JLabel dancersOutLable = new JLabel("Requested Outs");
         
     	txtProjectedSquares = new JTextField();
     	txtProjectedSquares.setMinimumSize  (new Dimension(40,30));
@@ -388,10 +388,10 @@ public class MainFrame extends JFrame
 	
 	public void setTipNo()
 	{
-		System.out.println("mainframe, setting tip to " + Globals.getInstance().getTip().getCurrentTip());
+		//System.out.println("mainframe, setting tip to " + Globals.getInstance().getTip().getCurrentTip());
 		short tipNo = Globals.getInstance().getTip().getCurrentTip();
 		if(tipNo < 0) tipNo = 0;
-		System.out.println("tipNo is now " + tipNo);
+		//System.out.println("tipNo is now " + tipNo);
 		txtTipNo.setText(Short.toString(tipNo));
 		txtTipNo.validate();
 		txtTipNo.repaint();
@@ -400,7 +400,7 @@ public class MainFrame extends JFrame
 	public void setDancerStatistics()
 	{
 		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-		System.out.println("mainframe, setting dancer statistics");
+		//System.out.println("mainframe, setting dancer statistics");
 
 		int dancersPresent = 0;
 		int dancersDancing = 0;
@@ -408,20 +408,19 @@ public class MainFrame extends JFrame
 		
 		for(int ix = 0; ix < dancerData.size(); ix++)
 		{
-			if((Boolean)dancerData.get(ix).get(Dancer.DANCER_DELETED_IX)) continue;
+			if(!(Boolean)dancerData.get(ix).get(Dancer.DANCER_AT_DANCE_IX)) continue;
 			
 			dancersPresent += 1;
-			System.out.println("mainframe, dancersPresent = " + dancersPresent);
+			//System.out.println("mainframe, dancersPresent = " + dancersPresent);
 			if((Boolean)dancerData.get(ix).get(Dancer.PRESENT_IX))
 			{
 				dancersDancing += 1;
-				System.out.println("mainframe, dancersDancing = " + dancersDancing);
+				//System.out.println("mainframe, dancersDancing = " + dancersDancing);
 			}
 			else
 			{
 				dancersOut += 1;
-				System.out.println("mainframe, dancersOut = " + dancersOut + ", name " + (String)dancerData.get(ix).get(Dancer.NAME_IX));
-		
+				//System.out.println("mainframe, dancersOut = " + dancersOut + ", name " + (String)dancerData.get(ix).get(Dancer.NAME_IX));
 			}
 		}
 		

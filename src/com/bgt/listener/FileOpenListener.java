@@ -86,9 +86,9 @@ public class FileOpenListener implements ActionListener
 							case Dancer.PRESENT_IX:
 							case Dancer.MUST_DANCE_IX:
 							case Dancer.WILLING_SINGLE_IX:
-							case Dancer.DANCER_DELETED_IX:
 							case Dancer.DANCER_DANCED_IX:
 							case Dancer.DANCER_SELECTED_IX:
+							case Dancer.DANCER_AT_DANCE_IX:
 								recObj[jx] = new Boolean(cols[ix]);
 								break;
 							

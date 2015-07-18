@@ -171,6 +171,21 @@ public class Tip implements Serializable
 		}
 		Globals.getInstance().getMainFrame().setDancerStatistics();
 	}
+
+	public void deleteDancer(int dancer) 
+	{ 
+		int capacity = dancerCt.size();
+
+		for(int ix = 0; ix < capacity; ix++)
+		{
+		   	dancerCt. get(ix).remove(dancer);
+		   	partnerCt.get(ix).remove(dancer);   
+		}
+		dancerCt. remove(dancer);
+	   	partnerCt.remove(dancer); 
+	   	
+		Globals.getInstance().getMainFrame().setDancerStatistics();
+	}
 	
 	public void tipLoadedFromSerializedForm()
 	{
@@ -268,7 +283,7 @@ public class Tip implements Serializable
 		short couplesToDisplay   = (short)(dancerData.size());
 		for(int ix = 0; ix < dancersToDisplay.length; ix++) dancersToDisplay[ix] = -1;
 		
-		this.screenData  = new ArrayList<ArrayList<Object>>(couplesToDisplay);
+		this.screenData = new ArrayList<ArrayList<Object>>(couplesToDisplay);
 		for(int ix = 0; ix < couplesToDisplay; ix++) 
 		{
 			this.screenData.add(new ArrayList<Object>(3));
@@ -328,12 +343,16 @@ public class Tip implements Serializable
 	    {
 	    	if(dancersToDisplay[ix] == 1) continue;		// this dancer has been processed
 	    	
-	    	this.screenData.get(line).set(0, Globals.OUT);
-	    	this.screenData.get(line).set(2, (Boolean)false);
-	    	
 	    	short d0 = (short)ix;
 	    	short d1 = ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).shortValue();
-	    	dancersToDisplay[d0] = 1;				// processed dancer d0
+	    	dancersToDisplay[d0] = 1;					// processed dancer d0
+	    	
+	    	if((Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX) || (Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX))
+	    		this.screenData.get(line).set(0, Globals.OUT);
+	    	else
+	    		this.screenData.get(line).set(0, Globals.REQUESTED_OUT);
+	    	
+	    	this.screenData.get(line).set(2, (Boolean)false);
 	    	
 	    	// if the options are set so that a couple can be pulled apart to dance
 	    	// with singles, it's possible that the partner of the current dancer 
@@ -348,8 +367,10 @@ public class Tip implements Serializable
 	    			dancersToDisplay[d1] = 1;	// processed dancer d1
 	    	
 	    	// dancers who are not present are not shown in the tip display as "out"
-	    	if(!(Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX) || 
-	    	   (d1 > 0 && !(Boolean)dancerData.get(d1).get(Dancer.PRESENT_IX))) continue;
+	    	//if(!(Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX) || 
+	    	//   (d1 > 0 && !(Boolean)dancerData.get(d1).get(Dancer.PRESENT_IX))) continue;
+	    	
+	    	if(!(Boolean)dancerData.get(d0).get(Dancer.DANCER_AT_DANCE_IX)) continue;
 	    	
 	    	if(d1 < 0)
 	    	{
@@ -464,8 +485,8 @@ public class Tip implements Serializable
 			// reset the flag that tracks whether each dancer has been selected for this tip
 			dancer.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);		
 			
-			// skip absent or deleted dancers
-			if(!(Boolean)dancer.get(Dancer.PRESENT_IX) || (Boolean)dancer.get(Dancer.DANCER_DELETED_IX)) 
+			// skip dancers voluntarily out, or not present at the dance
+			if(!(Boolean)dancer.get(Dancer.PRESENT_IX) || !(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX)) 
 				continue;
 			
 			eligibleDancers += 1;
@@ -597,8 +618,8 @@ public class Tip implements Serializable
 			for(Vector<Object>dancer : dancerData)
 			{
 				// skip absent or deleted dancers, and dancers already selected
-				if(!(Boolean)dancer.get(Dancer.PRESENT_IX)        	||		// not present
-					(Boolean)dancer.get(Dancer.DANCER_DELETED_IX) 	|| 		// deleted
+				if(!(Boolean)dancer.get(Dancer.PRESENT_IX)        	||		// voluntarily out
+				   !(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX) 	|| 		// not at dance
 					(Boolean)dancer.get(Dancer.DANCER_SELECTED_IX) 	|| 		// selected
 					(Integer)dancer.get(Dancer.PARTNER_IX) > -1)			// coupled
 					continue;
@@ -630,8 +651,8 @@ public class Tip implements Serializable
 				Vector<Object>dancer = dancerData.get(dx);
 				
 				// skip absent or deleted dancers, and dancers already selected
-				if(!(Boolean)dancer.get(Dancer.PRESENT_IX)        	||		// not present
-					(Boolean)dancer.get(Dancer.DANCER_DELETED_IX) 	|| 		// deleted
+				if(!(Boolean)dancer.get(Dancer.PRESENT_IX)        	||		// voluntarily out
+				   !(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX) 	|| 		// not at dance
 					(Boolean)dancer.get(Dancer.DANCER_SELECTED_IX) 	||		// selected
 					(Integer)dancer.get(Dancer.PARTNER_IX) < 0)				// single
 					continue;
@@ -893,8 +914,8 @@ public class Tip implements Serializable
 					continue;	// not been out enough and not marked must dance?
 				}
 				
-				if(!(Boolean)dancerData.get(ix).get(Dancer.PRESENT_IX)			||	// not present?
-					(Boolean)dancerData.get(ix).get(Dancer.DANCER_DELETED_IX)	|| 	// deleted?
+				if(!(Boolean)dancerData.get(ix).get(Dancer.PRESENT_IX)			||	// voluntarily out?
+				   !(Boolean)dancerData.get(ix).get(Dancer.DANCER_AT_DANCE_IX)	|| 	// not at dance?
 					(Boolean)dancerData.get(ix).get(Dancer.DANCER_SELECTED_IX))		// already dancing?
 				{
 					// skip this dancer for now
@@ -1021,8 +1042,8 @@ public class Tip implements Serializable
 				
 				if(!processSingle) continue;	// not been out enough and not marked must dance?
 				
-				if(!(Boolean)dancerData.get(jx).get(Dancer.PRESENT_IX)			 || // not present?
-					(Boolean)dancerData.get(jx).get(Dancer.DANCER_DELETED_IX)	 || // deleted?
+				if(!(Boolean)dancerData.get(jx).get(Dancer.PRESENT_IX)			 || // voluntarily out?
+				   !(Boolean)dancerData.get(jx).get(Dancer.DANCER_AT_DANCE_IX)	 || // not at dance?
 					(Boolean)dancerData.get(jx).get(Dancer.DANCER_SELECTED_IX)	 ||	// already dancing? 
 				   
 				   ((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1	&&		// dancer is coupled, and

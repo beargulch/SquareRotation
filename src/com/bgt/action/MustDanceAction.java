@@ -44,8 +44,7 @@ public class MustDanceAction extends AbstractAction
 	    
 	    int partnerIx = (Integer)dancersTmdl.getValueAt(jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.PARTNER_IX);
 	    if (partnerIx > -1) dancersTmdl.setValueAt((Boolean)mustDance, partnerIx, Dancer.MUST_DANCE_IX);
-	    
-	    jTable.validate();
-	    jTable.repaint();
+
+	    dancersTmdl.fireTableDataChanged();
 	}
 }

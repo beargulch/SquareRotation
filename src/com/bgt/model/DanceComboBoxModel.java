@@ -122,7 +122,7 @@ public class DanceComboBoxModel extends DefaultComboBoxModel<String>
 		
 		for(int ix = 0; ix < dancersTmdl.getRowCount(); ix++)
 		{
-			if(ix != currentDancerRow & !(Boolean)dancersTmdl.getValueAt(ix, Dancer.DANCER_DELETED_IX))
+			if(ix != currentDancerRow)
 			{ 
 				boolean alreadyPartnered = false;
 				for(int kx = 0; kx < dancersTmdl.getRowCount(); kx++)	
