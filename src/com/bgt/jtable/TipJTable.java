@@ -72,7 +72,7 @@ public class TipJTable extends JTable
 	{
 		if(data == null) return;
 		
-		// map 3 columns onto 6 columns for display, so
+		// map 2 columns onto 4 columns for display, so
 		//
 		// s1 d1                s1 d1 s3 d3
 		// s2 d2    becomes:    s2 d2 s4 d4
@@ -82,8 +82,11 @@ public class TipJTable extends JTable
 		// the 2 columns are:  
 		//   (s-) square no 
 		//   (d-) names of dancers in the couple 
+		//
+		// third column, information-only; not mapped
+		//	 boolean:  true means single, false means couple
 
-		Object[][] newData = new Object[(data.size()/2)+1][6];
+		Object[][] newData = new Object[(data.size()/2)+1][4];
 		int midway = (data.size() / 2) + (data.size() % 2) - 1; 
 		for(int ix = 0, jx = 0, kx = 0; ix < data.size(); ix++)
 		{
@@ -98,12 +101,13 @@ public class TipJTable extends JTable
 				kx = 0;		// filling out the first 2 columns
 			}
 			
-			newData[jx][kx++] = data.get(ix).get(0);			// square no
+			String square = (String)data.get(ix).get(0);		// square no, or string indicating no square assigned (out)
+			newData[jx][kx++] = square;							
 			if((Boolean)data.get(ix).get(2))	
 				newData[jx][kx] = "s~" + data.get(ix).get(1);	// names (e.g. "Dick & Jane"), flagged with "s~" for single
-			else							
-			if(((String)data.get(ix).get(0)).equals(Globals.OUT))
-				newData[jx][kx] = "y~" + data.get(ix).get(1);	// names (e.g. "Dick & Jane"), flagged with "o~" for out
+			else
+			if(square.equals(Globals.OUT) || square.equals(Globals.REQUESTED_OUT))
+				newData[jx][kx] = "y~" + data.get(ix).get(1);	// names (e.g. "Dick & Jane"), flagged with "y~" for yellow (out)
 			else
 				newData[jx][kx] = data.get(ix).get(1);			// names (e.g. "Dick & Jane"), normal, not flagged
 		}
