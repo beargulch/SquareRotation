@@ -91,7 +91,7 @@ public class FileSaveListener implements ActionListener
 			{
 				FileOutputStream fileOut = new FileOutputStream(fc.getSelectedFile() + ".ser");
 				ObjectOutputStream out = new ObjectOutputStream(fileOut);
-				out.writeObject(Globals.getInstance().getTip());
+				out.writeObject(Globals.getInstance().getCoupleGenerator());
 				out.close();
 				fileOut.close();
 				System.out.printf("Serialized data is saved in " + fc.getSelectedFile() + "ser");

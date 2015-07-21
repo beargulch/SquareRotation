@@ -65,7 +65,7 @@ public class DeleteDancerListener implements ActionListener
 		
 		dancerData.remove(row);
 		Globals.getInstance().getDancersTableModel().fireTableRowsDeleted(row, row);
-		Globals.getInstance().getTip().deleteDancer(row);
+		Globals.getInstance().getCoupleGenerator().deleteDancer(row);
 		for(int ix = 0; ix < dancerData.size(); ix++)
 		{
 			if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > row)
@@ -91,7 +91,7 @@ public class DeleteDancerListener implements ActionListener
 				// delete the partner as well
 				dancerData.remove(partnerRow);
 				Globals.getInstance().getDancersTableModel().fireTableRowsDeleted(partnerRow, partnerRow);
-				Globals.getInstance().getTip().deleteDancer(partnerRow);
+				Globals.getInstance().getCoupleGenerator().deleteDancer(partnerRow);
 				for(int ix = 0; ix < dancerData.size(); ix++)
 				{
 					if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > partnerRow)

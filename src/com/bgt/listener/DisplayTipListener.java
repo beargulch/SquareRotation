@@ -31,7 +31,7 @@ public class DisplayTipListener implements ActionListener
 	@Override 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		if(Globals.getInstance().getTip() != null && Globals.getInstance().getTip().getCurrentTip() < 1) return;
+		if(Globals.getInstance().getCoupleGenerator() != null && Globals.getInstance().getCoupleGenerator().getCurrentTip() < 1) return;
 		
 		Globals.setTipFrame(new TipFrame());
 	}

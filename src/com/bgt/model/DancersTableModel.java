@@ -44,7 +44,7 @@ public class DancersTableModel extends DefaultTableModel implements Serializable
 			public void tableChanged(TableModelEvent e) 
 			{ 
 				lastRow = e.getLastRow();
-				if(Globals.getInstance().getTip() != null) Globals.getInstance().getTip().tableModelChanged(lastRow);
+				if(Globals.getInstance().getCoupleGenerator() != null) Globals.getInstance().getCoupleGenerator().tableModelChanged(lastRow);
 			}
 		});
 		

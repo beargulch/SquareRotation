@@ -26,7 +26,6 @@ import java.util.Vector;
 import javax.swing.JTable;
 
 import com.bgt.core.Globals;
-import com.bgt.core.Tip;
 import com.bgt.frame.TipFrame;
 import com.bgt.model.TipTableModel;
 import com.bgt.renderer.HeaderCellRenderer;
@@ -38,6 +37,11 @@ public class TipJTable extends JTable
 	private static boolean 	  adjustedWidth    = false;
 	private TipTableModel     tipTmdl;
 	private TipFrame          tipFrame;
+	
+	public static final int    SQUARE1_IX	= 0;
+	public static final int    DANCER1_IX	= 1;
+	public static final int    SQUARE2_IX	= 2;
+	public static final int    DANCER2_IX	= 3;
 	
 	public TipJTable(TipFrame tipFrame) 
 	{
@@ -58,10 +62,10 @@ public class TipJTable extends JTable
     {
 		if(!adjustedWidth && getParent().getHeight() > 900)
 		{
-			this.getColumnModel().getColumn(Tip.SQUARE1_IX).setMaxWidth(140);
-			this.getColumnModel().getColumn(Tip.SQUARE1_IX).setMinWidth(140);
-			this.getColumnModel().getColumn(Tip.SQUARE2_IX).setMaxWidth(140);
-			this.getColumnModel().getColumn(Tip.SQUARE2_IX).setMinWidth(140);
+			this.getColumnModel().getColumn(SQUARE1_IX).setMaxWidth(140);
+			this.getColumnModel().getColumn(SQUARE1_IX).setMinWidth(140);
+			this.getColumnModel().getColumn(SQUARE2_IX).setMaxWidth(140);
+			this.getColumnModel().getColumn(SQUARE2_IX).setMinWidth(140);
 			adjustedWidth = true;
 		}
 		//System.out.println("getPreferredSize().height/getParent().getHeight():  " + getPreferredSize().height + "/" + getParent().getHeight());
@@ -123,14 +127,14 @@ public class TipJTable extends JTable
 
 		// set up editors, renderers, heights and widths for table columns
 		this.setGridColor(Color.gray);
-		this.getColumnModel().getColumn(Tip.SQUARE1_IX).setCellRenderer(new JTipTextFieldRenderer(true));
-		this.getColumnModel().getColumn(Tip.SQUARE1_IX).setMaxWidth(130);
-		this.getColumnModel().getColumn(Tip.SQUARE1_IX).setMinWidth(130);
-		this.getColumnModel().getColumn(Tip.DANCER1_IX).setCellRenderer(new JTipTextFieldRenderer());
-		this.getColumnModel().getColumn(Tip.SQUARE2_IX).setCellRenderer(new JTipTextFieldRenderer(true));
-		this.getColumnModel().getColumn(Tip.SQUARE2_IX).setMaxWidth(130);
-		this.getColumnModel().getColumn(Tip.SQUARE2_IX).setMinWidth(130);
-		this.getColumnModel().getColumn(Tip.DANCER2_IX).setCellRenderer(new JTipTextFieldRenderer());
+		this.getColumnModel().getColumn(SQUARE1_IX).setCellRenderer(new JTipTextFieldRenderer(true));
+		this.getColumnModel().getColumn(SQUARE1_IX).setMaxWidth(130);
+		this.getColumnModel().getColumn(SQUARE1_IX).setMinWidth(130);
+		this.getColumnModel().getColumn(DANCER1_IX).setCellRenderer(new JTipTextFieldRenderer());
+		this.getColumnModel().getColumn(SQUARE2_IX).setCellRenderer(new JTipTextFieldRenderer(true));
+		this.getColumnModel().getColumn(SQUARE2_IX).setMaxWidth(130);
+		this.getColumnModel().getColumn(SQUARE2_IX).setMinWidth(130);
+		this.getColumnModel().getColumn(DANCER2_IX).setCellRenderer(new JTipTextFieldRenderer());
 		this.getTableHeader().setDefaultRenderer(new HeaderCellRenderer(true, 24f));
 		this.getTableHeader().setBackground(Globals.MEDIUM_BLUE);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

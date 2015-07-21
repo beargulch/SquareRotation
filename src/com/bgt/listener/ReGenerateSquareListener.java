@@ -37,7 +37,7 @@ public class ReGenerateSquareListener implements ActionListener
 		if(Globals.getInstance().getDancersTableModel().getRowCount() < 8) return;
 		
 		// have we generated a Tip?
-		if(Globals.getInstance().getTip().getCurrentTip() < 1) return;
+		if(Globals.getInstance().getCoupleGenerator().getCurrentTip() < 1) return;
 		
 		if(!Globals.getInstance().getSquareGenerator().regenerateCurrentTip()) return;
 

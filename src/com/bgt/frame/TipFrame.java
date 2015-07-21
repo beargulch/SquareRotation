@@ -27,7 +27,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import com.bgt.core.Globals;
-import com.bgt.core.Tip;
 import com.bgt.jtable.TipJTable;
 import com.bgt.viewport.HeaderViewport;
 
@@ -36,16 +35,24 @@ public class TipFrame extends JFrame
 	private static final long serialVersionUID = 1L;
 	private JScrollPane jScrollPane;
 	
+	public static final String SQUARE_STR	= "Square";
+	public static final String DANCER_STR	= "Dancers";
+	public final static
+	String tipCol[] = { SQUARE_STR,		// "Square"
+						DANCER_STR,		// "Dancers"
+						SQUARE_STR,		// "Square"
+						DANCER_STR,		// "Dancers"
+					  };
+	
 	public TipFrame()
 	{	
 		this.setLayout(new GridBagLayout());
-		this.setTitle("Tip Number " + (Globals.getInstance().getTip().getCurrentTip()));
+		this.setTitle("Tip Number " + (Globals.getInstance().getCoupleGenerator().getCurrentTip()));
 	    
 		TipJTable jTable = new TipJTable(this);
 		
 		// generate the tip data, and add the data to the table model
-        Globals.getInstance().getTip().generateTipDisplay();
-        jTable.setUpTableModel(Globals.getInstance().getTip().getScreenData(), Tip.tipCol);
+        jTable.setUpTableModel(Globals.getInstance().getCoupleGenerator().generateTipDisplay(), tipCol);
 
 	    this.setPreferredSize(new Dimension(900,(jTable.getModel().getRowCount()*60)+jTable.getTableHeader().getHeight()));
         

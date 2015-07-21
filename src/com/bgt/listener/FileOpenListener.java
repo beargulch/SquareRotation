@@ -34,7 +34,7 @@ import javax.swing.JOptionPane;
 
 import com.bgt.core.Dancer;
 import com.bgt.core.Globals;
-import com.bgt.core.Tip;
+import com.bgt.core.CoupleGenerator;
 
 public class FileOpenListener implements ActionListener
 {
@@ -57,7 +57,7 @@ public class FileOpenListener implements ActionListener
 		
 		if(returnVal != JFileChooser.APPROVE_OPTION) return;
 		
-		Globals.getInstance().getTip().setCurrentTip((short)0);
+		Globals.getInstance().getCoupleGenerator().setCurrentTip((short)0);
 		List<Object[]> records = new ArrayList<Object[]>(100);
 		
 		BufferedReader bin = null;
@@ -133,12 +133,12 @@ public class FileOpenListener implements ActionListener
 		{
 			FileInputStream fileIn = new FileInputStream(fc.getSelectedFile() + ".ser");
 			ObjectInputStream   in = new ObjectInputStream(fileIn);
-			Globals.getInstance().setTip((Tip)in.readObject());
+			Globals.getInstance().setCoupleGenerator((CoupleGenerator)in.readObject());
 			System.out.println("before overlaying Tip with persisted object");
 			System.out.println("after overlaying Tip with persisted object");
 			in.close();
 			fileIn.close();
-			Globals.getInstance().getTip().tipLoadedFromSerializedForm();
+			Globals.getInstance().getCoupleGenerator().couplesLoadedFromSerializedForm();
 			Globals.getInstance().getMainFrame().setTipNo();
 		}
 		catch(FileNotFoundException f)
@@ -157,6 +157,6 @@ public class FileOpenListener implements ActionListener
 			return;
 		}
 
-		Globals.getInstance().getTip().allocateArrays();
+		Globals.getInstance().getCoupleGenerator().allocateArrays();
 	}
 }

@@ -38,9 +38,9 @@ public class ResetListener implements ActionListener
 						JOptionPane.OK_CANCEL_OPTION);
 		if(returnVal == JOptionPane.CANCEL_OPTION) return;
 		
-		if(Globals.getInstance().getTip() != null)
+		if(Globals.getInstance().getCoupleGenerator() != null)
 		{
-			Globals.getInstance().getTip().allocateArrays();
+			Globals.getInstance().getCoupleGenerator().allocateArrays();
 
 			Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);

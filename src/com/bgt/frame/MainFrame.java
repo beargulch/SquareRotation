@@ -389,7 +389,7 @@ public class MainFrame extends JFrame
 	public void setTipNo()
 	{
 		//System.out.println("mainframe, setting tip to " + Globals.getInstance().getTip().getCurrentTip());
-		short tipNo = Globals.getInstance().getTip().getCurrentTip();
+		short tipNo = Globals.getInstance().getCoupleGenerator().getCurrentTip();
 		if(tipNo < 0) tipNo = 0;
 		//System.out.println("tipNo is now " + tipNo);
 		txtTipNo.setText(Short.toString(tipNo));

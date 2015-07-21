@@ -21,38 +21,61 @@ package com.bgt.core;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Random;
 import java.util.Vector;
 
-public class Tip implements Serializable
+// the Tip class is very tightly coupled to the SquareGenerator class.
+//
+// the SquareGenerator class invokes methods in the CoupleGenerator class 
+// to select dancers and build couples.  the SquareGenerator class then 
+// uses the couples to build squares.  see the SquareGenerator class for 
+// notes on how it builds squares.
+
+// the CoupleGenerator class has the following responsibilities:
+//
+// the CoupleGenerator class scans through all the dancers, and selects 
+// which dancers will be in the next tip.  it does this by analyzing 
+// the number of times a dancer has been out as compared to all other
+// dancers.  dancers with higher outs are selected first.  during this 
+// process the "must dance" overrides the out-count analysis, and a 
+// dancer can also be removed from consideration if they wish to sit
+// out.
+//
+// when done selecting eligible dancers, the CoupleGenerator class then 
+// pairs dancers to make couples.  some couples are self-identified, and
+// some couples have to be made from singles.  when couples are made
+// from singles, another factor considered is how many times 2 singles
+// have danced with each other, and an effort is made to use this count to
+// rotate singles to minimize the number of times any 2 singles are
+// paired with each other.
+//
+// if the selected options permit, couples will be broken apart to
+// dance with a single if the single has been out more than the
+// couple.
+
+
+public class CoupleGenerator implements Serializable
 {
+	// the Tip class is instantiated once and only once when program execution
+	// begins.
+	//
+	// some Tip variables persist across multiple tips, and some variables are
+	// re-allocated or refreshed for each tip.
 	private static final long serialVersionUID = 1L;
 	
 	private static final boolean doBreakUpCouples    = true;
 	private static final boolean doNotbreakUpCouples = false;
 	private static final boolean doSinglesOnly       = true;
 	private static final boolean doSinglesAndCouples = false;
-	
-	// TODO:  adjust dancerCt when tip is regenerated
-	
-	public static final String SQUARE_STR	= "Square";
-	public static final String DANCER_STR	= "Dancers";
-	public static final int    SQUARE1_IX	= 0;
-	public static final int    DANCER1_IX	= 1;
-	public static final int    SQUARE2_IX	= 2;
-	public static final int    DANCER2_IX	= 3;
-	
-	public final static
-	String tipCol[] = { SQUARE_STR,		// "Square"
-						DANCER_STR,		// "Dancers"
-						SQUARE_STR,		// "Square"
-						DANCER_STR,		// "Dancers"
-					  };
-	
+
 	//private transient DancersTableModel tmdl;	// transient == do not serialize
 	
-	private short noOfTips		= 20;
+	// persistent variables.  these variables are allocated once, and 
+	// persist across multiple tips.
+	
+	// non-persistent variables.  these variables are reallocated or
+	// reinitialized each time a new tip is generated.
+
 	private short currentTip 	=  0;
 	private short noOfSquares	=  0;
 
@@ -66,11 +89,6 @@ public class Tip implements Serializable
 	private int matchedBeaux        = 0; 
 	private int unmatchedSingleOuts = 0; 
 
-	private Random random;
-	
-	//private Vector<Vector<Object>>dancerData;
-	private ArrayList<ArrayList<Object>>screenData;
-	
 	// maxActual keeps track of the maximum number of times any one dancer has
 	// danced with any other dancer.
 
@@ -82,27 +100,26 @@ public class Tip implements Serializable
 	
 	// (DancersTableModel) dancersTmdl.getDataVector().get(5);
 
-	// the "couple" array holds the dancer numbers assigned to each couple.  the first level in this 
-	// array is the couple number (that is, the index into the first level is couple number), and the 
-	// second level in the array is another three-element array that holds two dancers and a flag.  
-	// the flag is used to indicate whether a couple has been selected for a square in the current tip.
-	// level 1:  couple  level2:  dancer1, dancer2, selected flag
-	
+	// the "couple" array is an array of Couples objects, which contain the 2 dancer numbers that make up
+	// each couple, plus a flag to indicate whether the couple has been selected to be in a square.
 	// this array is built anew for each tip, because the couples in a tip must be assembled from a 
-	// combination of single dancers and coupled dancers taken from DancersTableModel.  this array can
-	// contain couples assembled from singles that exist only for the duration of a tip.
-	private ArrayList<ArrayList<Short>>couple;
+	// combination of single dancers and coupled dancers taken from DancersTableModel, which means the
+	// composition of the various couples will vary from tip to tip. 
+	private Couples couples;
 	
-	// couplesInSquare holds the 4 couples assigned to each square in a given tip.
-    // level 1:  square number (0 - 4)  level 2:  couple number.  couple number in this array corresponds
-	// to the primary index of the couple array.
-	private ArrayList<ArrayList<Short>>couplesInSquare;
+	// couplesInSquare is an array of CouplesInSquare objects, each of which contains the 4 couples 
+	// assigned to a square.  the couple number of each couple corresponds to the primary index of the
+	// couples array.
+	private CouplesInSquare couplesInSquare;
 
-	// dancerCt tracks the number of times one dancer has danced with another.  for given dancer numbers 
-	// d1 and d2, dancer[d1][d2] == dancer[d2][d1].  note that two dancers dancing in a couple does not 
-	// increment this count between the two coupled dancers.
-	private static ArrayList<ArrayList<Short>>dancerCt;
-	private static ArrayList<ArrayList<Short>>partnerCt;
+	// dancerCt tracks the number of times one dancer has danced in the same square as another dancer.  
+	// note that two dancers dancing in a couple does not increment the count between the two coupled dancers.
+	private static DancerCounts dancerCt;
+	
+	// dancerCt tracks the number of times one dancer has been partnered with another in singles rotation.  
+	// note that two dancers dancing in a predefined couple (not a couple built during singles rotation)
+	// does not increment the count between the two coupled dancers.
+	private static DancerCounts partnerCt;
 	
 	// participatingDancer is used to keep track of the dancers who are present during the process that
 	// selects the dancers who will dance in the next tip.  this is necessary during the tip regeneration
@@ -112,24 +129,43 @@ public class Tip implements Serializable
 	// to identify participating dancers.
 	private short[] participatingDancer;
 	
-	private static Tip instance = null;
+	private static CoupleGenerator instance = null;
 
-	protected Tip() 
+	protected CoupleGenerator() 
 	{
-		random = new Random(System.nanoTime());
-		this.noOfTips = 20;
-
 		allocateArrays();
 	}
 	
-	public static Tip getInstance()
+	public static CoupleGenerator getInstance()
 	{
 		if(instance == null)
 		{
-			System.out.println("instantiate Tip");
-			instance = new Tip();
+			System.out.println("instantiate CoupleGenerator");
+			instance = new CoupleGenerator();
 		}
 		return instance;
+	}
+	
+	public void couplesLoadedFromSerializedForm()
+	{
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		
+		if(dancerData.size() > 0 && (partnerCt.size() == 0 || dancerCt.size() == 0))
+		{
+			allocateArrays();
+			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
+		}
+	}
+	
+	public void allocateArrays() 
+	{	
+		this.currentTip  =  0;
+		this.noOfSquares =  0;
+
+		System.out.println("allocateArrays(), Globals.getInstance().getDancersJTable().getRowCount() = " + Globals.getInstance().getDancersJTable().getRowCount());
+		
+		dancerCt  = new DancerCounts(Globals.getInstance().getDancersJTable().getRowCount());
+		partnerCt = new DancerCounts(Globals.getInstance().getDancersJTable().getRowCount());
 	}
 
 	public void tableModelChanged(int lastRow) 
@@ -144,85 +180,23 @@ public class Tip implements Serializable
 		int oldCapacity = dancerCt.size();
 		int newCapacity = oldCapacity + (lastRow + 1 - dancerCt.size());
 		
+		// this method is only useful for increasing capacity.  if
+		// capacity is decreased, it is handled separately below in 
+		// method deleteDancer().
 		if(newCapacity > oldCapacity)
 		{
 			dancerCt. ensureCapacity(newCapacity);
 			partnerCt.ensureCapacity(newCapacity);
-			for(int ix = 0; ix < oldCapacity; ix++)
-			{
-				dancerCt. get(ix).ensureCapacity(newCapacity);
-				partnerCt.get(ix).ensureCapacity(newCapacity);
-				for(int jx = oldCapacity; jx < newCapacity; jx++)
-			    {
-			    	dancerCt. get(ix).add((short)0);
-			    	partnerCt.get(ix).add((short)0);
-			    }
-			}
-			for(int ix = oldCapacity; ix < newCapacity; ix++)
-			{
-				dancerCt .add(new ArrayList<Short>(newCapacity));
-				partnerCt.add(new ArrayList<Short>(newCapacity));
-				for(int jx = 0; jx < newCapacity; jx++)
-			    {
-			    	dancerCt. get(ix).add((short)0);
-			    	partnerCt.get(ix).add((short)0);
-			    }
-			}
 		}
 		Globals.getInstance().getMainFrame().setDancerStatistics();
 	}
 
 	public void deleteDancer(int dancer) 
 	{ 
-		int capacity = dancerCt.size();
-
-		for(int ix = 0; ix < capacity; ix++)
-		{
-		   	dancerCt. get(ix).remove(dancer);
-		   	partnerCt.get(ix).remove(dancer);   
-		}
 		dancerCt. remove(dancer);
-	   	partnerCt.remove(dancer); 
+		partnerCt.remove(dancer);   
 	   	
 		Globals.getInstance().getMainFrame().setDancerStatistics();
-	}
-	
-	public void tipLoadedFromSerializedForm()
-	{
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-		
-		if(dancerData.size() > 0 && (partnerCt.size() == 0 || dancerCt.size() == 0))
-		{
-			allocateArrays();
-			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
-		}
-	}
-	
-	public void allocateArrays() 
-	{	
-		this.noOfTips		= 20;
-		this.currentTip 	=  0;
-		this.noOfSquares	=  0;
-
-		System.out.println("allocateArrays(), Globals.getInstance().getDancersJTable().getRowCount() = " + Globals.getInstance().getDancersJTable().getRowCount());
-		
-		dancerCt  = new ArrayList<ArrayList<Short>>(Globals.getInstance().getDancersJTable().getRowCount());
-		partnerCt = new ArrayList<ArrayList<Short>>(Globals.getInstance().getDancersJTable().getRowCount());
-		for(int ix = 0; ix < Globals.getInstance().getDancersJTable().getRowCount(); ix++) 
-		{
-			dancerCt .add(new ArrayList<Short>(Globals.getInstance().getDancersJTable().getRowCount()));
-			partnerCt.add(new ArrayList<Short>(Globals.getInstance().getDancersJTable().getRowCount()));
-		    for(int jx = 0; jx < Globals.getInstance().getDancersJTable().getRowCount(); jx++)
-		    {
-		    	dancerCt.get (ix).add((short)0);
-		    	partnerCt.get(ix).add((short)0);
-		    }
-		}	
-	
-		//if(this.noOfTips < 1 || Globals.getInstance().getDancersJTable().getRowCount() < 1) return;
-		
-		this.couplesInSquare = new ArrayList<ArrayList<Short>>(this.noOfTips);
-		initializeCouplesInSquare();
 	}
 	
 	public void setCurrentTip(short currentTip) 
@@ -245,207 +219,47 @@ public class Tip implements Serializable
 	
 	public short getNoOfCouples() 
 	{
-		return (short)couple.size();
+		return couples.getNoOfCouples();
 	}
 	
 	public short getNoOfSquares() 
 	{
 		return this.noOfSquares;
 	}
-	
-	public ArrayList<ArrayList<Object>>getScreenData()
+
+	public Couples getCouples()
 	{
-		return this.screenData;
+		return couples;
 	}
 	
-	public ArrayList<ArrayList<Short>>getCouple()
-	{
-		return couple;
-	}
-	
-	public ArrayList<ArrayList<Short>>getDancerCt()
+	public DancerCounts getDancerCt()
 	{
 		return dancerCt;
 	}
 	
-	public ArrayList<ArrayList<Short>>getCouplesInSquare()
+	public CouplesInSquare getCouplesInSquare()
 	{
 		return couplesInSquare;
 	}
+	
+	// end getters
 
-	public void generateTipDisplay()
+	public ArrayList<ArrayList<Object>> generateTipDisplay()
 	{
-		if(this.noOfSquares == 0) return;
-		
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-
-		short dancersToDisplay[] = new short[dancerData.size()];
-		short couplesToDisplay   = (short)(dancerData.size());
-		for(int ix = 0; ix < dancersToDisplay.length; ix++) dancersToDisplay[ix] = -1;
-		
-		this.screenData = new ArrayList<ArrayList<Object>>(couplesToDisplay);
-		for(int ix = 0; ix < couplesToDisplay; ix++) 
-		{
-			this.screenData.add(new ArrayList<Object>(3));
-		    this.screenData.get (ix).add("zzz");			// square number
-		   	this.screenData.get (ix).add("zzz");			// dancer name(s)
-		   	this.screenData.get (ix).add((Boolean)false);	// flag:  true if couple includes a single
-		}
-		
-	    // loop goes through all squares in the tip
-    	int squareNo = random.nextInt(this.noOfSquares);	// randomly assign square numbers
-    	int line     = 0;
-	    for(short sx = 0; sx < this.noOfSquares; sx++)
-	    {
-	    	squareNo += 1;
-	    	if(squareNo > this.noOfSquares) squareNo = 1;
-	    	
-	        // pull out the couples in this square
-	    	for(short cx = 0; cx < 4; cx++)
-	    	{
-                short cpl = couplesInSquare.get(sx).get(cx);
-
-	            this.screenData.get(line).set(0, Integer.toString(squareNo));	// set square number in display
-
-	            short d0 = this.couple.get(cpl).get(0);
-	            short d1 = this.couple.get(cpl).get(1);
-	            dancersToDisplay[d0] = 1;	// processed dancer d0
-	            dancersToDisplay[d1] = 1;	// processed dancer d1
-	            if(dancerData.get(d0).get(Dancer.NAME_IX).toString().compareToIgnoreCase(dancerData.get(d1).get(Dancer.NAME_IX).toString()) < 0)
-	            {
-	            	this.screenData.get(line).set(1, dancerData.get(d0).get(Dancer.NAME_IX).toString() + " & " + 
-                          	                         dancerData.get(d1).get(Dancer.NAME_IX).toString());
-	            }
-	            else
-	            {
-	            	this.screenData.get(line).set(1, dancerData.get(d1).get(Dancer.NAME_IX).toString() + " & " + 
-                        	                         dancerData.get(d0).get(Dancer.NAME_IX).toString());
-	            }
-	            
-	            // this is used to control whether the font should be a special color
-	            // if a couple includes a single.  true == single == special color
-	            
-	            if((Integer)dancerData.get(d0).get(Dancer.PARTNER_IX) < 0 || 
-	               (Integer)dancerData.get(d1).get(Dancer.PARTNER_IX) < 0)
-	            {
-	            	this.screenData.get(line).set(2, (Boolean)true);
-	            }
-	            else
-	            {
-	            	this.screenData.get(line).set(2, (Boolean)false);
-	            }
-	            line += 1;
-	        }
-	    } 
-	    
-	    // add in 'out' dancers
-	    for(int ix = 0; ix < dancerData.size(); ix ++)
-	    {
-	    	if(dancersToDisplay[ix] == 1) continue;		// this dancer has been processed
-	    	
-	    	short d0 = (short)ix;
-	    	short d1 = ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).shortValue();
-	    	dancersToDisplay[d0] = 1;					// processed dancer d0
-	    	
-	    	if((Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX) || (Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX))
-	    		this.screenData.get(line).set(0, Globals.OUT);
-	    	else
-	    		this.screenData.get(line).set(0, Globals.REQUESTED_OUT);
-	    	
-	    	this.screenData.get(line).set(2, (Boolean)false);
-	    	
-	    	// if the options are set so that a couple can be pulled apart to dance
-	    	// with singles, it's possible that the partner of the current dancer 
-	    	// (assuming there is a partner) has been temporarily assigned to dance
-	    	// with someone else.  that means they will appear in the display with 
-	    	// the new, temporary partner, and should not be shown again with this 
-	    	// dancer as "out".
-	    	if(d1 > -1) 	// yes, the current dancer has partner
-	    		if(dancersToDisplay[d1] == 1)	// partner has already been displayed, so
-	    			d1 = -1;					//  set d1 to -1, as if there is no partner
-	    		else
-	    			dancersToDisplay[d1] = 1;	// processed dancer d1
-	    	
-	    	// dancers who are not present are not shown in the tip display as "out"
-	    	//if(!(Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX) || 
-	    	//   (d1 > 0 && !(Boolean)dancerData.get(d1).get(Dancer.PRESENT_IX))) continue;
-	    	
-	    	if(!(Boolean)dancerData.get(d0).get(Dancer.DANCER_AT_DANCE_IX)) continue;
-	    	
-	    	if(d1 < 0)
-	    	{
-	    		this.screenData.get(line).set(1, dancerData.get(d0).get(Dancer.NAME_IX).toString());
-	    	}
-	    	else
-	    	if(dancerData.get(d0).get(Dancer.NAME_IX).toString().compareToIgnoreCase(dancerData.get(d1).get(Dancer.NAME_IX).toString()) < 0)
-            {
-            	this.screenData.get(line).set(1, dancerData.get(d0).get(Dancer.NAME_IX).toString() + " & " + 
-                    	                         dancerData.get(d1).get(Dancer.NAME_IX).toString());
-            }
-            else
-            {
-            	this.screenData.get(line).set(1, dancerData.get(d1).get(Dancer.NAME_IX).toString() + " & " + 
-                    	                         dancerData.get(d0).get(Dancer.NAME_IX).toString());
-            }
-	    	line += 1;
-	    }
-
-	    // sort the display in ascending order by dancers
-	    Collections.sort(this.screenData, new Comparator<ArrayList<Object>>() {
-            @Override
-            public int compare(final ArrayList<Object> entry1, final ArrayList<Object> entry2) {
-                final String square1 = entry1.get(1).toString();
-                final String square2 = entry2.get(1).toString();
-                return square1.compareTo(square2);
-            }
-        });
-	    
-	    // remove unused elements, indicated by 'zzz' in square number.  they should be at the 
-	    // end after the sort ('zzz' is also in unused dancer names), so we iterate backwards.
-	    for(int ix = screenData.size()-1; ix > -1; ix--)
-	    	if(((String)screenData.get(ix).get(1)).equals("zzz")) screenData.remove(ix);
+		return new TipDisplay().generateTipDisplay(noOfSquares, couplesInSquare, couples);
 	}
 
 	public void incrementTip() 
 	{
 		this.currentTip += 1;
 		Globals.getInstance().getMainFrame().setTipNo();
-		
-		if(this.currentTip >= this.couplesInSquare.size())
-		{
-			this.noOfTips += 10;
-			this.couplesInSquare.ensureCapacity(this.noOfTips);
-			
-			initializeCouplesInSquare();
-		}
-	}
-	
-	private void initializeCouplesInSquare()
-	{
-		// note that squaresPerTip is pretty much the same as this.noOfSquares, but
-		// this.noOfSquares is computed in makeCouples, and may not be available at
-		// the time this method is called.  we wing it by dividing the total number
-		// of dancers by 8, and adding one.  since this does not take into account
-		// dancers that have been deleted or who are absent, and since it always adds
-		// 1 to the total, it should always be a little higher than the actual number 
-		// of squares, which is fine for our purposes.
-		
-		int squaresPerTip = (Globals.getInstance().getDancersJTable().getRowCount() / 8) + 1;	// rough estimate
-		this.couplesInSquare = new ArrayList<ArrayList<Short>>(squaresPerTip);
-
-		for(short sx = 0; sx < squaresPerTip; sx++)
-		{
-			ArrayList<Short>couples = new ArrayList<Short>(4);
-			for(short kx = 0; kx < 4; kx++) couples.add(kx, (short) 0);
-			this.couplesInSquare.add(couples);
-		}	
 	}
 	
 	public void clearCouplesUsedFlag()
 	{
 		// clear the third element in the couples array that is used to track whether the couple
 		// has been used to form a square in a tip.
-		for(int ix = 0; ix < this.couple.size(); ix++) this.couple.get(ix).set(2, (short)0);
+		couples.clearCouplesUsedFlag();
 	}
 	
 	// prior to generating a tip, it's necessary to build the couples that will be participating in the
@@ -455,7 +269,7 @@ public class Tip implements Serializable
 
 	public boolean makeCouples()
 	{
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 
 		int coupledCt			= 0;
 		int eligibleDancers     = 0;
@@ -550,21 +364,13 @@ public class Tip implements Serializable
 		}
 
 		this.coupleCt    = 0;
-		this.noOfSquares = (short)(noOfCouples / 4);								// compute the number of squares from the number of couples,
-		this.couple      = new ArrayList<ArrayList<Short>>(dancerData.size()/2);	// and allocate the couple array.
-		//this.couple = new ArrayList<ArrayList<Short>>(noOfCouples);				// and allocate the couple array.
+		this.noOfSquares = (short)(noOfCouples / 4);	// compute the number of squares from the number of couples,
+		this.couples     = new Couples(noOfCouples);	// and allocate the couples array.
+		this.couplesInSquare = new CouplesInSquare();
 
 		if(this.noOfSquares < 1) return false;
-		
-		for(int ix = 0; ix < dancerData.size()/2; ix++) 
-		{
-			this.couple.add(new ArrayList<Short>(3));
-		    for(int jx = 0; jx < 3; jx++)
-		    {
-		    	couple.get(ix).add((short)0);
-		    }
-		}
-		System.out.println("couple.size() = " + couple.size());
+
+		System.out.println("couples.getNoOfCouples() = " + couples.getNoOfCouples());
 		
 		/*====================================================================================*/
 		
@@ -837,13 +643,13 @@ public class Tip implements Serializable
 		
 		// remove any couple from the couple array that doesn't have an actual couple,
 		// as indicated by 2 zero-value dancers.
-		int csize = couple.size() - 1;
+		int csize = couples.getNoOfCouples() - 1;
 		for(int ix = csize; ix > -1; ix--)	// go backwards, since removing an elements shifts the 
 		{									// remaining elements down one notch.
-			if(couple.get(ix).get(0) == 0 && couple.get(ix).get(1) == 0) 
+			if(couples.getDancer0(ix) == 0 && couples.getDancer1(ix) == 0) 
 			{
 				noOfCouples -= 1;
-				couple.remove(ix);
+				couples.remove(ix);
 			}
 		}
 		
@@ -854,7 +660,7 @@ public class Tip implements Serializable
 		groomPartners();	// see if we can move partners around to lower partner counts.
 		
 		// shuffle the couples prior to making squares
-		Collections.shuffle(couple);
+		couples.shuffle();
 		return true;
 	}
 
@@ -864,7 +670,7 @@ public class Tip implements Serializable
 		// from the pool of available dancers.  the dancers who have the most outs are
 		// selected first.  we know the highest number of outs to start with from the
 		// maxOuts variable set above.
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		
 		boolean done  = false;
 		int currentMaxOuts = this.maxOuts;
@@ -879,7 +685,7 @@ public class Tip implements Serializable
 		
 		ArrayList<Short>randomizedDancer = new ArrayList<Short>(dancerData.size());
 		for(short ix = 0; ix < dancerData.size(); ix++) randomizedDancer.add(ix, ix);
-		Collections.shuffle(randomizedDancer, new Random(random.nextLong()));
+		Collections.shuffle(randomizedDancer, new Random(new Random(System.nanoTime()).nextLong()));
 		
 		while(!done)
 		{
@@ -975,7 +781,7 @@ public class Tip implements Serializable
 	
 	private void processCouple(int ix)
 	{
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		
 		// we can't use this couple if one of them has already been paired-up to dance with a single
 		if((Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.DANCER_SELECTED_IX)) return;
@@ -987,7 +793,7 @@ public class Tip implements Serializable
 	
 	private void processSingle(boolean breakupCouples, int ix, ArrayList<Short>randomizedDancer)
 	{
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		
 		// *****************************  SINGLES PROCESSING   ***************************** //
 		// this section deals with singles, which is not as straightforward as couples because
@@ -1189,11 +995,10 @@ public class Tip implements Serializable
 					}
 					else					// if partner already selected, choose this one instead if they've danced together less
 					{
-						System.out.println("ix: " + ix + "jx: " + jx);
-						System.out.println("selectedPartner" + selectedPartner);
-						System.out.println("partnerCt.get(ix).get(jx): " + partnerCt.get(ix).get(jx));
-						System.out.println("partnerCt.get(ix).get(selectedPartner): " + partnerCt.get(ix).get(selectedPartner));
-						if(partnerCt.get(ix).get(jx) < partnerCt.get(ix).get(selectedPartner))
+						System.out.println("ix: " + ix + "jx: " + jx + ", selectedPartner" + selectedPartner);
+						System.out.println("partnerCt.get(" + ix + ", " + jx              + "): " + partnerCt.get(ix, jx));
+						System.out.println("partnerCt.get(" + ix + ", " + selectedPartner + "): " + partnerCt.get(ix, selectedPartner));
+						if(partnerCt.get(ix, jx) < partnerCt.get(ix, selectedPartner))
 						{
 							System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " re-matched with " + dancerData.get(jx).get(Dancer.NAME_IX));
 							selectedPartner = jx;
@@ -1259,7 +1064,7 @@ public class Tip implements Serializable
 	
 	void matchCoupledPartnerToSingle(int singleIx, int partnerIx, int roleIx, ArrayList<Short>randomizedDancer)
 	{
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 
 		// we got here because a single was paired up with a dancer in a couple, and we
 		// want to pair the other half of the couple with a remaining single.
@@ -1302,22 +1107,22 @@ public class Tip implements Serializable
 		}
 	}
 	
-	private void addCouple(int d1, int d2, boolean countPairing)
+	private void addCouple(int d0, int d1, boolean countPairing)
 	{
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 	
-		System.out.println("in addCouple, adding couple " + this.coupleCt + ", size of couple:  " + couple.size());
-		System.out.println("in addCouple, couple is " + dancerData.get(d1).get(Dancer.NAME_IX) + ", " + dancerData.get(d2).get(Dancer.NAME_IX));
+		System.out.println("in addCouple, adding couple " + this.coupleCt + ", size of couple:  " + couples.getNoOfCouples());
+		System.out.println("in addCouple, couple is " + dancerData.get(d0).get(Dancer.NAME_IX) + ", " + dancerData.get(d1).get(Dancer.NAME_IX));
 	
 		// select both this dancer and their partner.
+		dancerData.get(d0).set(Dancer.DANCER_SELECTED_IX, (Boolean)true);
 		dancerData.get(d1).set(Dancer.DANCER_SELECTED_IX, (Boolean)true);
-		dancerData.get(d2).set(Dancer.DANCER_SELECTED_IX, (Boolean)true);
 		// 1st dancer in couple
-		couple.get(this.coupleCt).set(0, (short)d1);														
+		couples.setDancer0(this.coupleCt, (short)d0);														
 		// 2nd dancer in couple
-		couple.get(this.coupleCt).set(1, (short)d2);
+		couples.setDancer1(this.coupleCt, (short)d1);
 		// flag for whether couple has been chosen for a square yet
-		couple.get(this.coupleCt).set(2, (short)0);
+		couples.setSelectedForSquare(this.coupleCt, false);
 	
 		this.coupleCt        += 1;
 		this.dancersSelected += 2;
@@ -1327,8 +1132,7 @@ public class Tip implements Serializable
 			// count the number of times we've made dance partners of these 2 dancers.
 			// we don't count how many times the dancers in couples have danced with
 			// each other, since we did not put them together.
-			partnerCt.get(d1).set(d2, (short)(partnerCt.get(d1).get(d2) + 1));
-			partnerCt.get(d2).set(d1, (short)(partnerCt.get(d2).get(d1) + 1));
+			partnerCt.increment(d0, d1, (short)1);
 		}
 	}
 	
@@ -1339,7 +1143,7 @@ public class Tip implements Serializable
         // these two singles effectively become a couple.  this routine looks for that situation
         // and tries to remedy it.
     	
-    	Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+    	Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
     	int maxPartnerCt = -1;	// highest partner count between 2 singles
     	int maxSearchSv  = -1;
         int maxCouple    = -1;	// couple where we found the partnered singles with the highest count
@@ -1349,18 +1153,18 @@ public class Tip implements Serializable
     	while(!done)
     	{
     		maxPartnerCt = -1;
-    		for(int cx = 0; cx < couple.size(); cx++)
+    		for(int cx = 0; cx < couples.getNoOfCouples(); cx++)
     		{
-    			int d0 = couple.get(cx).get(0);
-    			int d1 = couple.get(cx).get(1);
+    			int d0 = couples.getDancer0(cx);
+    			int d1 = couples.getDancer1(cx);
     			// couple made up of at least 1 single?  we assume that if one of the dancers is not a single,
     			// they were selected as a willing single in selectDancers, so we can continue to treat them
     			// as a single.
     			if((Integer)dancerData.get(d0).get(Dancer.PARTNER_IX) < 0 || (Integer)dancerData.get(d1).get(Dancer.PARTNER_IX) < 0)
     			{
-    				if(partnerCt.get(d0).get(d1) > maxPartnerCt)
+    				if(partnerCt.get(d0, d1) > maxPartnerCt)
     				{
-    					maxPartnerCt = partnerCt.get(d0).get(d1);
+    					maxPartnerCt = partnerCt.get(d0, d1);
     					maxCouple    = cx;
     				}
     			}
@@ -1378,19 +1182,19 @@ public class Tip implements Serializable
             maxSearchSv = maxSearch;
             
             // d00 and d01 are the dancers with the high count we'd like to lower
-    		short d00 = couple.get(maxCouple).get(0);
-    		short d01 = couple.get(maxCouple).get(1);
+    		short d00 = couples.getDancer0(maxCouple);
+    		short d01 = couples.getDancer1(maxCouple);
     		
     		movedCouple = false;
         	
-            for(int cx = 0; cx < couple.size(); cx++)
+            for(int cx = 0; cx < couples.getNoOfCouples(); cx++)
         	{
         		// skip if same couple.
         		if(cx == maxCouple) continue;
 
         		// d10 and d11 are the current swap candidates
-        		short d10 = couple.get(cx).get(0);
-        		short d11 = couple.get(cx).get(1);
+        		short d10 = couples.getDancer0(cx);
+        		short d11 = couples.getDancer1(cx);
         		
         		// if these dancers are paired, we don't take them apart just to enhance 
     			// the singles rotation.
@@ -1398,8 +1202,8 @@ public class Tip implements Serializable
         			continue;
         		
         		// would swapping partners do nothing to lessen the count between partners?
-        		if(partnerCt.get(d00).get(d10) > maxSearch || partnerCt.get(d00).get(d11) > maxSearch ||
-        		   partnerCt.get(d01).get(d10) > maxSearch || partnerCt.get(d01).get(d11) > maxSearch)
+        		if(partnerCt.get(d00, d10) > maxSearch || partnerCt.get(d00, d11) > maxSearch ||
+        		   partnerCt.get(d01, d10) > maxSearch || partnerCt.get(d01, d11) > maxSearch)
         			continue;
         		
         		// get the roles (beau, belle, either) of the candidates for swap.
@@ -1440,28 +1244,24 @@ public class Tip implements Serializable
     private void swapPartners(int c0, int c1, short d00, short d01, short d10, short d11)
     {
     	// decrement the counts of existing partners, since they are being un-coupled.
-    	partnerCt.get(d00).set(d01, (short)(partnerCt.get(d00).get(d01)-1));
-    	partnerCt.get(d01).set(d00, (short)(partnerCt.get(d00).get(d01)-1));
-    	
-    	partnerCt.get(d10).set(d11, (short)(partnerCt.get(d10).get(d11)-1));
-    	partnerCt.get(d11).set(d10, (short)(partnerCt.get(d11).get(d10)-1));
+    	partnerCt.increment(d00, d01, (short)-1);
+    	partnerCt.increment(d10, d11, (short)-1);
     	
     	// increment the counts of new partners, since they are being coupled.
-    	partnerCt.get(d00).set(d10, (short)(partnerCt.get(d00).get(d10)+1));
-    	partnerCt.get(d10).set(d00, (short)(partnerCt.get(d10).get(d00)+1));
-
-    	partnerCt.get(d01).set(d11, (short)(partnerCt.get(d01).get(d11)+1));
-    	partnerCt.get(d11).set(d01, (short)(partnerCt.get(d11).get(d01)+1));
+    	partnerCt.increment(d00, d10, (short)+1);
+    	partnerCt.increment(d01, d11, (short)+1);
     	
     	// swap the dancers
     	
-    	couple.get(c0).set(0, (short)d00);
-    	couple.get(c0).set(1, (short)d10);
-    	couple.get(c1).set(0, (short)d01);
-    	couple.get(c1).set(1, (short)d11);
+    	couples.setDancer0(c0, (short)d00);
+    	couples.setDancer1(c0, (short)d10);
+    	couples.setDancer0(c1, (short)d01);
+    	couples.setDancer1(c1, (short)d11);
     }
+    
+    // adjustCounts is invoked only from the SquareGenerator object.
 	
-	public void adjustCounts(int incr)
+	public void adjustCounts(short incr)
 	{
 		// there are two flags that monitor whether a dancer is selected for a tip:
 		//
@@ -1483,7 +1283,7 @@ public class Tip implements Serializable
 		// we also need to adjust the partnerCt -- how many times one single has
 		// danced with another single.
 
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		
 		// participatingDancer is an array of dancers that is built at the time couples are generated,
 		// and contains an element for every dancer in the dancer model at that time.  if a dancer was
@@ -1500,11 +1300,11 @@ public class Tip implements Serializable
 		// as we traverse the couple array.
 		
 		// traverse couple array to flag participatingDancer elements and adjust partner counts
-		for(int ix = 0; ix < couple.size(); ix++)
+		for(int ix = 0; ix < couples.getNoOfCouples(); ix++)
 		{
 			// copy couple selected flag to participatingDancer 
-			participatingDancer[couple.get(ix).get(0)] = couple.get(ix).get(2);
-			participatingDancer[couple.get(ix).get(1)] = couple.get(ix).get(2);
+			participatingDancer[couples.getDancer0(ix)] = (short)(couples.getSelectedForSquare(ix) ? 1 : 0);
+			participatingDancer[couples.getDancer1(ix)] = (short)(couples.getSelectedForSquare(ix) ? 1 : 0);
 			
 			// we only adjust partnerCt if we're going backwards, which happens when
 			// we're regenerating a square.  partnerCt will be incremented upwards by the
@@ -1513,8 +1313,8 @@ public class Tip implements Serializable
 			
 			if(incr < 0)	// decrementing partnerCt?
 			{
-				short d0 = couple.get(ix).get(0);
-				short d1 = couple.get(ix).get(1);
+				short d0 = couples.getDancer0(ix);
+				short d1 = couples.getDancer1(ix);
 				// adjust partnerCt only if at least one dancer is a single whi has been paired
 				// for this tip with another dancer.  note that it's possible for one of the
 				// dancers to be in a couple that's been broken apart, so we check both dancers
@@ -1522,8 +1322,7 @@ public class Tip implements Serializable
 				if((Integer)dancerData.get(d0).get(Dancer.PARTNER_IX) < 0 ||
 				   (Integer)dancerData.get(d1).get(Dancer.PARTNER_IX) < 0 )
 				{
-					partnerCt.get(d0).set(d1, (short)(partnerCt.get(d0).get(d1) + incr));
-					partnerCt.get(d1).set(d0, (short)(partnerCt.get(d1).get(d0) + incr));
+					partnerCt.increment(d0, d1, incr);
 				}
 			}
 		}
@@ -1563,23 +1362,15 @@ public class Tip implements Serializable
 		
 		if(incr < 0)
 		{
-		    for(short sx = 0; sx < getNoOfSquares(); sx++)
-		    {
-		    	computeDanceCounts(sx, false);
-		    }
+		    for(short sx = 0; sx < getNoOfSquares(); sx++) computeDanceCounts(sx, incr);
 		}
 	}
 	
-	public void computeDanceCounts(short sx, boolean increment)
+	public void computeDanceCounts(short sx, short incr)
 	{
-	    // go around one square (sx), and either increment or decrement
+		// go around one square (sx), and either increment or decrement
 	    // the number of times each dancer in the square has danced with
-	    // every other dancer in the square, based on whether the boolean
-		// "increment" is true (true == increment the count) or false 
-		// (false == decrement the count).
-		
-		 short incr = +1;
-         if(!increment) incr =  (short)-1;
+	    // every other dancer in the square, based on the value of incr.
 
 	    for(short c0 = 0; c0 < 3; c0++)
 	    {
@@ -1589,8 +1380,8 @@ public class Tip implements Serializable
 
 	        // d00 and d01 are the dancers in the first couple
 
-	        short d00 = this.couple.get(this.couplesInSquare.get(sx).get(c0)).get(0);
-	        short d01 = this.couple.get(this.couplesInSquare.get(sx).get(c0)).get(1);
+	        short d00 = this.couples.getDancer0(this.couplesInSquare.getCoupleNo(sx, c0));
+	        short d01 = this.couples.getDancer1(this.couplesInSquare.getCoupleNo(sx, c0));
 
 	        for(short c1 = (short)(c0+1); c1 < 4; c1++)
 	        {
@@ -1603,18 +1394,13 @@ public class Tip implements Serializable
 	            // System.out.println("computeDanceCounts, tx = " + tx + ", sx = " + sx + ", c1 = " + c1);
 	            // System.out.println("this.couplesInSquare size:  " + this.couplesInSquare.size() + " / " + this.couplesInSquare.get(0).size() + " / " +
 	            //                     this.couplesInSquare.get(0).get(0).size());
-	            short d10 = this.couple.get(this.couplesInSquare.get(sx).get(c1)).get(0);
-	            short d11 = this.couple.get(this.couplesInSquare.get(sx).get(c1)).get(1);
+	            short d10 = this.couples.getDancer0(this.couplesInSquare.getCoupleNo(sx, c1));
+	            short d11 = this.couples.getDancer1(this.couplesInSquare.getCoupleNo(sx, c1));
 	            
-	           	dancerCt.get(d00).set(d10, (short)(dancerCt.get(d00).get(d10) + incr));
-	           	dancerCt.get(d00).set(d11, (short)(dancerCt.get(d00).get(d11) + incr));
-	            dancerCt.get(d01).set(d10, (short)(dancerCt.get(d01).get(d10) + incr));
-	            dancerCt.get(d01).set(d11, (short)(dancerCt.get(d01).get(d11) + incr));
-	                
-	          	dancerCt.get(d10).set(d00, (short)(dancerCt.get(d10).get(d00) + incr));
-	           	dancerCt.get(d10).set(d01, (short)(dancerCt.get(d10).get(d01) + incr));
-	            dancerCt.get(d11).set(d00, (short)(dancerCt.get(d11).get(d00) + incr));
-	            dancerCt.get(d11).set(d01, (short)(dancerCt.get(d11).get(d01) + incr));
+	           	dancerCt.increment(d00, d10, incr);
+	           	dancerCt.increment(d00, d11, incr);
+	            dancerCt.increment(d01, d10, incr);
+	            dancerCt.increment(d01, d11, incr);
 	        }
 	    }
 	    this.resetMaxActual();	// recalculate maxActual
@@ -1624,9 +1410,9 @@ public class Tip implements Serializable
 	{
 		this.maxActual = 0;
 		
-		for(int d1 = 0; d1 < Globals.getInstance().getDancersJTable().getRowCount(); d1++) {
-		    for(int d2 = 0; d2 < Globals.getInstance().getDancersJTable().getRowCount(); d2++) 
-		    	if(dancerCt.get(d1).get(d2) > this.maxActual) this.maxActual = dancerCt.get(d1).get(d2);
+		for(int d0 = 0; d0 < Globals.getInstance().getDancersJTable().getRowCount(); d0++) {
+		    for(int d1 = 0; d1 < Globals.getInstance().getDancersJTable().getRowCount(); d1++) 
+		    	if(dancerCt.get(d0, d1) > this.maxActual) this.maxActual = dancerCt.get(d0, d1);
 		}	
 		
 	}

@@ -78,7 +78,7 @@ public class Globals
 	public static final int HIGHLIGHT_OFF_BTN = 2;
 	
 	public static final String OUT            = "Out";
-	public static final String REQUESTED_OUT  = "Req";
+	public static final String REQUESTED_OUT  = "Vol";
 	
 	public final static Color VERY_LIGHT_RED  = new Color(255,   0,   0,  30);	
 	public final static Color VERY_LIGHT_GREY = new Color(235, 235, 235     );
@@ -92,7 +92,7 @@ public class Globals
 	private static int tipFrameHeight  		  = 0;
 	
 	private static SquareGenerator	squareGenerator;
-	private static Tip				tip;
+	private static CoupleGenerator	coupleGenerator;
 	private static DancersJTable	dancersJTable;
 	private static MainFrame        mainFrame;
 	
@@ -107,8 +107,8 @@ public class Globals
 			System.out.println("instantiate Globals");
 			instance        = new Globals();
 			dancersJTable   = new DancersJTable();
-	        squareGenerator = new SquareGenerator();
-	        tip				= Tip.getInstance();
+	        squareGenerator = SquareGenerator.getInstance();
+	        coupleGenerator	= CoupleGenerator.getInstance();
 		}
 		return instance;
 	}
@@ -118,14 +118,14 @@ public class Globals
 		return squareGenerator;
 	}
 	
-	public void setTip(Tip pTip)
+	public void setCoupleGenerator(CoupleGenerator pCoupleGenerator)
 	{
-		tip = pTip;
+		coupleGenerator = pCoupleGenerator;
 	}
 	
-	public Tip getTip()
+	public CoupleGenerator getCoupleGenerator()
 	{
-		return tip;
+		return coupleGenerator;
 	}
 	
 	public void setMainFrame(MainFrame pMainFrame)
