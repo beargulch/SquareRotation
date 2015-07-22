@@ -34,7 +34,7 @@ public class DancerCounts {
 		
 		// this method is only useful for increasing capacity.  if
 		// capacity is decreased, it is handled separately below in 
-		// method deleteDancer().
+		// method remove().
 		if(newCapacity > oldCapacity)
 		{
 			count. ensureCapacity(newCapacity);
@@ -66,7 +66,7 @@ public class DancerCounts {
 	
 	public short get(int ix, int jx)
 	{
-		System.out.println("count size:  " + count.size() + ", count.get(0).size():  " + (count.size() > 0 ? count.get(0).size() : "n/a"));
+		//System.out.println("count size:  " + count.size() + ", count.get(0).size():  " + (count.size() > 0 ? count.get(0).size() : "n/a"));
 		return count.get(ix).get(jx);
 	}
 	

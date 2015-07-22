@@ -127,6 +127,12 @@ public class CoupleGenerator implements Serializable
 	// dancer who was added after the tip was generated, or who was marked not present or deleted, is not 
 	// a participating dancer, and therefore should not have their out counts adjusted.  we use this array 
 	// to identify participating dancers.
+	//
+	// possible values for participatingDancer:
+	//  1  dancer selected for a square, so out count will be unaffected
+	//  0  dancer available, but not selected for a square, so out count should be incremented
+	// -1  dancer voluntarily out; check options as to whether out count should be incremented
+	// -2  dancer not available; do not increment out count (initialized value)
 	private short[] participatingDancer;
 	
 	private static CoupleGenerator instance = null;
@@ -284,7 +290,7 @@ public class CoupleGenerator implements Serializable
 		this.unmatchedSingleOuts = 0; 
 		
 		participatingDancer = new short[dancerData.size()];
-		for(int ix = 0; ix < dancerData.size(); ix++) participatingDancer[ix] = -1;
+		for(int ix = 0; ix < dancerData.size(); ix++) participatingDancer[ix] = -2;
 		
 		// first, compute the number of couples that can dance.  this is done by
 		// counting all the partnered couples, and the number of couples that can
@@ -299,14 +305,25 @@ public class CoupleGenerator implements Serializable
 			// reset the flag that tracks whether each dancer has been selected for this tip
 			dancer.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);		
 			
-			// skip dancers voluntarily out, or not present at the dance
-			if(!(Boolean)dancer.get(Dancer.PRESENT_IX) || !(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX)) 
+			// skip dancers not present at the dance, and set participatingDancer to -2.
+			if(!(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX)) 
+			{
+				participatingDancer[ix] = -2;
 				continue;
+			}
 			
-			eligibleDancers += 1;
-			participatingDancer[ix] = 0;	// this dancer was eligible to dance.  if not selected
-											// for this tip, we'll need to adjust their "out" count.
+			// skip dancers voluntarily out, and set participatingDancer to -1.
+			// depending on options settings, we may increment the out count for these dancers.
 			
+			if(!(Boolean)dancer.get(Dancer.PRESENT_IX)) 
+			{
+				participatingDancer[ix] = -1;
+				continue;
+			}
+			
+			eligibleDancers += 1;			// this dancer was eligible to dance.  if not selected
+			participatingDancer[ix] = 0;	// for this tip, we'll need to adjust their "out" count.	
+											
 			// capture maxOuts of eligible dancers for use later when making the tip
 			if((Integer)dancer.get(Dancer.DANCER_OUTS_IX) > this.maxOuts)	
 				this.maxOuts = (Integer)dancer.get(Dancer.DANCER_OUTS_IX); 
@@ -373,10 +390,7 @@ public class CoupleGenerator implements Serializable
 		System.out.println("couples.getNoOfCouples() = " + couples.getNoOfCouples());
 		
 		/*====================================================================================*/
-		
-		// this is the most common way to select dancers -- couples stay couples,
-		// and singles rotate only with other singles.
-					
+			
 		if(Globals.singlesRotationCanTakeCouplesOut())
 		{
 			// this option is the most aggressive in terms of breaking apart couples:
@@ -414,7 +428,7 @@ public class CoupleGenerator implements Serializable
 		// square.
 		
 		System.out.println("Total eligible dancers = " + eligibleDancers + ", dancersSelected = " + this.dancersSelected);
-		if((eligibleDancers - this.dancersSelected) >= 8 && Globals.singlesRotateWithCouplesThatAreOut())
+		if((eligibleDancers - this.dancersSelected) >= 8 && (Globals.singlesRotateWithCouplesThatAreOut() || Globals.singlesRotationCanTakeCouplesOut()))
 		{
 			System.out.println("There are enough Out dancers (" + (eligibleDancers - this.dancersSelected) + ") that I'm going to try to make another square.");
 			this.singleBelle  	= 0;
@@ -449,7 +463,7 @@ public class CoupleGenerator implements Serializable
 			int couplesSplit    = 0;
 			int couplesIntact   = 0;
 			int unpairedBelles  = (this.singleBelle - (this.singleBeau +this.singleEither)) > 0 ? (this.singleBelle - (this.singleBeau +this.singleEither)) : 0;
-			int unpairedBeaux   = (this.singleBeau  - (this.singleBelle+this.singleEither)) > 0 ? (this.singleBeau  - (this.singleBelle+this.singleEither)) : 0;
+			int unpairedBeaux	= (this.singleBeau  - (this.singleBelle+this.singleEither)) > 0 ? (this.singleBeau  - (this.singleBelle+this.singleEither)) : 0;
 			
 			//for(Vector<Object>dancer : dancerData)
 			for(int dx = 0; dx < dancerData.size(); dx++)
@@ -561,6 +575,8 @@ public class CoupleGenerator implements Serializable
 			System.out.println("singleBeau:          " + singleBeau);
 			System.out.println("singleBelle:         " + singleBelle);
 			System.out.println("singleEither:        " + singleEither);
+			System.out.println("noOfCouples:         " + noOfCouples);
+			System.out.println("noOfSquares:         " + noOfSquares);
 			
 			/*==============================================================================================*/
 			
@@ -580,8 +596,10 @@ public class CoupleGenerator implements Serializable
 			
 			if(noOfCouples >= 4)	// we only do further processing if we think we can make at least
 			{						// 4 couples (a square).
-				this.noOfSquares += (noOfCouples/4);
-				System.out.println("Second pass through select Dancers:  doBreakUpCouples, doSinglesOnly");	
+				//this.noOfSquares += (noOfCouples/4);
+				System.out.println("Second pass through select Dancers:  doBreakUpCouples, doSinglesOnly");
+				System.out.println("noOfCouples:  " + noOfCouples);
+				System.out.println("noOfSquares:  " + noOfSquares);	
 				
 				// second pass at selecting dancers to make couples.   'doBreakUpCouples' means we can break up couples who are out (if they are willing) to 
 				selectDancers(doBreakUpCouples, doSinglesOnly);		//	match with singles to see if we can make another square.  'doSinglesOnly' means we 
@@ -604,6 +622,8 @@ public class CoupleGenerator implements Serializable
 			
 			if(this.dancersSelected < dancersNeeded)
 			{
+				System.out.println("this.dancersSelected = " + this.dancersSelected + ", dancersNeeded = " + dancersNeeded + ", this.noOfSquares = " + this.noOfSquares);
+			
 				if(singlesOut < 1 && couplesOut > 0)
 				{
 					System.out.println("there are couples out, but no singles, which should never happen.  singlesOut = " + 
@@ -648,6 +668,7 @@ public class CoupleGenerator implements Serializable
 		{									// remaining elements down one notch.
 			if(couples.getDancer0(ix) == 0 && couples.getDancer1(ix) == 0) 
 			{
+				System.out.println("remove any couple from the couple array that doesn't have an actual couple");
 				noOfCouples -= 1;
 				couples.remove(ix);
 			}
@@ -661,6 +682,7 @@ public class CoupleGenerator implements Serializable
 		
 		// shuffle the couples prior to making squares
 		couples.shuffle();
+		System.out.println("after shuffling couples");
 		return true;
 	}
 
@@ -716,7 +738,7 @@ public class CoupleGenerator implements Serializable
 				
 				if(!processDancer)
 				{   
-					System.out.println("   . . . processing for dancer skipped -- not enough outs, or not 'must dance'.  outs = " + (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX));
+					System.out.println("   . . . processing for dancer skipped -- not enough outs, or not 'must dance'.  outs = " + (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) + ", currentMaxOuts = " + currentMaxOuts + ", firstPass = " + firstPass);
 					continue;	// not been out enough and not marked must dance?
 				}
 				
@@ -737,24 +759,25 @@ public class CoupleGenerator implements Serializable
 					continue;
 				}
 				
-				// we've found someone who is eligible and is coupled, which is relatively easy to handle.  we 
+				// we've found someone who is eligible.  if they are coupled, they are relatively easy to handle.  we 
 				// select them and their partner, even if the partner has fewer outs.  but . . . if we're permitted 
 				// to break up couples, and both of the partnered dancers have indicated a willingness to dance single, 
 				// we let this dancer fall through to singles processing.
-				if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1 && 			// this is a couple, and:
+				if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1 && 			// this dancer is in a couple, and:
 				    ( !breakupCouples || 												//   don't break up couples, or
 				      !(Boolean)dancerData.get(ix).get(Dancer.WILLING_SINGLE_IX) || 	//   dancer or partner not willing to dance single
 				      !(Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.WILLING_SINGLE_IX)
 				    )
 				  )	
 				{	
+					System.out.println("   . . . processing as couple.");
 					processCouple(ix);										// process the couple
 				}
 				else
 				{
 					// note that it's possible to reach processSingle on a dancer who is coupled, but only if the breakupCouples flag
 					// is set, and both the dancer and their partner are willing to dance single (see 'if' statement immediately above).
-					
+					System.out.println("   . . . processing as single.");
 					processSingle(breakupCouples, ix, randomizedDancer);	// process the single (might be half of a couple willing 
 				}															// to dance single)
 				
@@ -764,6 +787,7 @@ public class CoupleGenerator implements Serializable
 					done = true;
 					break;
 				}
+				System.out.println("dancersSelected now " + dancersSelected);
 			}
 			
 			if(firstPass)
@@ -822,7 +846,7 @@ public class CoupleGenerator implements Serializable
 		boolean singleIsFromCouple = false;
 		if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) singleIsFromCouple = true;
 		
-		System.out.println("in processSingle, working on dancer " + dancerData.get(ix).get(Dancer.NAME_IX));
+		System.out.println("in processSingle, working on dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + ", breakupCouples = " + breakupCouples + ", singleIsFromCouple = " + singleIsFromCouple);
 		while(!singleDone)
 		{
 			// note that "ix" refers to the original single; "jx" refers to the potential partner
@@ -846,7 +870,10 @@ public class CoupleGenerator implements Serializable
 							        (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX) >= singleMaxOuts;
 				}
 				
-				if(!processSingle) continue;	// not been out enough and not marked must dance?
+				if(!processSingle) {
+					System.out.println("(1) in processSingle, will not pair with " + dancerData.get(jx).get(Dancer.NAME_IX));
+					continue;	// not been out enough and not marked must dance?
+				}
 				
 				if(!(Boolean)dancerData.get(jx).get(Dancer.PRESENT_IX)			 || // voluntarily out?
 				   !(Boolean)dancerData.get(jx).get(Dancer.DANCER_AT_DANCE_IX)	 || // not at dance?
@@ -858,6 +885,7 @@ public class CoupleGenerator implements Serializable
 					 !(Boolean)dancerData.get(jx).get(Dancer.WILLING_SINGLE_IX))))	//   dancer is not a willing single
 																										 
 				{
+					System.out.println("(2) in processSingle, will not pair with " + dancerData.get(jx).get(Dancer.NAME_IX));
 					continue;
 				}
 				
@@ -1335,8 +1363,9 @@ public class CoupleGenerator implements Serializable
 			//    participatingDancer[ix] will be set to -1.
 			// if a dancer was eligible but not selected to dance, participatingDancer[ix] will be 0,
 			// indicating their out counts need to be adjusted.
-			if(participatingDancer[ix] == 0)	// this dancer was out (not selected), so he/she is a dancer whose
-			{									// 'out count' needs to be adjusted.
+			if(participatingDancer[ix] == 0  ||										// this dancer was out (not selected), so he/she is a dancer whose
+			  (participatingDancer[ix] == -1 && Globals.getCountVountaryOuts()))	// 'out count' needs to be adjusted.	
+			{																		
 				
 				// whether or not a dancer was present and not deleted is a factor that was considered when
 				// building the couple array when the tip was generated.  although the status may have changed

@@ -78,16 +78,16 @@ public class Globals
 	public static final int HIGHLIGHT_OFF_BTN = 2;
 	
 	public static final String OUT            = "Out";
-	public static final String REQUESTED_OUT  = "Vol";
+	public static final String REQUESTED_OUT  = "Out*";
 	
 	public final static Color VERY_LIGHT_RED  = new Color(255,   0,   0,  30);	
 	public final static Color VERY_LIGHT_GREY = new Color(235, 235, 235     );
 	public final static Color VERY_LIGHT_BLUE = new Color(  0,   0, 255,  30);
 	public final static Color MEDIUM_BLUE     = new Color(  0,   0, 255,  36);
-	public final static Color LIGHT_YELLOW    = new Color(255, 255,   0,  30);
+	public final static Color LIGHT_YELLOW    = new Color(255, 255,   0,  60);
 	
 	private static int selectedOption		  = SINGLES_ROTATE_ONLY_WITH_SINGLES;
-	private static boolean countVountaryOuts  = false;
+	private static boolean countVountaryOuts  = true;
 	private static TipFrame tipFrame  		  = null;
 	private static int tipFrameHeight  		  = 0;
 	

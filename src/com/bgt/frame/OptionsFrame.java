@@ -90,6 +90,10 @@ public class OptionsFrame extends JFrame
         mainPanel.add(pane2);
 		
 		optionsBox.setSelectedIndex(Globals.getSelectedOption());
+		if(Globals.getCountVountaryOuts())
+			jCountVountaryOuts.setSelected(true);
+		else
+			jCountVountaryOuts.setSelected(false);
 
 	    savBtn.addActionListener(new ActionListener() 
 	    {
