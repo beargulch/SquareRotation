@@ -399,9 +399,9 @@ public class CoupleGenerator implements Serializable
 			// in a couple has indicated a willingness to dance single, that couple can be
 			// split apart and paired with 1 or 2 singles, if needed to get singles dancing.
 
-			selectDancers(doNotbreakUpCouples, doSinglesOnly);		// before we start breaking up couples, let's see if we can pair up
+			selectDancersToCouple(doNotbreakUpCouples, doSinglesOnly);		// before we start breaking up couples, let's see if we can pair up
 																	// singles with each other.
-			selectDancers(doBreakUpCouples, doSinglesAndCouples);	// we've tried pairing singles with singles. now let's get aggressive.
+			selectDancersToCouple(doBreakUpCouples, doSinglesAndCouples);	// we've tried pairing singles with singles. now let's get aggressive.
 																	// 'doBreakUpCouples' means that we can break up couples to pair with 
 																	// singles if at least one dancer in the couple is willing.
 			System.out.println("dancersNeeded = " + this.noOfSquares * 8 + ", dancersSelected = " + this.dancersSelected);
@@ -414,7 +414,7 @@ public class CoupleGenerator implements Serializable
 			// and singles rotate only with other singles.
 			
 			System.out.println("First pass through select Dancers:  doNotbreakUpCouples, doSinglesAndCouples");
-			selectDancers(doNotbreakUpCouples, doSinglesAndCouples);	// first pass at selecting dancers to make couples. 'doNotbreakUpCouples'
+			selectDancersToCouple(doNotbreakUpCouples, doSinglesAndCouples);	// first pass at selecting dancers to make couples. 'doNotbreakUpCouples'
 																		// means that we do not attempt to break up couples to make a square.
 		}
 
@@ -604,13 +604,13 @@ public class CoupleGenerator implements Serializable
 				System.out.println("noOfSquares:  " + noOfSquares);	
 				
 				// second pass at selecting dancers to make couples.   'doBreakUpCouples' means we can break up couples who are out (if they are willing) to 
-				selectDancers(doBreakUpCouples, doSinglesOnly);		//	match with singles to see if we can make another square.  'doSinglesOnly' means we 
+				selectDancersToCouple(doBreakUpCouples, doSinglesOnly);		//	match with singles to see if we can make another square.  'doSinglesOnly' means we 
 																	//  process the singles first, trying to get them coupled up before aggressively breaking
 																	//	couples apart.
 				System.out.println("Third pass through select Dancers:   doNotBreakUpCouples, doSinglesAndCouples");
 				
 				// third pass at selecting dancers to make couples.   		   'doNotBreakUpCouples' means we can break up couples who are out (if they are willing) to 
-				selectDancers(doNotbreakUpCouples, doSinglesAndCouples);	//	match with singles to see if we can make another square.  'doSinglesAndCouples' means
+				selectDancersToCouple(doNotbreakUpCouples, doSinglesAndCouples);	//	match with singles to see if we can make another square.  'doSinglesAndCouples' means
 																			// 	we handle any dancer who is left.
 			}
 			/*==============================================================================================*/
@@ -688,7 +688,7 @@ public class CoupleGenerator implements Serializable
 		return true;
 	}
 
-	private void selectDancers(boolean breakupCouples, boolean singlesOnly)
+	private void selectDancersToCouple(boolean breakupCouples, boolean singlesOnly)
 	{		
 		// we know how many dancers we're looking for, so we start selecting them
 		// from the pool of available dancers.  the dancers who have the most outs are
@@ -897,15 +897,41 @@ public class CoupleGenerator implements Serializable
 				// we do that for singles who have been out as much or more than everyone else -- that is, we 
 				// only break up couples for singles who have already been out more than other dancers.
 				
+// TODO TODO TODO TODO
+				
 				if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1)	// dancer passed in is in a couple
-				{	// has the single been out as much or more than other dancers, and is that number greater than 0?
-					if((Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX) != this.maxOuts && this.maxOuts > 0)
+				{	
+					// has the single been out as much or more than other dancers, and is that number greater than 0?
+					if((Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX) < this.maxOuts || this.maxOuts == 0)
+						continue;
+					
+					// has the single been out less than the dancer we're considering for their partner?
+					if((Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) < (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX))
+						continue;
+					
+					// if the other dancer in the couple we're considering breaking apart has not yet been selected to dance,
+					// has the single been out less than the other dancer?
+					int partnerIx = (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX);
+					if(!(Boolean)dancerData.get(partnerIx).get(Dancer.DANCER_SELECTED_IX) &&
+					  (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX) < (Integer)dancerData.get(partnerIx).get(Dancer.DANCER_OUTS_IX))
 						continue;
 				}
 				else
 				if((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1)	// dancer matched to dancer passed in is in a couple
-				{	// has the single been out as much or more than other dancers, and is that number greater than 0?
-					if((Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) != this.maxOuts && this.maxOuts > 0)
+				{	
+					// has the single been out as much or more than other dancers, and is that number greater than 0?
+					if((Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) < this.maxOuts || this.maxOuts == 0)
+						continue;
+					
+					// has the single been out less than the dancer we're considering for their partner?
+					if((Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) < (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX))
+						continue;
+					
+					// if the other dancer in the couple we're considering breaking apart has not yet been selected to dance,
+					// has the single been out less than the other dancer?
+					int partnerIx = (Integer)dancerData.get(jx).get(Dancer.PARTNER_IX);
+					if(!(Boolean)dancerData.get(partnerIx).get(Dancer.DANCER_SELECTED_IX) &&
+					  (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) < (Integer)dancerData.get(partnerIx).get(Dancer.DANCER_OUTS_IX))
 						continue;
 				}
 				
