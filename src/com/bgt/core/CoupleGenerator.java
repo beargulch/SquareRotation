@@ -843,12 +843,11 @@ public class CoupleGenerator implements Serializable
 		int roleHeavy            	= -1;	// -1 = singles are evenly matched
 											// Dancer.BEAU_IX  = singles are heavy with beaux; 
 											// Dancer.BELLE_IX = singles are heavy with belles; 
-
 		boolean singleDone         = false;
-		boolean singleIsFromCouple = false;
-		if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) singleIsFromCouple = true;
 		
-		System.out.println("in processSingle, working on dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + ", breakupCouples = " + breakupCouples + ", singleIsFromCouple = " + singleIsFromCouple);
+		System.out.println("in processSingle, working on dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + 
+				           ", breakupCouples = " + breakupCouples + 
+				           ", single is from couple = " + ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1));
 		while(!singleDone)
 		{
 			// note that "ix" refers to the original single; "jx" refers to the potential partner
@@ -883,19 +882,36 @@ public class CoupleGenerator implements Serializable
 				   
 				   ((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1	&&		// dancer is coupled, and
 					(!breakupCouples     										 || //   either we're not breaking up couples, or
-					  singleIsFromCouple 										 ||	//   we don't want to pair a coupled dancer with another coupled dancer, or
-					 !(Boolean)dancerData.get(jx).get(Dancer.WILLING_SINGLE_IX)  || //   dancer is not a willing single, or
-					 (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX) <= 		//   single dancer has not been out more than coupled dancer
-					 (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX)
+					  (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1 	 ||	//   we don't pair a coupled dancer with another coupled dancer, or
+					 !(Boolean)dancerData.get(jx).get(Dancer.WILLING_SINGLE_IX)     //   dancer is not a willing single
 					)
-				   ))	
-																										 
+				   ))																					 
 				{
 					System.out.println("(2) in processSingle, will not pair with " + dancerData.get(jx).get(Dancer.NAME_IX));
 					continue;
 				}
 				
+				// one final test:  if we got to this point, and one of the dancers is in a couple, we know
+				// the other dancer must be a single (we do not pull apart couples to dance with another dancer
+				// also pulled from a couple).  if we are breaking up a couple to pair with a single, we only 
+				// we do that for singles who have been out as much or more than everyone else -- that is, we 
+				// only break up couples for singles who have already been out more than other dancers.
+				
+				if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1)	// dancer passed in is in a couple
+				{	// has the single been out as much or more than other dancers, and is that number greater than 0?
+					if((Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX) != this.maxOuts && this.maxOuts > 0)
+						continue;
+				}
+				else
+				if((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1)	// dancer matched to dancer passed in is in a couple
+				{	// has the single been out as much or more than other dancers, and is that number greater than 0?
+					if((Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) != this.maxOuts && this.maxOuts > 0)
+						continue;
+				}
+				
 				System.out.println("in processSingle, trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+				System.out.println("outs " + (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) + " / " + (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX));
+				System.out.println("coupled " + ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) + " / " + ((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1));
 				
 				// we found a candidate, but now we must be concerned about matching a belle to beau, or
 				// vice-versa; and we must also factor in the "eithers".
