@@ -80,37 +80,37 @@ public class DanceComboBoxModel extends DefaultComboBoxModel<String>
 
 	public int getDancerIx()
 	{
-		System.out.println("combobox returning previous partner " + previousPartnerIx);
+		// System.out.println("combobox returning previous partner " + previousPartnerIx);
 		return this.dancerIx;
 	}
 	
 	public void setDancerIx(int dancerIx)
 	{
-		System.out.println("combobox dancerIx set to " + dancerIx);
+		// System.out.println("combobox dancerIx set to " + dancerIx);
 		this.dancerIx = dancerIx;
 	}
 
 	public int getPreviousPartnerIx()
 	{
-		System.out.println("combobox returning previous partner " + previousPartnerIx);
+		// System.out.println("combobox returning previous partner " + previousPartnerIx);
 		return this.previousPartnerIx;
 	}
 	
 	public void setPreviousPartnerIx(int previousPartnerIx)
 	{
-		System.out.println("combobox previous partner set to " + previousPartnerIx);
+		// System.out.println("combobox previous partner set to " + previousPartnerIx);
 		this.previousPartnerIx = previousPartnerIx;
 	}
 
 	public int getCurrentRow()
 	{
-		System.out.println("combobox returning currentRow " + currentRow);
+		// System.out.println("combobox returning currentRow " + currentRow);
 		return this.currentRow;
 	}
 	
 	public void setCurrentRow(int currentRow)
 	{
-		System.out.println("combobox currentRow set to " + currentRow);
+		// System.out.println("combobox currentRow set to " + currentRow);
 		this.currentRow = currentRow;
 	}
 

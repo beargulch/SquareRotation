@@ -62,13 +62,13 @@ public class Couples
 
 	public short getDancer0(int coupleNo)
 	{
-		System.out.println("getDancer0, coupleNo = " + coupleNo + ", size of couple:  " + couple.size());
+		// System.out.println("getDancer0, coupleNo = " + coupleNo + ", size of couple:  " + couple.size());
 		return couple.get(coupleNo).dancer0;
 	}
 	
 	public short getDancer1(int coupleNo)
 	{
-		System.out.println("getDancer1, coupleNo = " + coupleNo + ", size of couple:  " + couple.size());
+		// System.out.println("getDancer1, coupleNo = " + coupleNo + ", size of couple:  " + couple.size());
 		return couple.get(coupleNo).dancer1;
 	}
 	
@@ -79,7 +79,7 @@ public class Couples
 	
 	public void remove(int ix)
 	{
-		System.out.println("Couples, removing coupleNo = " +ix);
+		// System.out.println("Couples, removing coupleNo = " +ix);
 		couple.remove(ix);
 	}
 	

@@ -285,7 +285,7 @@ public class SquareGenerator
 		// has a valid value (0 - 3), the couple at that position is eliminated from consideration, 
 		// so as to return the maximum dancerCt as if that couple had been removed from the square.
 		
-		System.out.println("getSquareMaxCt for square " + square + ", position = " + position);
+		// System.out.println("getSquareMaxCt for square " + square + ", position = " + position);
 		
 		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
 		short max = -1;
@@ -300,7 +300,7 @@ public class SquareGenerator
 	   		
 		 	for(int psn1 = (psn0+1); psn1 < 4; psn1++)
 		   	{	
-		 		System.out.println("getSquareMaxCt for square " + square + ", examining position = " + psn1);
+		 		// System.out.println("getSquareMaxCt for square " + square + ", examining position = " + psn1);
 		 		if(psn1 == position) continue;	// eliminate this couple?
 		 		
 		   		//short cp1 = Tip.getInstance().getCouplesInSquare().get(square).get(psn1);
@@ -416,7 +416,7 @@ public class SquareGenerator
 	{
 		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
 		
-		System.out.println("in addCoupleToSquare, square = " + square + ", couple = " + coupleNo + ", cplPsn = " + cplPsn);
+		// System.out.println("in addCoupleToSquare, square = " + square + ", couple = " + coupleNo + ", cplPsn = " + cplPsn);
 
 	    tip.getCouplesInSquare().setCoupleNo(square, cplPsn, coupleNo);	// store the couple number at the indicated position in the square,
 	    tip.getCouples().setSelectedForSquare(coupleNo, true);			// and mark this couple as used.

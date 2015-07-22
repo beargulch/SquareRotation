@@ -399,9 +399,11 @@ public class CoupleGenerator implements Serializable
 			// in a couple has indicated a willingness to dance single, that couple can be
 			// split apart and paired with 1 or 2 singles, if needed to get singles dancing.
 
-			selectDancers(doBreakUpCouples, doSinglesAndCouples);	// first pass at selecting dancers to make couples. 'doBreakUpCouples'	
-																	// means that we can break up couples to pair with singles if at least
-																	// one dancer in the couple is willing.
+			selectDancers(doNotbreakUpCouples, doSinglesOnly);		// before we start breaking up couples, let's see if we can pair up
+																	// singles with each other.
+			selectDancers(doBreakUpCouples, doSinglesAndCouples);	// we've tried pairing singles with singles. now let's get aggressive.
+																	// 'doBreakUpCouples' means that we can break up couples to pair with 
+																	// singles if at least one dancer in the couple is willing.
 			System.out.println("dancersNeeded = " + this.noOfSquares * 8 + ", dancersSelected = " + this.dancersSelected);
 			
 			//if(this.noOfSquares * 8 > this.dancersSelected) selectDancers(doBreakUpCouples, true);
@@ -668,7 +670,7 @@ public class CoupleGenerator implements Serializable
 		{									// remaining elements down one notch.
 			if(couples.getDancer0(ix) == 0 && couples.getDancer1(ix) == 0) 
 			{
-				System.out.println("remove any couple from the couple array that doesn't have an actual couple");
+				// System.out.println("remove any couple from the couple array that doesn't have an actual couple");
 				noOfCouples -= 1;
 				couples.remove(ix);
 			}
@@ -880,9 +882,13 @@ public class CoupleGenerator implements Serializable
 					(Boolean)dancerData.get(jx).get(Dancer.DANCER_SELECTED_IX)	 ||	// already dancing? 
 				   
 				   ((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1	&&		// dancer is coupled, and
-					(!breakupCouples     || 										//   either we're not breaking up couples, or
-					  singleIsFromCouple ||											//   we don't want to pair a coupled dancer with another coupled dancer, or
-					 !(Boolean)dancerData.get(jx).get(Dancer.WILLING_SINGLE_IX))))	//   dancer is not a willing single
+					(!breakupCouples     										 || //   either we're not breaking up couples, or
+					  singleIsFromCouple 										 ||	//   we don't want to pair a coupled dancer with another coupled dancer, or
+					 !(Boolean)dancerData.get(jx).get(Dancer.WILLING_SINGLE_IX)  || //   dancer is not a willing single, or
+					 (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX) <= 		//   single dancer has not been out more than coupled dancer
+					 (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX)
+					)
+				   ))	
 																										 
 				{
 					System.out.println("(2) in processSingle, will not pair with " + dancerData.get(jx).get(Dancer.NAME_IX));
