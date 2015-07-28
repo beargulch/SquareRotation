@@ -84,7 +84,7 @@ public class SquareGenerator
 			groomTip();
 			// for(short sx = 0; sx < tip.getNoOfSquares(); sx++) tip.computeDanceCounts(sx, true);
 			tip.adjustCounts((short)+1);
-			printCountChart();
+			// printCountChart();
 			return true;
 		}
 		return false;
@@ -99,12 +99,12 @@ public class SquareGenerator
 
 		if(tip.makeCouples())	// make new couples, in case dancers have been added or modified
 		{
-			printCountChart();
+			// printCountChart();
 			generateTip();
 			groomTip();
 			// for(short sx = 0; sx < tip.getNoOfSquares(); sx++) tip.computeDanceCounts(sx, true);
 			tip.adjustCounts((short)+1);
-			printCountChart();
+			// printCountChart();
 			return true;
 		}
 		
