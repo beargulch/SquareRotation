@@ -18,8 +18,6 @@
 
 package com.bgt.core;
 
-import java.util.Vector;
-
 // the SquareGenerator class is very tightly coupled to the Tip class.
 //
 // the SquareGenerator class invokes methods in the Tip class to select
@@ -421,7 +419,7 @@ public class SquareGenerator
 	    tip.getCouplesInSquare().setCoupleNo(square, cplPsn, coupleNo);	// store the couple number at the indicated position in the square,
 	    tip.getCouples().setSelectedForSquare(coupleNo, true);			// and mark this couple as used.
 	} 
-	
+/*	
 	private void printCountChart()
 	{
 		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
@@ -434,7 +432,7 @@ public class SquareGenerator
         int jxsv = -1;
         int pfnd = 0;
         
-        /* dancerCt printout */
+        // dancerCt printout
         System.out.print("  ");
         for(int ix = 0; ix < tip.getDancerCt().size(); ix++)
         {
@@ -477,9 +475,8 @@ public class SquareGenerator
         }
         System.out.println("Partners found:  " + pfnd);
         System.out.println("current max dancer count of " + max + " first detected between dancer " + ixsv + " and dancer " + jxsv);
-        /**/
 	}
-	
+*/	
 	private void printSquares(short square)
 	{
 		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
