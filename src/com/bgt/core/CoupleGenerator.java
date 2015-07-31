@@ -114,7 +114,7 @@ public class CoupleGenerator implements Serializable
 	// note that two dancers dancing in a couple does not increment the count between the two coupled dancers.
 	private static DancerCounts dancerCt;
 	
-	// dancerCt tracks the number of times one dancer has been partnered with another in singles rotation.  
+	// partnerCt tracks the number of times one dancer has been partnered with another in singles rotation.  
 	// note that two dancers dancing in a predefined couple (not a couple built during singles rotation)
 	// does not increment the count between the two coupled dancers.
 	private static DancerCounts partnerCt;
@@ -490,7 +490,6 @@ public class CoupleGenerator implements Serializable
 			int unpairedBelles  = (this.singleBelle - (this.singleBeau +this.singleEither)) > 0 ? (this.singleBelle - (this.singleBeau +this.singleEither)) : 0;
 			int unpairedBeaux	= (this.singleBeau  - (this.singleBelle+this.singleEither)) > 0 ? (this.singleBeau  - (this.singleBelle+this.singleEither)) : 0;
 			
-			//for(Vector<Object>dancer : dancerData)
 			for(int dx = 0; dx < dancerData.size(); dx++)
 			{
 				Vector<Object>dancer = dancerData.get(dx);
@@ -662,6 +661,10 @@ public class CoupleGenerator implements Serializable
 			}
 		}
 		
+		// it's possible that we've selected more couples than are required to make the number of
+		// squares that can be built.  if that has happened, we need to remove the extra couples.
+		// when removing couples, we want to remove those who have been out the least.
+		
 		int extraCouples = couples.getNoOfCouples() % 4;
 		int targetOuts   = 0;
 		if(extraCouples > 0) 
@@ -687,7 +690,6 @@ public class CoupleGenerator implements Serializable
 			}
 			targetOuts += 1;
 		}
-		
 		
 		// !important!  do not groom partners until after the unused couple slots have been
 		// removed.  if you groom partners before the cleanup, the grooming algorithm will
