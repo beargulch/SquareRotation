@@ -374,10 +374,10 @@ public class SquareGenerator
 	{
 		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
         
-	    System.out.println("Source square before: " + sourceSquare);
-	    printSquares(sourceSquare);
-	    System.out.println("Target square before: " + targetSquare);
-	    printSquares(targetSquare);
+	    // System.out.println("Source square before: " + sourceSquare);
+	    // printSquares(sourceSquare);
+	    // System.out.println("Target square before: " + targetSquare);
+	    // printSquares(targetSquare);
 	        	
 	    // get couple numbers being swapped between source and target squares
 	    short sourceCplToMove = tip.getCouplesInSquare().getCoupleNo(sourceSquare, sourcePsn);
@@ -390,9 +390,9 @@ public class SquareGenerator
 	    // targetPsn       is the position of the couple in the target square being swapped with the source couple
 	    // targetCplToMove is the couple number of the couple in the target square being swapped with the source couple
 	            
-	    System.out.println("DOING MOVE.  from source square " + sourceSquare + ", swapping couple " + sourceCplToMove + 
-	    				   " at position " + sourcePsn + " to square " + targetSquare + ", couple " + targetCplToMove + 
-	    				   " at position " + targetPsn);
+	    //System.out.println("DOING MOVE.  from source square " + sourceSquare + ", swapping couple " + sourceCplToMove + 
+	    //				   " at position " + sourcePsn + " to square " + targetSquare + ", couple " + targetCplToMove + 
+	    //				   " at position " + targetPsn);
 	     
 	    // move source to target
 	    tip.computeDanceCounts(targetSquare, (short)-1);  				// decrement counts in square targetSquare before move
@@ -404,10 +404,10 @@ public class SquareGenerator
         addCoupleToSquare(sourceSquare, targetCplToMove, sourcePsn);	// move in new couple from square targetSquare
         tip.computeDanceCounts(sourceSquare, (short)+1);  				// increment counts in square sourceSquare after move
 	            
-        System.out.println("Source square after: " + sourceSquare);
-        printSquares(sourceSquare);
-	    System.out.println("Targer square after: " + targetSquare);
-	    printSquares(targetSquare);    
+        // System.out.println("Source square after: " + sourceSquare);
+        // printSquares(sourceSquare);
+	    // System.out.println("Target square after: " + targetSquare);
+	    // printSquares(targetSquare);    
 	}
 	
 	private void addCoupleToSquare(short square, short coupleNo, short cplPsn)
@@ -476,7 +476,7 @@ public class SquareGenerator
         System.out.println("Partners found:  " + pfnd);
         System.out.println("current max dancer count of " + max + " first detected between dancer " + ixsv + " and dancer " + jxsv);
 	}
-*/	
+	
 	private void printSquares(short square)
 	{
 		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
@@ -554,4 +554,5 @@ public class SquareGenerator
 	        					tip.getCouples().getDancer0(cp[3]), tip.getCouples().getDancer1(cp[3]));        
 	    }
 	}
+	*/
 }

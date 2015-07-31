@@ -41,7 +41,9 @@ public class Couples
 	
 	public Couples(int noOfCouples) 
 	{
-		couple = new ArrayList<Couple>(noOfCouples);	// and allocate the couple array.
+		// allocate the couple array and initialize with couples.
+		
+		couple = new ArrayList<Couple>(noOfCouples);	
 		for(int ix = 0; ix < noOfCouples; ix++) couple.add(new Couple());
 	}
 

@@ -381,6 +381,8 @@ public class CoupleGenerator implements Serializable
 		this.noOfSquares = (short)(noOfCouples / 4);	// compute the number of squares from the number of couples,
 		this.couples     = new Couples(noOfCouples);	// and allocate the couples array.
 		this.couplesInSquare = new CouplesInSquare();
+		
+		System.out.println("couples.getNoOfCouples():  " + couples.getNoOfCouples() + ", noOfCouples:  " + noOfCouples + ", noOfSquares:  " + noOfSquares);
 
 		if(this.noOfSquares < 1) return false;
 
@@ -394,7 +396,8 @@ public class CoupleGenerator implements Serializable
 		for(short ix = 0; ix < dancerData.size(); ix++) randomizedDancer.add(ix, ix);
 		Collections.shuffle(randomizedDancer);
 		
-		while(currentMaxOuts >= 0)
+		int dancersNeeded = this.noOfSquares * 8;
+		while(currentMaxOuts >= 0 && this.dancersSelected < dancersNeeded)
 		{
 			if(Globals.singlesRotationCanTakeCouplesOut())
 			{
@@ -405,13 +408,13 @@ public class CoupleGenerator implements Serializable
 				// split apart and paired with 1 or 2 singles, if needed to get singles dancing.
 
 				// before we start breaking up couples, let's see if we can pair up singles with each other.
-				selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesOnly,       firstPass, currentMaxOuts);
+				selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesOnly,       firstPass, currentMaxOuts, dancersNeeded);
 				
 				// we've tried pairing singles with singles. now let's get aggressive, and try breaking up couples.																					
-				selectDancersToCouple(randomizedDancer, doBreakUpCouples,    doSinglesOnly,       firstPass, currentMaxOuts);
+				selectDancersToCouple(randomizedDancer, doBreakUpCouples,    doSinglesOnly,       firstPass, currentMaxOuts,dancersNeeded);
 				
 				// ok, it's all s
-				selectDancersToCouple(randomizedDancer, doBreakUpCouples,    doSinglesAndCouples, firstPass, currentMaxOuts);	
+				selectDancersToCouple(randomizedDancer, doBreakUpCouples,    doSinglesAndCouples, firstPass, currentMaxOuts, dancersNeeded);	
 				
 				//System.out.println("dancersNeeded = " + this.noOfSquares * 8 + ", dancersSelected = " + this.dancersSelected);
 			
@@ -424,7 +427,7 @@ public class CoupleGenerator implements Serializable
 			
 
 				// 'doNotBreakUpCouples' means that we do not break up couples to pair with singles.
-				selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesAndCouples, firstPass, currentMaxOuts);	
+				selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesAndCouples, firstPass, currentMaxOuts, dancersNeeded);	
 			}
 		
 			if(firstPass)
@@ -618,8 +621,8 @@ public class CoupleGenerator implements Serializable
 			
 			firstPass = true;
 			currentMaxOuts = this.maxOuts;
-			
-			while(currentMaxOuts >= 0)
+
+			while(currentMaxOuts >= 0 && this.dancersSelected < dancersNeeded)
 			{
 				if(noOfCouples >= 4)	// we only do further processing if we think we can make at least
 				{						// 4 couples (a square).
@@ -628,15 +631,18 @@ public class CoupleGenerator implements Serializable
 					//System.out.println("noOfCouples:  " + noOfCouples);
 					//System.out.println("noOfSquares:  " + noOfSquares);	
 				
-					// second pass at selecting dancers to make couples.   'doBreakUpCouples' means we can break up couples who are out (if they are willing) to 
-					selectDancersToCouple(randomizedDancer, doBreakUpCouples, doSinglesOnly, firstPass, currentMaxOuts);		//	match with singles to see if we can make another square.  'doSinglesOnly' means we 
-																	//  process the singles first, trying to get them coupled up before aggressively breaking
-																	//	couples apart.
+					// second pass at selecting dancers to make couples.   'doBreakUpCouples' means we can break up 
+					// couples who are out (if they are willing) to match with singles to see if we can make another 
+					// square.  'doSinglesOnly' means we process the singles first, trying to get them coupled up 
+					// before aggressively breaking couples apart.
+					selectDancersToCouple(randomizedDancer, doBreakUpCouples, doSinglesOnly, firstPass, currentMaxOuts,dancersNeeded);	
+					
 					//System.out.println("Third pass through select Dancers:   doNotBreakUpCouples, doSinglesAndCouples");
 				
-					// third pass at selecting dancers to make couples.   		   'doNotBreakUpCouples' means we can break up couples who are out (if they are willing) to 
-					selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesAndCouples, firstPass, currentMaxOuts);	//	match with singles to see if we can make another square.  'doSinglesAndCouples' means
-																			// 	we handle any dancer who is left.
+					// third pass at selecting dancers to make couples.  'doNotBreakUpCouples' means we can break
+					// up couples who are out (if they are willing) to match with singles to see if we can make 
+					// another square.  'doSinglesAndCouples' means we handle any dancer who is left.
+					selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesAndCouples, firstPass, currentMaxOuts,dancersNeeded);
 				}
 			}
 			/*==============================================================================================*/
@@ -645,6 +651,7 @@ public class CoupleGenerator implements Serializable
 		// remove any couple from the couple array that doesn't have an actual couple,
 		// as indicated by 2 zero-value dancers.
 		int csize = couples.getNoOfCouples() - 1;
+		System.out.println("number of couples before culling:  " + couples.getNoOfCouples());
 		for(int ix = csize; ix > -1; ix--)	// go backwards, since removing an elements shifts the 
 		{									// remaining elements down one notch.
 			if(couples.getDancer0(ix) == 0 && couples.getDancer1(ix) == 0) 
@@ -655,6 +662,33 @@ public class CoupleGenerator implements Serializable
 			}
 		}
 		
+		int extraCouples = couples.getNoOfCouples() % 4;
+		int targetOuts   = 0;
+		if(extraCouples > 0) 
+			System.out.println("need to remove " + extraCouples + " extraCouples."); 
+		else 
+			System.out.println("no need to remove extraCouples.");
+		while(extraCouples > 0)
+		{
+			for(int ix = csize; ix > -1; ix--)	// go backwards, since removing an elements shifts the 
+			{									// remaining elements down one notch.
+				Vector<Object>dancer0 = dancerData.get(couples.getDancer0(ix));
+				Vector<Object>dancer1 = dancerData.get(couples.getDancer1(ix));
+				if((Integer)dancer0.get(Dancer.DANCER_OUTS_IX) <= targetOuts && (Integer)dancer1.get(Dancer.DANCER_OUTS_IX) <= targetOuts) 
+				{
+					//System.out.println("remove any couple from the couple array that is extra.");
+					extraCouples -= 1;
+					couples.remove(ix);
+					dancer0.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);
+					dancer1.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);
+					
+					if(extraCouples <= 0) break;
+				}
+			}
+			targetOuts += 1;
+		}
+		
+		
 		// !important!  do not groom partners until after the unused couple slots have been
 		// removed.  if you groom partners before the cleanup, the grooming algorithm will
 		// try to match real dancers with phantom dancers in the unused slots.
@@ -663,20 +697,21 @@ public class CoupleGenerator implements Serializable
 		
 		// shuffle the couples prior to making squares
 		couples.shuffle();
+		System.out.println("number of couples after grooming and shuffling:  " + couples.getNoOfCouples());
 		//System.out.println("after shuffling couples");
 		return true;
 	}
 
-	private void selectDancersToCouple(ArrayList<Short>randomizedDancer, boolean breakupCouples, boolean singlesOnly, boolean firstPass, int currentMaxOuts)
+	private void selectDancersToCouple(ArrayList<Short>randomizedDancer, boolean breakupCouples, boolean singlesOnly, boolean firstPass, int currentMaxOuts, int dancersNeeded)
 	{		
 		// we know how many dancers we're looking for, so we start selecting them
 		// from the pool of available dancers.  the dancers who have the most outs are
 		// selected first.  we know the highest number of outs to start with from the
 		// this.maxOuts variable set above.
 		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-
-		int dancersNeeded	  = this.noOfSquares * 8;	// this.noOfCouples * 2;
+		
 		boolean processDancer = false;
+		System.out.println("noOfSquares:  " + this.noOfSquares + ", dancersNeeded:  " + dancersNeeded);
 		
 		// the point of randomizedDancer is to be able to traverse dancerData randomly.
 		// it turns out to be important to shuffle things up between tips to remove 
@@ -771,14 +806,30 @@ public class CoupleGenerator implements Serializable
 				//System.out.println("   . . . processing as single.");
 				processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts);	// process the single (might be half of a couple willing 
 			}															// to dance single)
-				
 			if(this.dancersSelected >= dancersNeeded)
 			{
-				//System.out.println("selectDancers, done because this.dancersSelected >= dancersNeeded:  " + this.dancersSelected + " >= " + dancersNeeded);
+				System.out.println("selectDancers, done because this.dancersSelected >= dancersNeeded:  " + this.dancersSelected + " >= " + dancersNeeded);
 				break;
 			}
 			//System.out.println("dancersSelected now " + dancersSelected);
 		}
+		/*
+		if(!firstPass)
+		{
+			boolean foundOut = false;
+			for(int iix = 0; iix < dancerData.size(); iix++)
+			{	
+				if(!(Boolean)dancerData.get(iix).get(Dancer.DANCER_SELECTED_IX))
+				{
+					foundOut = true;
+					System.out.println("dancer not selected.  currentMaxOuts: " + currentMaxOuts + ", this dancer outs:  " + 
+										(Integer)dancerData.get(iix).get(Dancer.DANCER_OUTS_IX) + ", dancer name:  " + 
+										(String) dancerData.get(iix).get(Dancer.NAME_IX));
+				}
+			}
+			if(!foundOut) System.out.println("found no couple out when currentMaxOuts = " + currentMaxOuts);
+		}
+		*/
 	}
 	
 	private void processCouple(int ix)
@@ -1075,7 +1126,7 @@ public class CoupleGenerator implements Serializable
 		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 
 		// we got here because a single was paired up with a dancer in a couple, and we
-		// want to pair the other half of the couple with a remaining single.
+		// want to pair the other half of the couple with a remaining single, if that's possible.
 		
 		// "singleIx"  is the original single.  
 		// "partnerIx" is the dancer we are seeking a partner for (the partner of the dancer paired with the original single). 

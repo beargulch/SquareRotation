@@ -140,7 +140,7 @@ public class TipJTable extends JTable
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.setFillsViewportHeight(true);
 		
-		System.out.println("jTable preferred size:  " + this.getPreferredSize() + ", jTable rowHeight:  " + this.getRowHeight());
+		//System.out.println("jTable preferred size:  " + this.getPreferredSize() + ", jTable rowHeight:  " + this.getRowHeight());
 	}
 	
 	public TipFrame getTipFrame()

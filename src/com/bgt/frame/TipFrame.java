@@ -56,7 +56,7 @@ public class TipFrame extends JFrame
 
 	    this.setPreferredSize(new Dimension(900,(jTable.getModel().getRowCount()*60)+jTable.getTableHeader().getHeight()));
         
-        System.out.println("after jTable init, rows = " + jTable.getRowCount());
+        //System.out.println("after jTable init, rows = " + jTable.getRowCount());
         
         this.jScrollPane = new JScrollPane(jTable);
         jScrollPane.setColumnHeader(new HeaderViewport());
