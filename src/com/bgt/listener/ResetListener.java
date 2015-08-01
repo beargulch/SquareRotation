@@ -24,8 +24,10 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
+import com.bgt.frame.MainFrame;
+import com.bgt.jtable.DancersJTable;
 
 public class ResetListener implements ActionListener 
 {
@@ -37,15 +39,12 @@ public class ResetListener implements ActionListener
 		int returnVal = JOptionPane.showConfirmDialog(null, "This will set the tip back to 1, and reset all counts to zero.  Proceed?", "Reset Tipst", 
 						JOptionPane.OK_CANCEL_OPTION);
 		if(returnVal == JOptionPane.CANCEL_OPTION) return;
-		
-		if(Globals.getInstance().getCoupleGenerator() != null)
-		{
-			Globals.getInstance().getCoupleGenerator().allocateArrays();
 
-			Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
+		CoupleGenerator.getInstance().allocateArrays();
+		
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
+		for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
 			
-			Globals.getInstance().getMainFrame().setTipNo();
-		}
+		MainFrame.getInstance().setTipNo();
 	}
 }

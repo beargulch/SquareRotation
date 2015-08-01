@@ -18,13 +18,17 @@
 
 package com.bgt.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Couples 
+public class Couples implements Serializable
 {	
-	private class Couple 
+	private static final long serialVersionUID = 1L;
+
+	private class Couple implements Serializable
 	{
+		private static final long serialVersionUID = 1L;
 		private short   dancer0;
 		private short   dancer1;
 		private boolean selectedForSquare;

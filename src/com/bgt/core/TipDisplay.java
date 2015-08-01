@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.Vector;
 
+import com.bgt.jtable.DancersJTable;
+
 // after the squares have been generated, the TipDisplay class is responsible
 // for putting together the Tip display that shows who is dancing, what the
 // couple makeup is (important for singles), and who is assigned to what square.
@@ -18,7 +20,8 @@ public class TipDisplay {
 	{
 		if(noOfSquares == 0) return new ArrayList<ArrayList<Object>>(0);
 		
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		short dancersToDisplay[] = new short[dancerData.size()];
 		short couplesToDisplay   = (short)(dancerData.size());

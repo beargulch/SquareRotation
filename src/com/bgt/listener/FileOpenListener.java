@@ -28,13 +28,18 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
 import com.bgt.core.Globals;
-import com.bgt.core.CoupleGenerator;
+import com.bgt.frame.MainFrame;
+import com.bgt.jtable.DancersJTable;
+import com.bgt.model.DancersTableModel;
 
 public class FileOpenListener implements ActionListener
 {
@@ -45,7 +50,7 @@ public class FileOpenListener implements ActionListener
 	{	
 		int returnVal = 1;
 
-		if(Globals.getInstance().getDancersTableModel().getRowCount() > 0)
+		if(((DancersTableModel)DancersJTable.getInstance().getModel()).getRowCount() > 0)
 		{
 			returnVal = JOptionPane.showConfirmDialog(null, "This will overlay your existing dancer list.  Proceed?", "Load new Dancers List", 
 						JOptionPane.OK_CANCEL_OPTION);
@@ -53,11 +58,12 @@ public class FileOpenListener implements ActionListener
 		}
 		
 		final JFileChooser fc = new JFileChooser();
+		fc.setFileFilter(new FileNameExtensionFilter("SquareRotation files", "dnc"));
 		returnVal = fc.showOpenDialog(null);
 		
 		if(returnVal != JFileChooser.APPROVE_OPTION) return;
 		
-		Globals.getInstance().getCoupleGenerator().setCurrentTip((short)0);
+		//CoupleGenerator.getInstance().setCurrentTip((short)0);
 		List<Object[]> records = new ArrayList<Object[]>(100);
 		
 		BufferedReader bin = null;
@@ -97,7 +103,7 @@ public class FileOpenListener implements ActionListener
 							case Dancer.DANCER_OUTS_IX:
 								recObj[jx] = new Integer(cols[ix]);
 								break;
-							
+								
 							default:
 								recObj[jx] = cols[ix];			
 						}
@@ -105,7 +111,7 @@ public class FileOpenListener implements ActionListener
 					records.add(recObj);
 				}
 			}
-			Globals.getInstance().getDancersJTable().setUpTableModel((Object[][])records.toArray(new Object[records.size()][]));
+			DancersJTable.getInstance().setUpTableModel((Object[][])records.toArray(new Object[records.size()][]));
 		} 
 		catch(FileNotFoundException e1) 
 		{
@@ -129,34 +135,46 @@ public class FileOpenListener implements ActionListener
 		
 		// loaded dancers; now load persisted Tip, if one can be found.
 
-		try
+		if(Globals.getLoadSerializedData())
 		{
-			FileInputStream fileIn = new FileInputStream(fc.getSelectedFile() + ".ser");
-			ObjectInputStream   in = new ObjectInputStream(fileIn);
-			Globals.getInstance().setCoupleGenerator((CoupleGenerator)in.readObject());
-			System.out.println("before overlaying Tip with persisted object");
-			System.out.println("after overlaying Tip with persisted object");
-			in.close();
-			fileIn.close();
-			Globals.getInstance().getCoupleGenerator().couplesLoadedFromSerializedForm();
-			Globals.getInstance().getMainFrame().setTipNo();
+			String fileName = "";
+			try
+			{
+				fileName = fc.getSelectedFile().getAbsolutePath().replace(".dnc", ".ser");
+				System.out.println("Loading serialized file " + fileName);
+				FileInputStream fileIn = new FileInputStream(fileName);
+				ObjectInputStream   in = new ObjectInputStream(fileIn);
+				CoupleGenerator.loadSerializedInstance((CoupleGenerator)in.readObject());
+				in.close();
+				fileIn.close();
+				MainFrame.getInstance().setTipNo();
+			}
+			catch(FileNotFoundException f)
+			{
+				System.out.println("Could not find file " + fileName + ".  Will start from tip 1.");
+			}
+			catch(IOException i)
+			{
+				System.out.println("IOException");
+				i.printStackTrace();
+				return;
+			}
+			catch(ClassNotFoundException c)
+			{
+				System.out.println("CoupleGenerator class not found");
+				c.printStackTrace();
+				return;
+			}
 		}
-		catch(FileNotFoundException f)
+		else
 		{
-			System.out.println("Could not find file " + fc.getSelectedFile() + ".ser.  Will start from tip 1.");
-		}
-		catch(IOException i)
-		{
-			i.printStackTrace();
-			return;
-		}
-		catch(ClassNotFoundException c)
-		{
-			System.out.println("Tip class not found");
-			c.printStackTrace();
-			return;
+			// if we are not loading the serialized object, then we are starting fresh,
+			// with no outs.  we therefore zero out the out counts which may have been
+			// present (non-zero) in the input data.
+			Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
+			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
 		}
 
-		Globals.getInstance().getCoupleGenerator().allocateArrays();
+		CoupleGenerator.getInstance().allocateArrays();
 	}
 }

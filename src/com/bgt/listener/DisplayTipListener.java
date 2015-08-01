@@ -21,6 +21,7 @@ package com.bgt.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Globals;
 import com.bgt.frame.TipFrame;
 
@@ -31,7 +32,9 @@ public class DisplayTipListener implements ActionListener
 	@Override 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		if(Globals.getInstance().getCoupleGenerator() != null && Globals.getInstance().getCoupleGenerator().getCurrentTip() < 1) return;
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
+		
+		if(cplGen.getCurrentTip() < 1) return;
 		
 		Globals.setTipFrame(new TipFrame());
 	}

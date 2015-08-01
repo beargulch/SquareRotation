@@ -37,8 +37,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
+import com.bgt.jtable.DancersJTable;
 import com.bgt.listener.DisplayTipListener;
 import com.bgt.listener.EditDancerListener;
 import com.bgt.listener.FileOpenListener;
@@ -57,8 +58,10 @@ public class MainFrame extends JFrame
 	private JTextField txtDancersDancing   = null;
 	private JTextField txtDancersOut       = null;
 	private JTextField txtProjectedSquares = null;
+	
+	private static MainFrame instance;
 
-	public MainFrame()
+	protected MainFrame()
     {
         this.setLayout(new GridBagLayout());
 		
@@ -78,7 +81,8 @@ public class MainFrame extends JFrame
         c2.gridx   = 1;
         c2.gridy   = 0;
         c2.fill    = GridBagConstraints.BOTH;
-        JScrollPane pane = new JScrollPane(Globals.getInstance().getDancersJTable());
+        //JScrollPane pane = new JScrollPane(Globals.getInstance().getDancersJTable());
+        JScrollPane pane = new JScrollPane(DancersJTable.getInstance());
 		pane.setColumnHeader(new HeaderViewport()); 
         add(new JScrollPane(pane), c2);
 
@@ -91,6 +95,19 @@ public class MainFrame extends JFrame
         setSize(960, 800);
         setVisible(true);
     }
+	
+	public static MainFrame getInstance()
+	{
+		System.out.println("instantiate MainFrame 1");
+		if(instance == null)
+		{
+			System.out.println("instantiate MainFrame 2");
+			instance = new MainFrame();
+			System.out.println("instantiate MainFrame 3");
+		}
+		System.out.println("instantiate MainFrame 4");
+		return instance;
+	}
 	
 	private JMenuBar createMenuBar()
 	{
@@ -389,7 +406,7 @@ public class MainFrame extends JFrame
 	public void setTipNo()
 	{
 		//System.out.println("mainframe, setting tip to " + Globals.getInstance().getTip().getCurrentTip());
-		short tipNo = Globals.getInstance().getCoupleGenerator().getCurrentTip();
+		short tipNo = CoupleGenerator.getInstance().getCurrentTip();
 		if(tipNo < 0) tipNo = 0;
 		//System.out.println("tipNo is now " + tipNo);
 		txtTipNo.setText(Short.toString(tipNo));
@@ -399,12 +416,14 @@ public class MainFrame extends JFrame
 	
 	public void setDancerStatistics()
 	{
-		Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		//System.out.println("mainframe, setting dancer statistics");
 
 		int dancersPresent = 0;
 		int dancersDancing = 0;
 		int dancersOut     = 0;
+		
+		setTipNo();
 		
 		for(int ix = 0; ix < dancerData.size(); ix++)
 		{

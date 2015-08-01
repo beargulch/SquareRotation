@@ -20,10 +20,7 @@ package com.bgt.core;
 
 import java.awt.Color;
 
-import com.bgt.frame.MainFrame;
 import com.bgt.frame.TipFrame;
-import com.bgt.jtable.DancersJTable;
-import com.bgt.model.DancersTableModel;
 
 public class Globals 
 {
@@ -88,13 +85,9 @@ public class Globals
 	
 	private static int selectedOption		  = SINGLES_ROTATE_ONLY_WITH_SINGLES;
 	private static boolean countVountaryOuts  = true;
+	private static boolean loadSerializedData = false;
 	private static TipFrame tipFrame  		  = null;
 	private static int tipFrameHeight  		  = 0;
-	
-	private static SquareGenerator	squareGenerator;
-	private static CoupleGenerator	coupleGenerator;
-	private static DancersJTable	dancersJTable;
-	private static MainFrame        mainFrame;
 	
 	private static Globals instance = null;
 	
@@ -104,60 +97,11 @@ public class Globals
 	{
 		if(instance == null)
 		{
-			System.out.println("instantiate Globals");
-			instance        = new Globals();
-			dancersJTable   = new DancersJTable();
-	        squareGenerator = SquareGenerator.getInstance();
-	        coupleGenerator	= CoupleGenerator.getInstance();
+			instance = new Globals();
 		}
 		return instance;
 	}
-	
-	public SquareGenerator getSquareGenerator()
-	{
-		return squareGenerator;
-	}
-	
-	public void setCoupleGenerator(CoupleGenerator pCoupleGenerator)
-	{
-		coupleGenerator = pCoupleGenerator;
-	}
-	
-	public CoupleGenerator getCoupleGenerator()
-	{
-		return coupleGenerator;
-	}
-	
-	public void setMainFrame(MainFrame pMainFrame)
-	{
-		mainFrame = pMainFrame;
-	}
-	
-	public MainFrame getMainFrame()
-	{
-		return mainFrame;
-	}
-	
-	public void setDancersJTable(DancersJTable pDancersJTable)
-	{
-		dancersJTable = pDancersJTable;
-	}
-	
-	public DancersJTable getDancersJTable()
-	{
-		return dancersJTable;
-	}
-	
-	public void setDancersTableModel(DancersTableModel pDancersTmdl)
-	{
-		dancersJTable.setModel(pDancersTmdl);
-	}
-	
-	public DancersTableModel getDancersTableModel()
-	{
-		return (DancersTableModel)dancersJTable.getModel();
-	}
-	
+
 	public static void setSelectedOption(int pSelectedOption)
 	{
 		selectedOption = pSelectedOption;
@@ -191,6 +135,16 @@ public class Globals
 	public static boolean getCountVountaryOuts()
 	{
 		return countVountaryOuts;
+	}
+	
+	public static void setLoadSerializedData(boolean pLoadSerializedData)
+	{
+		loadSerializedData = pLoadSerializedData;
+	}
+	
+	public static boolean getLoadSerializedData()
+	{
+		return loadSerializedData;
 	}
 	
 	public static TipFrame getTipFrame()

@@ -25,30 +25,41 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
 
 public class DancersTableModel extends DefaultTableModel implements Serializable
 { 
 	private static final long serialVersionUID = 1L;
 	private int lastRow;
+	
+	private static DancersTableModel instance;
 
-	public DancersTableModel()
+	protected DancersTableModel()
 	{
-		System.out.println("instantiate DancersTableModel");
-		
-		lastRow = -1;
-		
+		lastRow = -1;	
+		for(String col : Dancer.dancerCol) this.addColumn(col);	// set up the columns in the model
+	}
+	
+	public static DancersTableModel getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new DancersTableModel();
+		}
+		return instance;
+	}
+	
+	public void setTableModelListener()
+	{
 		this.addTableModelListener(new TableModelListener() 
 		{  
 			public void tableChanged(TableModelEvent e) 
 			{ 
 				lastRow = e.getLastRow();
-				if(Globals.getInstance().getCoupleGenerator() != null) Globals.getInstance().getCoupleGenerator().tableModelChanged(lastRow);
+				if(CoupleGenerator.getInstance() != null) CoupleGenerator.getInstance().tableModelChanged(lastRow);
 			}
 		});
-		
-		for(String col : Dancer.dancerCol) this.addColumn(col);	// set up the columns in the model
 	}
 	
 	public int getLastRow()

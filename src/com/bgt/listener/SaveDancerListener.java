@@ -23,8 +23,9 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
 import com.bgt.frame.EditDancerFrame;
+import com.bgt.jtable.DancersJTable;
+import com.bgt.model.DancersTableModel;
 
 public class SaveDancerListener implements ActionListener 
 {	
@@ -38,8 +39,10 @@ public class SaveDancerListener implements ActionListener
 	@Override 
 	public void actionPerformed(ActionEvent e) 
 	{	
+		DancersTableModel tblModel = (DancersTableModel)DancersJTable.getInstance().getModel();
+		
 		this.frame.clearDancer1Error();
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = tblModel.getDataVector();
 		boolean err1 = false;
 
 		if(this.frame.getDancer1RowIX() > -1)	// editing existing dancer 1
@@ -62,13 +65,13 @@ public class SaveDancerListener implements ActionListener
 			}
 			else
 			{
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getDancer1().getText(), 				  this.frame.getDancer1RowIX(), Dancer.NAME_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getOuts1Value(), 				  	  this.frame.getDancer1RowIX(), Dancer.DANCER_OUTS_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJPresent1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.PRESENT_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJMustDance1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.MUST_DANCE_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJWillingSingle1().isSelected(), 	  this.frame.getDancer1RowIX(), Dancer.WILLING_SINGLE_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getBeauBelleBox1().getSelectedIndex(), this.frame.getDancer1RowIX(), Dancer.ROLE_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJAtDance1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.DANCER_AT_DANCE_IX);
+				tblModel.setValueAt(this.frame.getDancer1().getText(), 				  this.frame.getDancer1RowIX(), Dancer.NAME_IX);
+				tblModel.setValueAt(this.frame.getOuts1Value(), 				  	  this.frame.getDancer1RowIX(), Dancer.DANCER_OUTS_IX);
+				tblModel.setValueAt(this.frame.getJPresent1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.PRESENT_IX);
+				tblModel.setValueAt(this.frame.getJMustDance1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.MUST_DANCE_IX);
+				tblModel.setValueAt(this.frame.getJWillingSingle1().isSelected(), 	  this.frame.getDancer1RowIX(), Dancer.WILLING_SINGLE_IX);
+				tblModel.setValueAt(this.frame.getBeauBelleBox1().getSelectedIndex(), this.frame.getDancer1RowIX(), Dancer.ROLE_IX);
+				tblModel.setValueAt(this.frame.getJAtDance1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.DANCER_AT_DANCE_IX);
 			}
 		}
 		else	// adding new dancer 1
@@ -87,8 +90,8 @@ public class SaveDancerListener implements ActionListener
 				v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
 				v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
 				v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-				Globals.getInstance().getDancersTableModel().addRow(v);
-				this.frame.setDancer1RowIX(Globals.getInstance().getDancersTableModel().getLastRow());
+				tblModel.addRow(v);
+				this.frame.setDancer1RowIX(tblModel.getLastRow());
 			}
 		}
 
@@ -120,13 +123,13 @@ public class SaveDancerListener implements ActionListener
 				// only update dancer 2 name if it's a text box.  if it's from a drop-down, we know the name
 				// cannot have been changed.
 				if(this.frame.isDancer2TextBox()) 
-					Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getDancer2().getText(),			  this.frame.getDancer2RowIX(), Dancer.NAME_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getOuts2Value(), 					  this.frame.getDancer2RowIX(), Dancer.DANCER_OUTS_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJPresent2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.PRESENT_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJMustDance2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.MUST_DANCE_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJWillingSingle2().isSelected(), 	  this.frame.getDancer2RowIX(), Dancer.WILLING_SINGLE_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getBeauBelleBox2().getSelectedIndex(), this.frame.getDancer2RowIX(), Dancer.ROLE_IX);
-				Globals.getInstance().getDancersTableModel().setValueAt(this.frame.getJAtDance2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.DANCER_AT_DANCE_IX);
+					tblModel.setValueAt(this.frame.getDancer2().getText(),			  this.frame.getDancer2RowIX(), Dancer.NAME_IX);
+				tblModel.setValueAt(this.frame.getOuts2Value(), 					  this.frame.getDancer2RowIX(), Dancer.DANCER_OUTS_IX);
+				tblModel.setValueAt(this.frame.getJPresent2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.PRESENT_IX);
+				tblModel.setValueAt(this.frame.getJMustDance2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.MUST_DANCE_IX);
+				tblModel.setValueAt(this.frame.getJWillingSingle2().isSelected(), 	  this.frame.getDancer2RowIX(), Dancer.WILLING_SINGLE_IX);
+				tblModel.setValueAt(this.frame.getBeauBelleBox2().getSelectedIndex(), this.frame.getDancer2RowIX(), Dancer.ROLE_IX);
+				tblModel.setValueAt(this.frame.getJAtDance2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.DANCER_AT_DANCE_IX);
 			}
 		}
 		else	// adding new dancer 2
@@ -145,8 +148,8 @@ public class SaveDancerListener implements ActionListener
 				v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
 				v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
 				v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-				Globals.getInstance().getDancersTableModel().addRow(v);
-				this.frame.setDancer2RowIX(Globals.getInstance().getDancersTableModel().getLastRow());
+				tblModel.addRow(v);
+				this.frame.setDancer2RowIX(tblModel.getLastRow());
 			}
 		}
 		

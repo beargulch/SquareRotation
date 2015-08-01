@@ -24,7 +24,10 @@ import java.util.Vector;
 
 import com.bgt.core.Dancer;
 import com.bgt.core.Globals;
+import com.bgt.core.SquareGenerator;
 import com.bgt.frame.TipFrame;
+import com.bgt.jtable.DancersJTable;
+import com.bgt.model.DancersTableModel;
 
 public class GenerateSquareListener implements ActionListener 
 {
@@ -34,14 +37,14 @@ public class GenerateSquareListener implements ActionListener
 	public void actionPerformed(ActionEvent e) 
 	{	
 		// do we have at least a square?
-		if(Globals.getInstance().getDancersTableModel().getRowCount() < 8) return;
+		if(((DancersTableModel)DancersJTable.getInstance().getModel()).getRowCount() < 8) return;
 
-		if(!Globals.getInstance().getSquareGenerator().generateNextTip()) return;
+		if(!SquareGenerator.getInstance().generateNextTip()) return;
 
 		Globals.setTipFrame(new TipFrame());
 
 		// clear the Must Dance flag
-		for(Vector<Object>dancer : Globals.getInstance().getDancersTableModel().getDataVector()) 
+		for(Vector<Object>dancer : DancersJTable.getInstance().getDancerData()) 
 			dancer.set(Dancer.MUST_DANCE_IX,(Boolean)false);
 	}
 }

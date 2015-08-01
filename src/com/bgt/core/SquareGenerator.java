@@ -73,7 +73,7 @@ public class SquareGenerator
 
 	public boolean generateNextTip()
 	{	
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator tip = CoupleGenerator.getInstance();
 		
 		if(tip.makeCouples())
 		{
@@ -90,45 +90,45 @@ public class SquareGenerator
 	
 	public boolean regenerateCurrentTip()
 	{			
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
-		if(tip.getCurrentTip() < 0) return false;
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
+		if(cplGen.getCurrentTip() < 0) return false;
 		
-		tip.adjustCounts((short)-1);	// decrement the out counts, since this is a do-over.
+		cplGen.adjustCounts((short)-1);	// decrement the out counts, since this is a do-over.
 
-		if(tip.makeCouples())	// make new couples, in case dancers have been added or modified
+		if(cplGen.makeCouples())	// make new couples, in case dancers have been added or modified
 		{
 			// printCountChart();
 			generateTip();
 			groomTip();
-			// for(short sx = 0; sx < tip.getNoOfSquares(); sx++) tip.computeDanceCounts(sx, true);
-			tip.adjustCounts((short)+1);
+			// for(short sx = 0; sx < cplGen.getNoOfSquares(); sx++) cplGen.computeDanceCounts(sx, true);
+			cplGen.adjustCounts((short)+1);
 			// printCountChart();
 			return true;
 		}
 		
-		tip.adjustCounts((short)+1);	// increment the out counts to put us back where
+		cplGen.adjustCounts((short)+1);	// increment the out counts to put us back where
 		return false;			// we were before decrementing them above.
 	}
 	
 	private void generateTip()
 	{
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
-		tip.clearCouplesUsedFlag();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
+		cplGen.clearCouplesUsedFlag();
 		
 		// find and store the maximum number of times any dancer has danced with
 		// any other dancer.
 		short maxGoal = -1;
-		for(int ix = 0; ix < tip.getDancerCt().size(); ix++)
+		for(int ix = 0; ix < cplGen.getDancerCt().size(); ix++)
 		{
-			for(int jx = 0; jx < tip.getDancerCt().size(); jx++)
+			for(int jx = 0; jx < cplGen.getDancerCt().size(); jx++)
 			{
 				if(jx == ix) continue;
-				if(tip.getDancerCt().get(ix, jx) > maxGoal) maxGoal = tip.getDancerCt().get(ix, jx);
+				if(cplGen.getDancerCt().get(ix, jx) > maxGoal) maxGoal = cplGen.getDancerCt().get(ix, jx);
 			}
 		}
 		
 		// outside loop iterates through the squares in the tip
-	    for(short sx = 0; sx < tip.getNoOfSquares(); sx++)
+	    for(short sx = 0; sx < cplGen.getNoOfSquares(); sx++)
 	    {
 	        // cplCt is the number of couples selected; 4 couples makes a square, of course
 	       
@@ -147,10 +147,10 @@ public class SquareGenerator
 	        {
 	            // cx iterates through all couples
 
-	            for(short cx = 0;  cx < tip.getNoOfCouples() && cplCt < 4; cx++)
+	            for(short cx = 0;  cx < cplGen.getNoOfCouples() && cplCt < 4; cx++)
 	            {
 	                // has this couple been selected for a square yet in this tip?
-	                if(!tip.getCouples().getSelectedForSquare(cx))
+	                if(!cplGen.getCouples().getSelectedForSquare(cx))
 	                {
 	                    // is this the first couple in the square?
 	                    if(cplCt == 0)
@@ -171,8 +171,8 @@ public class SquareGenerator
 	                    // dc0 is dancer 0 of the couple we're considering adding to the square
 	                    // dc1 is dancer 1 of the couple we're considering adding to the square
 
-	                    short dc0 = tip.getCouples().getDancer0(cx);
-	                    short dc1 = tip.getCouples().getDancer1(cx);
+	                    short dc0 = cplGen.getCouples().getDancer0(cx);
+	                    short dc1 = cplGen.getCouples().getDancer1(cx);
 
 	                    // iterate over the couples currently selected for this square
 
@@ -183,17 +183,17 @@ public class SquareGenerator
 	                        // dt1 is dancer 1 of the current couple in the square we're going to compare
 	                        //     against the couple we're considering adding to the square
 
-	                        short cplNo = tip.getCouplesInSquare().getCoupleNo(sx, cn);
-	                        short dt0   = tip.getCouples().getDancer0(cplNo);
-	                        short dt1   = tip.getCouples().getDancer1(cplNo);
+	                        short cplNo = cplGen.getCouplesInSquare().getCoupleNo(sx, cn);
+	                        short dt0   = cplGen.getCouples().getDancer0(cplNo);
+	                        short dt1   = cplGen.getCouples().getDancer1(cplNo);
 	                    
 	                        // if either of the dancers we're considering adding to the square
 	                        // have danced with either of the current dancers already in the square
 	                        // more than the "$goal" number, we don't select this couple for the
 	                        // square ($useCouple = 0).
 
-	                        if(tip.getDancerCt().get(dt0, dc0) > goal || tip.getDancerCt().get(dt0, dc1) > goal ||
-	                           tip.getDancerCt().get(dt1, dc0) > goal || tip.getDancerCt().get(dt1, dc1) > goal)
+	                        if(cplGen.getDancerCt().get(dt0, dc0) > goal || cplGen.getDancerCt().get(dt0, dc1) > goal ||
+	                           cplGen.getDancerCt().get(dt1, dc0) > goal || cplGen.getDancerCt().get(dt1, dc1) > goal)
 	                        {
 	                            useCouple = false;
 	                            break;
@@ -220,15 +220,15 @@ public class SquareGenerator
 	        // number of times each dancer in the square has danced
 	        // with every other dancer in the square.
 
-	        tip.computeDanceCounts(sx, (short)+1);
+	        cplGen.computeDanceCounts(sx, (short)+1);
 	    }
 	}
 	
 	private void groomTip()
 	{
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
 
-		this.overallMaxCt = tip.getMaxActual();
+		this.overallMaxCt = cplGen.getMaxActual();
 	    if(this.overallMaxCt < 1) return;
 	    
 	    boolean done 	  = false;
@@ -237,7 +237,7 @@ public class SquareGenerator
 	    while(!done)
 	    {
 	    	foundMove = false;
-	    	for(short s0 = 0; s0 < tip.getNoOfSquares(); s0++)
+	    	for(short s0 = 0; s0 < cplGen.getNoOfSquares(); s0++)
 	    	{
 	    		// get the max count between all dancers in this square , as indicated by -1
 	    		short squareMaxCt = getSquareMaxCt(s0, (short)-1);
@@ -253,7 +253,7 @@ public class SquareGenerator
 	    			// will moving the couple at this position reduce the square max count?
 	    			if(reducedMaxCt >= squareMaxCt) continue;	// will not reduce the count; skip
 	    		
-	    			for(short s1 = 0; s1 < tip.getNoOfSquares(); s1++)
+	    			for(short s1 = 0; s1 < cplGen.getNoOfSquares(); s1++)
 	    			{
 	    				if(s1 == s0) continue;	// same square; skip
 	    			
@@ -285,16 +285,16 @@ public class SquareGenerator
 		
 		// System.out.println("getSquareMaxCt for square " + square + ", position = " + position);
 		
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
 		short max = -1;
 		
 		for(int psn0 = 0; psn0 < 4; psn0++)
 		{
 			if(psn0 == position) continue;	// eliminate this couple?
 			
-			short cp0 = tip.getCouplesInSquare().getCoupleNo(square, psn0);
-	   		short d00 = tip.getCouples().getDancer0(cp0);
-	   		short d01 = tip.getCouples().getDancer1(cp0);
+			short cp0 = cplGen.getCouplesInSquare().getCoupleNo(square, psn0);
+	   		short d00 = cplGen.getCouples().getDancer0(cp0);
+	   		short d01 = cplGen.getCouples().getDancer1(cp0);
 	   		
 		 	for(int psn1 = (psn0+1); psn1 < 4; psn1++)
 		   	{	
@@ -305,32 +305,32 @@ public class SquareGenerator
 		   		//short d10 = Tip.getInstance().getCouple().get(cp1).get(0);
 		   		//short d11 = Tip.getInstance().getCouple().get(cp1).get(1);
 		 		
-		   		short cp1 = tip.getCouplesInSquare().getCoupleNo(square, psn1);
-		   		short d10 = tip.getCouples().getDancer0(cp1);
-		   		short d11 = tip.getCouples().getDancer1(cp1);
+		   		short cp1 = cplGen.getCouplesInSquare().getCoupleNo(square, psn1);
+		   		short d10 = cplGen.getCouples().getDancer0(cp1);
+		   		short d11 = cplGen.getCouples().getDancer1(cp1);
 		    		
-		   		if(tip.getDancerCt().get(d00, d10) > max) max = tip.getDancerCt().get(d00, d10);
-		   		if(tip.getDancerCt().get(d01, d10) > max) max = tip.getDancerCt().get(d01, d10);
-		   		if(tip.getDancerCt().get(d00, d11) > max) max = tip.getDancerCt().get(d00, d11);
-		   		if(tip.getDancerCt().get(d01, d11) > max) max = tip.getDancerCt().get(d01, d11);
+		   		if(cplGen.getDancerCt().get(d00, d10) > max) max = cplGen.getDancerCt().get(d00, d10);
+		   		if(cplGen.getDancerCt().get(d01, d10) > max) max = cplGen.getDancerCt().get(d01, d10);
+		   		if(cplGen.getDancerCt().get(d00, d11) > max) max = cplGen.getDancerCt().get(d00, d11);
+		   		if(cplGen.getDancerCt().get(d01, d11) > max) max = cplGen.getDancerCt().get(d01, d11);
 		   	}
 		}	
 		//System.out.printf("square %d:  %2d %2d %2d %2d  maxDanceCt:  %2d  position:  %2d\n", 
-		//		           square, tip.getCouplesInSquare().get(square).get(0), 
-		//		                   tip.getCouplesInSquare().get(square).get(1), 
-		//		                   tip.getCouplesInSquare().get(square).get(2), 
-		//		                   tip.getCouplesInSquare().get(square).get(3), max, position);
+		//		           square, cplGen.getCouplesInSquare().get(square).get(0), 
+		//		                   cplGen.getCouplesInSquare().get(square).get(1), 
+		//		                   cplGen.getCouplesInSquare().get(square).get(2), 
+		//		                   cplGen.getCouplesInSquare().get(square).get(3), max, position);
 		return max;
 	}
 	
 	private boolean checkIfMoveWorks(short sourceSquare, short sourcePsn, short targetSquare, short targetPsn, short maxCt)
 	{
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
 		boolean moveWorks = true;	// start assuming it works, then try to falsify
 		
-		short sourceCpl = tip.getCouplesInSquare().getCoupleNo(sourceSquare, sourcePsn);
-        short ds0 = tip.getCouples().getDancer0(sourceCpl); // source dancer 0
-        short ds1 = tip.getCouples().getDancer1(sourceCpl); // source dancer 1
+		short sourceCpl = cplGen.getCouplesInSquare().getCoupleNo(sourceSquare, sourcePsn);
+        short ds0 = cplGen.getCouples().getDancer0(sourceCpl); // source dancer 0
+        short ds1 = cplGen.getCouples().getDancer1(sourceCpl); // source dancer 1
 
         // with the selected couple from the source square, iterate over the target
         // square to see if it could be moved without exceeding maxCt
@@ -339,32 +339,32 @@ public class SquareGenerator
         {
         	if(psn == targetPsn) continue;	// this is the couple that would be moved out, so we don't
             								// care how many times they've danced with the source couple
-            short cpl = tip.getCouplesInSquare().getCoupleNo(targetSquare, psn);
-            short dt0 = tip.getCouples().getDancer0(cpl);
-            short dt1 = tip.getCouples().getDancer1(cpl);
+            short cpl = cplGen.getCouplesInSquare().getCoupleNo(targetSquare, psn);
+            short dt0 = cplGen.getCouples().getDancer0(cpl);
+            short dt1 = cplGen.getCouples().getDancer1(cpl);
             
-            if((tip.getDancerCt().get(dt0, ds0) + 1) > maxCt ||
-               (tip.getDancerCt().get(dt0, ds1) + 1) > maxCt ||
-               (tip.getDancerCt().get(dt1, ds0) + 1) > maxCt ||
-               (tip.getDancerCt().get(dt1, ds1) + 1) > maxCt)
+            if((cplGen.getDancerCt().get(dt0, ds0) + 1) > maxCt ||
+               (cplGen.getDancerCt().get(dt0, ds1) + 1) > maxCt ||
+               (cplGen.getDancerCt().get(dt1, ds0) + 1) > maxCt ||
+               (cplGen.getDancerCt().get(dt1, ds1) + 1) > maxCt)
             {
                 moveWorks = false;
                 //System.out.println("moving from source square " + sourceSquare + ", psn " + sourcePsn + 
                 //				   " to target square " + targetSquare + ", psn " + targetPsn + " did not work, maxCt = " + maxCt+ " counts: " +
-                //				   (tip.getDancerCt().get(dt0).get(ds0) + 1) + " / " +
-                //				   (tip.getDancerCt().get(dt0).get(ds1) + 1) + " / " +
-                //				   (tip.getDancerCt().get(dt1).get(ds0) + 1) + " / " +
-                //				   (tip.getDancerCt().get(dt1).get(ds1) + 1) + ", psn = " + psn);
+                //				   (cplGen.getDancerCt().get(dt0).get(ds0) + 1) + " / " +
+                //				   (cplGen.getDancerCt().get(dt0).get(ds1) + 1) + " / " +
+                //				   (cplGen.getDancerCt().get(dt1).get(ds0) + 1) + " / " +
+                //				   (cplGen.getDancerCt().get(dt1).get(ds1) + 1) + ", psn = " + psn);
                 break;
             }
             //else
             //{
             //	System.out.println("moving from source square " + sourceSquare + ", psn " + sourcePsn + 
             //					   " to target square " + targetSquare + ", psn " + targetPsn + " WORKS, maxCt = " + maxCt + " counts: " +
-            //					   (tip.getDancerCt().get(dt0).get(ds0) + 1) + " / " +
-            //					   (tip.getDancerCt().get(dt0).get(ds1) + 1) + " / " +
-            //					   (tip.getDancerCt().get(dt1).get(ds0) + 1) + " / " +
-            //					   (tip.getDancerCt().get(dt1).get(ds1) + 1) + ", psn = " + psn);
+            //					   (cplGen.getDancerCt().get(dt0).get(ds0) + 1) + " / " +
+            //					   (cplGen.getDancerCt().get(dt0).get(ds1) + 1) + " / " +
+            //					   (cplGen.getDancerCt().get(dt1).get(ds0) + 1) + " / " +
+            //					   (cplGen.getDancerCt().get(dt1).get(ds1) + 1) + ", psn = " + psn);
             //}
         }
 		return moveWorks;
@@ -372,7 +372,7 @@ public class SquareGenerator
 	
 	private void doTheMove(short sourceSquare, short sourcePsn, short targetSquare, short targetPsn)
 	{
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
         
 	    // System.out.println("Source square before: " + sourceSquare);
 	    // printSquares(sourceSquare);
@@ -380,8 +380,8 @@ public class SquareGenerator
 	    // printSquares(targetSquare);
 	        	
 	    // get couple numbers being swapped between source and target squares
-	    short sourceCplToMove = tip.getCouplesInSquare().getCoupleNo(sourceSquare, sourcePsn);
-	    short targetCplToMove = tip.getCouplesInSquare().getCoupleNo(targetSquare, targetPsn);
+	    short sourceCplToMove = cplGen.getCouplesInSquare().getCoupleNo(sourceSquare, sourcePsn);
+	    short targetCplToMove = cplGen.getCouplesInSquare().getCoupleNo(targetSquare, targetPsn);
 	           
 	    // sourceSquare    is the square we're moving from
 	    // sourcePsn       is the position of the couple in the source square being moved
@@ -395,14 +395,14 @@ public class SquareGenerator
 	    //				   " at position " + targetPsn);
 	     
 	    // move source to target
-	    tip.computeDanceCounts(targetSquare, (short)-1);  				// decrement counts in square targetSquare before move
+	    cplGen.computeDanceCounts(targetSquare, (short)-1);  				// decrement counts in square targetSquare before move
         addCoupleToSquare(targetSquare, sourceCplToMove, targetPsn);	// move in new couple from square sourceSquare
-        tip.computeDanceCounts(targetSquare, (short)+1);  				// increment counts in square targetSquare after move
+        cplGen.computeDanceCounts(targetSquare, (short)+1);  				// increment counts in square targetSquare after move
         
         // move target to source
-        tip.computeDanceCounts(sourceSquare, (short)-1);  				// decrement counts in square sourceSquare before move
+        cplGen.computeDanceCounts(sourceSquare, (short)-1);  				// decrement counts in square sourceSquare before move
         addCoupleToSquare(sourceSquare, targetCplToMove, sourcePsn);	// move in new couple from square targetSquare
-        tip.computeDanceCounts(sourceSquare, (short)+1);  				// increment counts in square sourceSquare after move
+        cplGen.computeDanceCounts(sourceSquare, (short)+1);  				// increment counts in square sourceSquare after move
 	            
         // System.out.println("Source square after: " + sourceSquare);
         // printSquares(sourceSquare);
@@ -412,17 +412,17 @@ public class SquareGenerator
 	
 	private void addCoupleToSquare(short square, short coupleNo, short cplPsn)
 	{
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
 		
 		// System.out.println("in addCoupleToSquare, square = " + square + ", couple = " + coupleNo + ", cplPsn = " + cplPsn);
 
-	    tip.getCouplesInSquare().setCoupleNo(square, cplPsn, coupleNo);	// store the couple number at the indicated position in the square,
-	    tip.getCouples().setSelectedForSquare(coupleNo, true);			// and mark this couple as used.
+	    cplGen.getCouplesInSquare().setCoupleNo(square, cplPsn, coupleNo);	// store the couple number at the indicated position in the square,
+	    cplGen.getCouples().setSelectedForSquare(coupleNo, true);			// and mark this couple as used.
 	} 
 /*	
 	private void printCountChart()
 	{
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
 		Vector<Vector<Object>>dancerVector = Globals.getInstance().getDancersTableModel().getDataVector();
   
 		printSquares((short)-1);
@@ -434,20 +434,20 @@ public class SquareGenerator
         
         // dancerCt printout
         System.out.print("  ");
-        for(int ix = 0; ix < tip.getDancerCt().size(); ix++)
+        for(int ix = 0; ix < cplGen.getDancerCt().size(); ix++)
         {
         	System.out.print("  " + ix%10 + " ");	// header
         }
         System.out.println("");
         max = -1;
-        for(int ix = 0; ix < tip.getDancerCt().size(); ix++)
+        for(int ix = 0; ix < cplGen.getDancerCt().size(); ix++)
         {   
             System.out.print(ix%10 + " ");
-        	for(int jx = 0; jx < tip.getDancerCt().size(); jx++)
+        	for(int jx = 0; jx < cplGen.getDancerCt().size(); jx++)
         	{
-        		if(tip.getDancerCt().get(ix, jx) > max)
+        		if(cplGen.getDancerCt().get(ix, jx) > max)
         		{
-        			max  = tip.getDancerCt().get(ix, jx);
+        			max  = cplGen.getDancerCt().get(ix, jx);
         			ixsv = ix;
         			jxsv = jx;
         		}
@@ -462,14 +462,14 @@ public class SquareGenerator
         			else
         			if((Integer)dancerVector.get(ix).get(Dancer.PARTNER_IX) < 0)
         				if((Integer)dancerVector.get(jx).get(Dancer.PARTNER_IX) < 0)
-        					System.out.print("ss" + tip.getDancerCt().get(ix, jx) + " ");
+        					System.out.print("ss" + cplGen.getDancerCt().get(ix, jx) + " ");
         				else
-        					System.out.print("sc" + tip.getDancerCt().get(ix, jx) + " ");
+        					System.out.print("sc" + cplGen.getDancerCt().get(ix, jx) + " ");
         			else
         				if((Integer)dancerVector.get(jx).get(Dancer.PARTNER_IX) < 0)
-        					System.out.print("cs" + tip.getDancerCt().get(ix, jx) + " ");
+        					System.out.print("cs" + cplGen.getDancerCt().get(ix, jx) + " ");
         				else
-        					System.out.print("cc" + tip.getDancerCt().get(ix, jx) + " ");
+        					System.out.print("cc" + cplGen.getDancerCt().get(ix, jx) + " ");
         	}
         	System.out.println("");
         }
@@ -479,10 +479,10 @@ public class SquareGenerator
 	
 	private void printSquares(short square)
 	{
-		CoupleGenerator tip = Globals.getInstance().getCoupleGenerator();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
 		
 		short bgn = 0;
-		short end = tip.getNoOfSquares();
+		short end = cplGen.getNoOfSquares();
 		
 		if(square > -1)
 		{
@@ -495,10 +495,10 @@ public class SquareGenerator
 	    	// System.out.println("tx = " + tx + ", sx = " + sx);
 	        // pull out couple numbers into cp0, c1, c2, c3
 	    	short[] cp = new short[4];
-	        cp[0] = tip.getCouplesInSquare().getCoupleNo(sx, 0);
-	        cp[1] = tip.getCouplesInSquare().getCoupleNo(sx, 1);
-	        cp[2] = tip.getCouplesInSquare().getCoupleNo(sx, 2);
-	        cp[3] = tip.getCouplesInSquare().getCoupleNo(sx, 3);
+	        cp[0] = cplGen.getCouplesInSquare().getCoupleNo(sx, 0);
+	        cp[1] = cplGen.getCouplesInSquare().getCoupleNo(sx, 1);
+	        cp[2] = cplGen.getCouplesInSquare().getCoupleNo(sx, 2);
+	        cp[3] = cplGen.getCouplesInSquare().getCoupleNo(sx, 3);
 	        
 	        short[][]dnc = new short[4][2];
 	        
@@ -509,8 +509,8 @@ public class SquareGenerator
 	        {
 	        	try
 	        	{
-	        		dnc[ix][0] = tip.getCouples().getDancer0(cp[ix]);
-	        		dnc[ix][1] = tip.getCouples().getDancer1(cp[ix]);
+	        		dnc[ix][0] = cplGen.getCouples().getDancer0(cp[ix]);
+	        		dnc[ix][1] = cplGen.getCouples().getDancer1(cp[ix]);
 	        	}
 	        	catch(IndexOutOfBoundsException e)
 	        	{
@@ -525,14 +525,14 @@ public class SquareGenerator
 	        	{
 	        		try
 	        		{
-	        			if(tip.getDancerCt().get(dnc[ix][0], dnc[jx][0]) > max) 
-	        				max = tip.getDancerCt().get(dnc[ix][0], dnc[jx][0]);
-	        			if(tip.getDancerCt().get(dnc[ix][1], dnc[jx][0]) > max) 
-	        				max = tip.getDancerCt().get(dnc[ix][1], dnc[jx][0]);
-	        			if(tip.getDancerCt().get(dnc[ix][0], dnc[jx][1]) > max) 
-	        				max = tip.getDancerCt().get(dnc[ix][0], dnc[jx][1]);
-	        			if(tip.getDancerCt().get(dnc[ix][1], dnc[jx][1]) > max) 
-	        				max = tip.getDancerCt().get(dnc[ix][1], dnc[jx][1]);
+	        			if(cplGen.getDancerCt().get(dnc[ix][0], dnc[jx][0]) > max) 
+	        				max = cplGen.getDancerCt().get(dnc[ix][0], dnc[jx][0]);
+	        			if(cplGen.getDancerCt().get(dnc[ix][1], dnc[jx][0]) > max) 
+	        				max = cplGen.getDancerCt().get(dnc[ix][1], dnc[jx][0]);
+	        			if(cplGen.getDancerCt().get(dnc[ix][0], dnc[jx][1]) > max) 
+	        				max = cplGen.getDancerCt().get(dnc[ix][0], dnc[jx][1]);
+	        			if(cplGen.getDancerCt().get(dnc[ix][1], dnc[jx][1]) > max) 
+	        				max = cplGen.getDancerCt().get(dnc[ix][1], dnc[jx][1]);
 	        		}
 		        	catch(IndexOutOfBoundsException e)
 		        	{
@@ -545,13 +545,13 @@ public class SquareGenerator
 	            
 	        System.out.printf("square %d:  %2d %2d %2d %2d  maxDanceCt:  %2d\n", sx, cp[0], cp[1], cp[2], cp[3], max);
 	            
-	        // print:  tip number, square number, couples in the square
+	        // print:  cplGen number, square number, couples in the square
 	        System.out.printf("square %d:  %2d %2d %2d %2d (%2d %2d), (%2d %2d), (%2d %2d), (%2d %2d)\n",
 	        					sx, cp[0], cp[1], cp[2], cp[3], 
-	        					tip.getCouples().getDancer0(cp[0]), tip.getCouples().getDancer1(cp[0]), 
-	        					tip.getCouples().getDancer0(cp[1]), tip.getCouples().getDancer1(cp[1]), 
-	        					tip.getCouples().getDancer0(cp[2]), tip.getCouples().getDancer1(cp[2]), 
-	        					tip.getCouples().getDancer0(cp[3]), tip.getCouples().getDancer1(cp[3]));        
+	        					cplGen.getCouples().getDancer0(cp[0]), cplGen.getCouples().getDancer1(cp[0]), 
+	        					cplGen.getCouples().getDancer0(cp[1]), cplGen.getCouples().getDancer1(cp[1]), 
+	        					cplGen.getCouples().getDancer0(cp[2]), cplGen.getCouples().getDancer1(cp[2]), 
+	        					cplGen.getCouples().getDancer0(cp[3]), cplGen.getCouples().getDancer1(cp[3]));        
 	    }
 	}
 	*/

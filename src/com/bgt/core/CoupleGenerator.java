@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
 
+import com.bgt.frame.MainFrame;
+import com.bgt.jtable.DancersJTable;
+
 // the Tip class is very tightly coupled to the SquareGenerator class.
 //
 // the SquareGenerator class invokes methods in the CoupleGenerator class 
@@ -55,13 +58,14 @@ import java.util.Vector;
 
 public class CoupleGenerator implements Serializable
 {
-	// the Tip class is instantiated once and only once when program execution
-	// begins.
+	// the CoupleGenerator class is instantiated once and only once when program 
+	// execution begins.
 	//
-	// some Tip variables persist across multiple tips, and some variables are
-	// re-allocated or refreshed for each tip.
-	private static final long serialVersionUID = 1L;
+	// some CoupleGenerator variables persist across multiple tips, and some 
+	// variables are re-allocated or refreshed for each tip.
 	
+	private static final long serialVersionUID = 1L;
+
 	private static final boolean doBreakUpCouples    = true;
 	private static final boolean doNotBreakUpCouples = false;
 	private static final boolean doSinglesOnly       = true;
@@ -144,21 +148,25 @@ public class CoupleGenerator implements Serializable
 	{
 		if(instance == null)
 		{
-			//System.out.println("instantiate CoupleGenerator");
+			System.out.println("instantiate CoupleGenerator");
 			instance = new CoupleGenerator();
 		}
 		return instance;
 	}
-	
-	public void couplesLoadedFromSerializedForm()
+
+	public static void loadSerializedInstance(CoupleGenerator cplGen)
 	{
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-		
+		if(cplGen != null) instance = cplGen;
+	
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		// instance.allocateArrays();
+		/*
 		if(dancerData.size() > 0 && (partnerCt.size() == 0 || dancerCt.size() == 0))
 		{
 			allocateArrays();
 			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
 		}
+		*/
 	}
 	
 	public void allocateArrays() 
@@ -168,8 +176,10 @@ public class CoupleGenerator implements Serializable
 
 		//System.out.println("allocateArrays(), Globals.getInstance().getDancersJTable().getRowCount() = " + Globals.getInstance().getDancersJTable().getRowCount());
 		
-		dancerCt  = new DancerCounts(Globals.getInstance().getDancersJTable().getRowCount());
-		partnerCt = new DancerCounts(Globals.getInstance().getDancersJTable().getRowCount());
+		DancersJTable tbl = DancersJTable.getInstance();
+		
+		dancerCt  = new DancerCounts(tbl.getRowCount());
+		partnerCt = new DancerCounts(tbl.getRowCount());
 	}
 
 	public void tableModelChanged(int lastRow) 
@@ -177,7 +187,7 @@ public class CoupleGenerator implements Serializable
 		// partnerCt must be same size as dancerCt so we only check one size to adjust both.
 		if(lastRow < 0 || lastRow == Integer.MAX_VALUE || lastRow < dancerCt.size()) 
 		{
-			Globals.getInstance().getMainFrame().setDancerStatistics();
+			MainFrame.getInstance().setDancerStatistics();
 			return;
 		}
 		
@@ -192,7 +202,7 @@ public class CoupleGenerator implements Serializable
 			dancerCt. ensureCapacity(newCapacity);
 			partnerCt.ensureCapacity(newCapacity);
 		}
-		Globals.getInstance().getMainFrame().setDancerStatistics();
+		MainFrame.getInstance().setDancerStatistics();
 	}
 
 	public void deleteDancer(int dancer) 
@@ -200,13 +210,13 @@ public class CoupleGenerator implements Serializable
 		dancerCt. remove(dancer);
 		partnerCt.remove(dancer);   
 	   	
-		Globals.getInstance().getMainFrame().setDancerStatistics();
+		MainFrame.getInstance().setDancerStatistics();
 	}
 	
 	public void setCurrentTip(short currentTip) 
 	{
 		this.currentTip = currentTip;
-		Globals.getInstance().getMainFrame().setTipNo();
+		MainFrame.getInstance().setTipNo();
 	}
 	
 	// getters
@@ -256,7 +266,7 @@ public class CoupleGenerator implements Serializable
 	public void incrementTip() 
 	{
 		this.currentTip += 1;
-		Globals.getInstance().getMainFrame().setTipNo();
+		MainFrame.getInstance().setTipNo();
 	}
 	
 	public void clearCouplesUsedFlag()
@@ -273,7 +283,9 @@ public class CoupleGenerator implements Serializable
 
 	public boolean makeCouples()
 	{
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		int coupledCt			= 0;
 		int eligibleDancers     = 0;
@@ -452,6 +464,10 @@ public class CoupleGenerator implements Serializable
 		// be paired from splitting up the willing couples to match with singles to make another 
 		// square.
 		
+		// remove any 'extra' couples to correct the value of this.dancersSelected for the following
+		// if statement.
+		removeExtraCouples(dancerData);
+		
 		//System.out.println("Total eligible dancers = " + eligibleDancers + ", dancersSelected = " + this.dancersSelected);
 		if((eligibleDancers - this.dancersSelected) >= 8 && (Globals.singlesRotateWithCouplesThatAreOut() || Globals.singlesRotationCanTakeCouplesOut()))
 		{
@@ -560,39 +576,6 @@ public class CoupleGenerator implements Serializable
 				}
 			}
 			
-			//noOfCouples = (short)(unwillingCouple / 2);	// this accounts for the partnered couples who are remaining partners.
-
-			// now we need to add in the couples that can be made from singles.
-			/*
-			if(this.singleBeau > this.singleBelle)
-			{
-				if(this.singleBeau > (this.singleEither + this.singleBelle))
-				{
-					noOfCouples += (this.singleEither + this.singleBelle);
-				}
-				else
-				{
-					noOfCouples += (this.singleBeau + (((this.singleBelle + this.singleEither) - this.singleBeau)/2));
-				}
-			}
-			else
-			if(this.singleBelle > this.singleBeau)
-			{
-				if(this.singleBelle > (this.singleEither + this.singleBeau))
-				{
-					noOfCouples += (this.singleEither + this.singleBeau);
-				}
-				else
-				{
-					noOfCouples += (this.singleBelle + (((this.singleBeau + this.singleEither) - this.singleBelle)/2));
-				}
-			}
-			else
-			{
-				noOfCouples += (this.singleBeau + (this.singleEither/2));
-			}
-			*/
-			
 			System.out.println("I think I can make   " + noOfCouples + " couples from the remaining " + (eligibleDancers - this.dancersSelected) + " dancers");
 			System.out.println("couples left intact: " + couplesIntact);
 			System.out.println("couples split:       " + couplesSplit);
@@ -618,13 +601,14 @@ public class CoupleGenerator implements Serializable
 			// in the same role, leaving partners in the other role -- and we know they were in the other role
 			// and not "either" dancers, because "either" dancers could have been matched with a single).
 			
-			firstPass = true;
-			currentMaxOuts = this.maxOuts;
-
-			while(currentMaxOuts >= 0 && this.dancersSelected < dancersNeeded)
+			
+			if(noOfCouples >= 4)	// we only do further processing if we think we can make at least 4 couples (a square)
 			{
-				if(noOfCouples >= 4)	// we only do further processing if we think we can make at least
-				{						// 4 couples (a square).
+				firstPass = true;
+				currentMaxOuts = this.maxOuts;
+			
+				while(currentMaxOuts >= 0 && this.dancersSelected < dancersNeeded)
+				{
 					//this.noOfSquares += (noOfCouples/4);
 					//System.out.println("Second pass through select Dancers:  doBreakUpCouples, doSinglesOnly");
 					//System.out.println("noOfCouples:  " + noOfCouples);
@@ -642,6 +626,16 @@ public class CoupleGenerator implements Serializable
 					// up couples who are out (if they are willing) to match with singles to see if we can make 
 					// another square.  'doSinglesAndCouples' means we handle any dancer who is left.
 					selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesAndCouples, firstPass, currentMaxOuts,dancersNeeded);
+				
+					if(firstPass)
+					{
+						firstPass = false;
+					}
+					else
+					{
+						currentMaxOuts -= 1;
+						//System.out.println("selectDancers, done because currentMaxOuts < 0:  " + currentMaxOuts);
+					}
 				}
 			}
 			/*==============================================================================================*/
@@ -661,35 +655,8 @@ public class CoupleGenerator implements Serializable
 			}
 		}
 		
-		// it's possible that we've selected more couples than are required to make the number of
-		// squares that can be built.  if that has happened, we need to remove the extra couples.
-		// when removing couples, we want to remove those who have been out the least.
-		
-		int extraCouples = couples.getNoOfCouples() % 4;
-		int targetOuts   = 0;
-		if(extraCouples > 0) 
-			System.out.println("need to remove " + extraCouples + " extraCouples."); 
-		else 
-			System.out.println("no need to remove extraCouples.");
-		while(extraCouples > 0)
-		{
-			for(int ix = csize; ix > -1; ix--)	// go backwards, since removing an elements shifts the 
-			{									// remaining elements down one notch.
-				Vector<Object>dancer0 = dancerData.get(couples.getDancer0(ix));
-				Vector<Object>dancer1 = dancerData.get(couples.getDancer1(ix));
-				if((Integer)dancer0.get(Dancer.DANCER_OUTS_IX) <= targetOuts && (Integer)dancer1.get(Dancer.DANCER_OUTS_IX) <= targetOuts) 
-				{
-					//System.out.println("remove any couple from the couple array that is extra.");
-					extraCouples -= 1;
-					couples.remove(ix);
-					dancer0.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);
-					dancer1.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);
-					
-					if(extraCouples <= 0) break;
-				}
-			}
-			targetOuts += 1;
-		}
+		// remove any 'extra' couples
+		removeExtraCouples(dancerData);
 		
 		// !important!  do not groom partners until after the unused couple slots have been
 		// removed.  if you groom partners before the cleanup, the grooming algorithm will
@@ -703,6 +670,60 @@ public class CoupleGenerator implements Serializable
 		//System.out.println("after shuffling couples");
 		return true;
 	}
+	
+	private void removeExtraCouples(Vector<Vector<Object>>dancerData)
+	{
+		// it's possible that that the couples selection process has selected more couples than
+		// can be used to build squares -- that is, the number of couples selected is not an
+		// even multiple of 4 (4 couples to a square).  when that happens, we need to de-select
+		// the extra couples, but we need to do so carefully.  we don't want to de-select anyone
+		// who must dance, or who has a high number of outs.
+		
+		int csize		= couples.getNoOfCouples() - 1;
+		int coupleCt	= 0;
+		for(int ix = csize; ix > -1; ix--)	// go backwards, since removing an elements shifts the 
+		{									// remaining elements down one notch.
+			if(couples.getDancer0(ix) == 0 && couples.getDancer1(ix) == 0) continue;
+			coupleCt += 1;
+		}
+		
+		int extraCouples = coupleCt % 4;
+		if(extraCouples > 0) 
+		{
+			System.out.println("number of couples:  " + coupleCt + ", need to remove " + extraCouples + " extraCouples."); 
+		}
+		else
+		{
+			System.out.println("number of couples:  " + coupleCt + ", no need to remove extraCouples.");
+			return;
+		}
+
+		int targetOuts   = 0;
+		while(extraCouples > 0)
+		{
+			for(int ix = csize; ix > -1; ix--)	// go backwards, since removing an elements shifts the 
+			{									// remaining elements down one notch.
+				
+				if(couples.getDancer0(ix) == 0 && couples.getDancer1(ix) == 0) continue;
+				
+				Vector<Object>dancer0 = dancerData.get(couples.getDancer0(ix));
+				Vector<Object>dancer1 = dancerData.get(couples.getDancer1(ix));
+				if((Integer)dancer0.get(Dancer.DANCER_OUTS_IX) <= targetOuts && !(Boolean)dancer0.get(Dancer.MUST_DANCE_IX) && 
+				   (Integer)dancer1.get(Dancer.DANCER_OUTS_IX) <= targetOuts && !(Boolean)dancer1.get(Dancer.MUST_DANCE_IX) ) 
+				{
+					//System.out.println("remove any couple from the couple array that is extra.");
+					extraCouples -= 1;
+					couples.remove(ix);
+					dancer0.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);
+					dancer1.set(Dancer.DANCER_SELECTED_IX, (Boolean)false);
+					this.dancersSelected -= 2;
+					
+					if(extraCouples <= 0) break;
+				}
+			}
+			targetOuts += 1;
+		}
+	}
 
 	private void selectDancersToCouple(ArrayList<Short>randomizedDancer, boolean breakupCouples, boolean singlesOnly, boolean firstPass, int currentMaxOuts, int dancersNeeded)
 	{		
@@ -710,7 +731,8 @@ public class CoupleGenerator implements Serializable
 		// from the pool of available dancers.  the dancers who have the most outs are
 		// selected first.  we know the highest number of outs to start with from the
 		// this.maxOuts variable set above.
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		
 		boolean processDancer = false;
 		System.out.println("noOfSquares:  " + this.noOfSquares + ", dancersNeeded:  " + dancersNeeded);
@@ -836,7 +858,8 @@ public class CoupleGenerator implements Serializable
 	
 	private void processCouple(int ix)
 	{
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		
 		// we can't use this couple if one of them has already been paired-up to dance with a single
 		if((Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.DANCER_SELECTED_IX)) return;
@@ -848,7 +871,8 @@ public class CoupleGenerator implements Serializable
 	
 	private void processSingle(boolean breakupCouples, int ix, ArrayList<Short>randomizedDancer, boolean firstPass, int currentMaxOuts)
 	{
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		
 		// *****************************  SINGLES PROCESSING   ***************************** //
 		// this section deals with singles, which is not as straightforward as couples because
@@ -1125,7 +1149,8 @@ public class CoupleGenerator implements Serializable
 	
 	void matchCoupledPartnerToSingle(int singleIx, int partnerIx, int roleIx, ArrayList<Short>randomizedDancer)
 	{
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		// we got here because a single was paired up with a dancer in a couple, and we
 		// want to pair the other half of the couple with a remaining single, if that's possible.
@@ -1170,7 +1195,8 @@ public class CoupleGenerator implements Serializable
 	
 	private void addCouple(int d0, int d1, boolean countPairing)
 	{
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 	
 		//System.out.println("in addCouple, adding couple " + this.coupleCt + ", size of couple:  " + couples.getNoOfCouples());
 		//System.out.println("in addCouple, couple is " + dancerData.get(d0).get(Dancer.NAME_IX) + ", " + dancerData.get(d1).get(Dancer.NAME_IX));
@@ -1204,7 +1230,9 @@ public class CoupleGenerator implements Serializable
         // these two singles effectively become a couple.  this routine looks for that situation
         // and tries to remedy it.
     	
-    	Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+    	//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+    	Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
+    	
     	int maxPartnerCt = -1;	// highest partner count between 2 singles
     	int maxSearchSv  = -1;
         int maxCouple    = -1;	// couple where we found the partnered singles with the highest count
@@ -1344,7 +1372,8 @@ public class CoupleGenerator implements Serializable
 		// we also need to adjust the partnerCt -- how many times one single has
 		// danced with another single.
 
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		
 		// participatingDancer is an array of dancers that is built at the time couples are generated,
 		// and contains an element for every dancer in the dancer model at that time.  if a dancer was
@@ -1472,8 +1501,8 @@ public class CoupleGenerator implements Serializable
 	{
 		this.maxActual = 0;
 		
-		for(int d0 = 0; d0 < Globals.getInstance().getDancersJTable().getRowCount(); d0++) {
-		    for(int d1 = 0; d1 < Globals.getInstance().getDancersJTable().getRowCount(); d1++) 
+		for(int d0 = 0; d0 < DancersJTable.getInstance().getRowCount(); d0++) {
+		    for(int d1 = 0; d1 < DancersJTable.getInstance().getRowCount(); d1++) 
 		    	if(dancerCt.get(d0, d1) > this.maxActual) this.maxActual = dancerCt.get(d0, d1);
 		}	
 		

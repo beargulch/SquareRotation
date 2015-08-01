@@ -19,8 +19,12 @@
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Globals;
+import com.bgt.core.SquareGenerator;
 import com.bgt.frame.MainFrame;
+import com.bgt.jtable.DancersJTable;
+import com.bgt.model.DancersTableModel;
 
 public class SquareRotation
 {
@@ -53,7 +57,16 @@ public class SquareRotation
         	     * Create the GUI and show it.  For thread safety, this method should be invoked from 
         	     * the event dispatch thread.
         	     */
-        		Globals.getInstance().setMainFrame(new MainFrame());
+        		
+        		Globals.getInstance();
+        		DancersJTable     tbl 	 = DancersJTable.getInstance();
+        		DancersTableModel tblMdl = DancersTableModel.getInstance();
+        		tbl.setTableModel(tblMdl);
+        		SquareGenerator.getInstance();
+        		CoupleGenerator.getInstance();
+        		tblMdl.setTableModelListener();
+        		
+        		MainFrame.getInstance();      		
             }
         });
     }

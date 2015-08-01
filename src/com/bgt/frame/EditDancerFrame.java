@@ -40,11 +40,12 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
+import com.bgt.jtable.DancersJTable;
 import com.bgt.listener.DeleteDancerListener;
 import com.bgt.listener.SaveDancerListener;
 import com.bgt.listener.SelectDancerListener;
 import com.bgt.model.DanceComboBoxModel;
+import com.bgt.model.DancersTableModel;
 
 public class EditDancerFrame extends JFrame
 {
@@ -467,10 +468,12 @@ public class EditDancerFrame extends JFrame
     }
     public void setDancer1RowIX(int dancer1RowIX)
     {
+    	DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();
+    	
     	this.dancer1RowIX = dancer1RowIX;
-    	if(this.dancer1RowIX > -1 && Globals.getInstance().getDancersTableModel() != null)
+    	if(this.dancer1RowIX > -1 && dancersTmdl != null)
     	{
-			this.dancer1Row = (Vector<Object>)Globals.getInstance().getDancersTableModel().getDataVector().get(this.dancer1RowIX);
+			this.dancer1Row = (Vector<Object>)dancersTmdl.getDataVector().get(this.dancer1RowIX);
     	}
 		else
 		{
@@ -483,10 +486,12 @@ public class EditDancerFrame extends JFrame
     }
     public void setDancer2RowIX(int dancer2RowIX)
     {
+    	DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();
+    	
     	this.dancer2RowIX = dancer2RowIX;
-    	if(this.dancer2RowIX > -1 && Globals.getInstance().getDancersTableModel() != null)
+    	if(this.dancer2RowIX > -1 && dancersTmdl != null)
     	{
-			this.dancer2Row = (Vector<Object>)Globals.getInstance().getDancersTableModel().getDataVector().get(this.dancer2RowIX);
+			this.dancer2Row = (Vector<Object>)dancersTmdl.getDataVector().get(this.dancer2RowIX);
     	}
 		else
     	{

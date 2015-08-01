@@ -48,18 +48,29 @@ import com.bgt.renderer.JTextFieldRenderer;
 public class DancersJTable extends JTable implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
-	private DancersTableModel dancersTmdl;
+	
+	private static DancersJTable instance;
 
-	public DancersJTable() 
+	protected DancersJTable() 
 	{
-		System.out.println("instantiate DancersJTable");
-		
-		this.dancersTmdl = new DancersTableModel();
-		this.setModel(this.dancersTmdl);
-		this.setUpTableModel(null);
 		this.addMouseListener(this);
 		this.setSize(2000, 500);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	}
+	
+	public static DancersJTable getInstance()
+	{
+		if(instance == null)
+		{
+			instance = new DancersJTable();	
+		}
+		return instance;
+	}
+
+	public void setTableModel(DancersTableModel dancersTmdl)
+	{
+		this.setModel(dancersTmdl);
+		this.setUpTableModel(null);
 	}
 	
 	@Override
@@ -85,14 +96,19 @@ public class DancersJTable extends JTable implements MouseListener
 		else
 			dancerVector = new Vector<Vector<Object>>(100, 100);
 
-		this.dancersTmdl.setDataVector(dancerVector, new Vector<String>(Arrays.asList(Dancer.dancerCol)));
+		((DancersTableModel)this.getModel()).setDataVector(dancerVector, new Vector<String>(Arrays.asList(Dancer.dancerCol)));
 		this.setUpTablePresentation();
+	}
+	
+	public Vector<Vector<Object>>getDancerData()
+	{
+		return ((DancersTableModel)DancersJTable.getInstance().getModel()).getDataVector();
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setUpTablePresentation()
 	{
-		TableRowSorter<DancersTableModel>sorter = new TableRowSorter<DancersTableModel>(dancersTmdl);
+		TableRowSorter<DancersTableModel>sorter = new TableRowSorter<DancersTableModel>(((DancersTableModel)this.getModel()));
 		
 		/*
 		RowFilter<DancersTableModel, Integer> activeFilter = new RowFilter<DancersTableModel, Integer>() 
@@ -127,8 +143,8 @@ public class DancersJTable extends JTable implements MouseListener
 				
 				if(i1 > -1 && i2 > -1)
 				{
-					String sx1 = (String)dancersTmdl.getDataVector().get(i1).get(Dancer.NAME_IX);
-					String sx2 = (String)dancersTmdl.getDataVector().get(i2).get(Dancer.NAME_IX);
+					String sx1 = (String)((DancersTableModel)getModel()).getDataVector().get(i1).get(Dancer.NAME_IX);
+					String sx2 = (String)((DancersTableModel)getModel()).getDataVector().get(i2).get(Dancer.NAME_IX);
 					return sx1.compareToIgnoreCase(sx2);
 				}
 				if(i1 < 0 && i2 < 0) return 0;

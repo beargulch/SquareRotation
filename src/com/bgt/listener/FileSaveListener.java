@@ -30,7 +30,8 @@ import java.io.OutputStreamWriter;
 
 import javax.swing.JFileChooser;
 
-import com.bgt.core.Globals;
+import com.bgt.core.CoupleGenerator;
+import com.bgt.jtable.DancersJTable;
 import com.bgt.model.DancersTableModel;
 
 public class FileSaveListener implements ActionListener 
@@ -45,12 +46,19 @@ public class FileSaveListener implements ActionListener
 
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{
+			String fileName = fc.getSelectedFile().getAbsolutePath();
+			int periodPsn = fileName.lastIndexOf('.');
+			
+			// remove existing extension if necessary, then add ".dnc"
+			if(periodPsn > -1) fileName = fileName.substring(0, periodPsn);
+			fileName += ".dnc";
+
 			BufferedWriter bout = null;
 			try 
 			{
-				bout = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fc.getSelectedFile())));
+				bout = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName)));
 				
-				DancersTableModel mdl = (DancersTableModel)Globals.getInstance().getDancersJTable().getModel();
+				DancersTableModel mdl = (DancersTableModel)DancersJTable.getInstance().getModel();
         		
         		for(int r = 0; r < mdl.getRowCount(); r++)
         		{
@@ -64,6 +72,7 @@ public class FileSaveListener implements ActionListener
         			colData = colData + "\n";
         			bout.write(colData);
         		}
+        		System.out.println("Table data is saved in " + fileName);
 			} 
 			catch(FileNotFoundException e1) 
 			{
@@ -89,12 +98,20 @@ public class FileSaveListener implements ActionListener
 			// save tip status as well
 			try
 			{
-				FileOutputStream fileOut = new FileOutputStream(fc.getSelectedFile() + ".ser");
+				fileName = fc.getSelectedFile().getAbsolutePath();
+				periodPsn = fileName.lastIndexOf('.');
+				
+				// remove existing extension if necessary, then add ".ser"
+				if(periodPsn > -1) fileName = fileName.substring(0, periodPsn);
+				fileName += ".ser";
+
+				FileOutputStream fileOut = new FileOutputStream(fileName);
 				ObjectOutputStream out = new ObjectOutputStream(fileOut);
-				out.writeObject(Globals.getInstance().getCoupleGenerator());
+				//out.writeObject(Globals.getInstance().getCoupleGenerator());
+				out.writeObject(CoupleGenerator.getInstance());
 				out.close();
 				fileOut.close();
-				System.out.printf("Serialized data is saved in " + fc.getSelectedFile() + "ser");
+				System.out.printf("Serialized data is saved in " + fileName);
 			}
 			catch(IOException i)
 			{

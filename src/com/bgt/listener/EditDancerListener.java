@@ -21,7 +21,6 @@ package com.bgt.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.bgt.core.Globals;
 import com.bgt.frame.EditDancerFrame;
 import com.bgt.jtable.DancersJTable;
 
@@ -37,7 +36,7 @@ public class EditDancerListener implements ActionListener
 	@Override 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		DancersJTable jTable = Globals.getInstance().getDancersJTable();
+		DancersJTable jTable = DancersJTable.getInstance();
 		
 		int row = -1;
 		if(this.edit && jTable.getSelectedRow() > -1) row = jTable.convertRowIndexToModel(jTable.getSelectedRow());

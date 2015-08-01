@@ -1,8 +1,13 @@
 package com.bgt.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CouplesInSquare {
+import com.bgt.jtable.DancersJTable;
+
+public class CouplesInSquare implements Serializable 
+{
+	private static final long serialVersionUID = 1L;
 	
 	private ArrayList<ArrayList<Short>>coupleNo;
 	
@@ -19,7 +24,7 @@ public class CouplesInSquare {
 		// should always be a little higher than the actual number of squares, 
 		// which is fine for our purposes.
 		
-		int squaresPerTip = (Globals.getInstance().getDancersJTable().getRowCount() / 8) + 1;	// rough estimate
+		int squaresPerTip = (DancersJTable.getInstance().getRowCount() / 8) + 1;	// rough estimate
 		coupleNo = new ArrayList<ArrayList<Short>>(squaresPerTip);
 
 		for(short sx = 0; sx < squaresPerTip; sx++)

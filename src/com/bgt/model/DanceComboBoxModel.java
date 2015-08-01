@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.DefaultComboBoxModel;
 
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
+import com.bgt.jtable.DancersJTable;
 
 //@SuppressWarnings("rawtypes")
 public class DanceComboBoxModel extends DefaultComboBoxModel<String>
@@ -117,7 +117,7 @@ public class DanceComboBoxModel extends DefaultComboBoxModel<String>
 	//@SuppressWarnings("unchecked")
 	public void populateModel(int currentDancerRow)
 	{
-		DancersTableModel dancersTmdl = (DancersTableModel)Globals.getInstance().getDancersJTable().getModel();
+		DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();
 		List<ComboNameList>nameList = new ArrayList<ComboNameList>(dancersTmdl.getRowCount()+1);
 		
 		for(int ix = 0; ix < dancersTmdl.getRowCount(); ix++)

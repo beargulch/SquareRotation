@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Globals;
 import com.bgt.jtable.TipJTable;
 import com.bgt.viewport.HeaderViewport;
@@ -46,13 +47,15 @@ public class TipFrame extends JFrame
 	
 	public TipFrame()
 	{	
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
+		
 		this.setLayout(new GridBagLayout());
-		this.setTitle("Tip Number " + (Globals.getInstance().getCoupleGenerator().getCurrentTip()));
+		this.setTitle("Tip Number " + (cplGen.getCurrentTip()));
 	    
 		TipJTable jTable = new TipJTable(this);
 		
 		// generate the tip data, and add the data to the table model
-        jTable.setUpTableModel(Globals.getInstance().getCoupleGenerator().generateTipDisplay(), tipCol);
+        jTable.setUpTableModel(cplGen.generateTipDisplay(), tipCol);
 
 	    this.setPreferredSize(new Dimension(900,(jTable.getModel().getRowCount()*60)+jTable.getTableHeader().getHeight()));
         

@@ -46,6 +46,7 @@ public class OptionsFrame extends JFrame
 	
 	private JComboBox<String>optionsBox = new JComboBox<String>(singleOptions);
 	private JCheckBox jCountVountaryOuts;
+	private JCheckBox jLoadSerializedData;
 	
 	public OptionsFrame()
 	{
@@ -55,6 +56,7 @@ public class OptionsFrame extends JFrame
 	private void setUpPanel()
 	{
 		jCountVountaryOuts = new JCheckBox("Voluntary out counts as involuntary out");
+		jLoadSerializedData = new JCheckBox("Load serialized data (mostly for debugging)");
 		
 		JPanel mainPanel   = new JPanel(new GridBagLayout());
 		Dimension minSize  = new Dimension(10, 18);
@@ -79,6 +81,11 @@ public class OptionsFrame extends JFrame
 	    c1.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(jCountVountaryOuts, c1);
 		
+		GridBagConstraints c2 = new GridBagConstraints();
+	    c1.gridy  = 4;
+	    c1.anchor = GridBagConstraints.LINE_START;
+		mainPanel.add(jLoadSerializedData, c2);
+		
 		JPanel pane2 = new JPanel();
 		pane2.setLayout(new BoxLayout(pane2, BoxLayout.LINE_AXIS));
 		pane2.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -94,6 +101,10 @@ public class OptionsFrame extends JFrame
 			jCountVountaryOuts.setSelected(true);
 		else
 			jCountVountaryOuts.setSelected(false);
+		if(Globals.getLoadSerializedData())
+			jLoadSerializedData.setSelected(true);
+		else
+			jLoadSerializedData.setSelected(false);
 
 	    savBtn.addActionListener(new ActionListener() 
 	    {
@@ -102,6 +113,7 @@ public class OptionsFrame extends JFrame
 	    	{	
 	    		Globals.setSelectedOption(getFrame().getOptionsBox().getSelectedIndex());
 	    		Globals.setCountVountaryOuts(getFrame().getCountVountaryOuts().isSelected());
+	    		Globals.setLoadSerializedData(getFrame().getLoadSerializedData().isSelected());
 	    		getFrame().dispose();
 	    	}
 	    });
@@ -134,6 +146,11 @@ public class OptionsFrame extends JFrame
     public JCheckBox getCountVountaryOuts()
     {
     	return this.jCountVountaryOuts;
+    }
+	
+    public JCheckBox getLoadSerializedData()
+    {
+    	return this.jLoadSerializedData;
     }
     
     public OptionsFrame getFrame()

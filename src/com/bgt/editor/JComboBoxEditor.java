@@ -27,7 +27,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
+import com.bgt.jtable.DancersJTable;
 import com.bgt.model.DanceComboBoxModel;
 import com.bgt.model.DancersTableModel;
 
@@ -62,7 +62,8 @@ public class JComboBoxEditor extends DefaultCellEditor
 				// System.out.println("EditorDelegate()");
 				DanceComboBoxModel comboBoxModel = (DanceComboBoxModel)comboBox.getModel();
 				ConcurrentHashMap<Integer, Integer>cmap = comboBoxModel.getComboMap();
-				DancersTableModel dancersTmdl = Globals.getInstance().getDancersTableModel();
+				//DancersTableModel dancersTmdl = Globals.getInstance().getDancersTableModel();
+				DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();
 				
 				// cmap makes it possible to translate the selectedIndex to a pointer to 
 				// the model (see comments in DanceComboBoxModel for more information).
@@ -98,7 +99,7 @@ public class JComboBoxEditor extends DefaultCellEditor
 		@SuppressWarnings("unchecked")
 		JComboBox<String>comboBox = (JComboBox<String>)this.getComponent();
 		DanceComboBoxModel comboBoxModel = (DanceComboBoxModel)comboBox.getModel();
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		int dancerIx = jTable.convertRowIndexToModel(row);
 		

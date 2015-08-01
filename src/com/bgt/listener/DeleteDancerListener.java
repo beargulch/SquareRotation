@@ -24,9 +24,11 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
-import com.bgt.core.Globals;
 import com.bgt.frame.EditDancerFrame;
+import com.bgt.jtable.DancersJTable;
+import com.bgt.model.DancersTableModel;
 
 public class DeleteDancerListener implements ActionListener 
 {	
@@ -51,21 +53,26 @@ public class DeleteDancerListener implements ActionListener
 	
 	private void doTheDelete(int row)
 	{
+		DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();
+		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerData = dancersTmdl.getDataVector();
+		
 		int returnVal = JOptionPane.showConfirmDialog(null, "Are you certain you wish to delete dancer " + 
-						Globals.getInstance().getDancersTableModel().getDataVector().get(row).get(Dancer.NAME_IX) + 
+				         dancerData.get(row).get(Dancer.NAME_IX) + 
 						"?  This will delete all data associated with this dancer (outs, etc.), and is unrecoverable.", 
 						"Delete dancer " + dancer, JOptionPane.OK_CANCEL_OPTION);
 		if(returnVal != JOptionPane.OK_OPTION) return;
 		
-		Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		
-		String deletedDancerName = (String)Globals.getInstance().getDancersTableModel().getDataVector().get(row).get(Dancer.NAME_IX);
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
+		
+		String deletedDancerName = (String)dancerData.get(row).get(Dancer.NAME_IX);
 		int partnerRow = (Integer)dancerData.get(row).get(Dancer.PARTNER_IX);
 		if(partnerRow > row) partnerRow -= 1;
 		
 		dancerData.remove(row);
-		Globals.getInstance().getDancersTableModel().fireTableRowsDeleted(row, row);
-		Globals.getInstance().getCoupleGenerator().deleteDancer(row);
+		dancersTmdl.fireTableRowsDeleted(row, row);
+		cplGen.deleteDancer(row);
 		for(int ix = 0; ix < dancerData.size(); ix++)
 		{
 			if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > row)
@@ -82,7 +89,7 @@ public class DeleteDancerListener implements ActionListener
 			frame.getJPartners().setSelected(false);
 			
 			returnVal = JOptionPane.showConfirmDialog(null, "Do you wish to also delete dancer " + deletedDancerName + "'s partner, " + 
-			            Globals.getInstance().getDancersTableModel().getDataVector().get(partnerRow).get(Dancer.NAME_IX) +
+					    dancerData.get(partnerRow).get(Dancer.NAME_IX) +
 			            "?  This will delete all data associated with this dancer (outs, etc.), and is unrecoverable.", 
 			            "Delete dancer " + dancer + "'s partner", JOptionPane.OK_CANCEL_OPTION);
 			
@@ -90,8 +97,8 @@ public class DeleteDancerListener implements ActionListener
 				
 				// delete the partner as well
 				dancerData.remove(partnerRow);
-				Globals.getInstance().getDancersTableModel().fireTableRowsDeleted(partnerRow, partnerRow);
-				Globals.getInstance().getCoupleGenerator().deleteDancer(partnerRow);
+				dancersTmdl.fireTableRowsDeleted(partnerRow, partnerRow);
+				cplGen.deleteDancer(partnerRow);
 				for(int ix = 0; ix < dancerData.size(); ix++)
 				{
 					if((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > partnerRow)
@@ -101,7 +108,7 @@ public class DeleteDancerListener implements ActionListener
 			}
 		}
 		
-		Globals.getInstance().getDancersTableModel().fireTableDataChanged();
+		dancersTmdl.fireTableDataChanged();
 		frame.dispose();
 	}
 	
