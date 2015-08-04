@@ -107,7 +107,6 @@ public class FileSaveListener implements ActionListener
 
 				FileOutputStream fileOut = new FileOutputStream(fileName);
 				ObjectOutputStream out = new ObjectOutputStream(fileOut);
-				//out.writeObject(Globals.getInstance().getCoupleGenerator());
 				out.writeObject(CoupleGenerator.getInstance());
 				out.close();
 				fileOut.close();

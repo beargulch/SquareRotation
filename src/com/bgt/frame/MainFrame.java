@@ -98,14 +98,10 @@ public class MainFrame extends JFrame
 	
 	public static MainFrame getInstance()
 	{
-		System.out.println("instantiate MainFrame 1");
 		if(instance == null)
 		{
-			System.out.println("instantiate MainFrame 2");
 			instance = new MainFrame();
-			System.out.println("instantiate MainFrame 3");
-		}
-		System.out.println("instantiate MainFrame 4");
+		};
 		return instance;
 	}
 	

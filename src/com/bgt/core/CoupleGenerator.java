@@ -425,7 +425,7 @@ public class CoupleGenerator implements Serializable
 				// we've tried pairing singles with singles. now let's get aggressive, and try breaking up couples.																					
 				selectDancersToCouple(randomizedDancer, doBreakUpCouples,    doSinglesOnly,       firstPass, currentMaxOuts,dancersNeeded);
 				
-				// ok, it's all s
+				// ok, it's all skate
 				selectDancersToCouple(randomizedDancer, doBreakUpCouples,    doSinglesAndCouples, firstPass, currentMaxOuts, dancersNeeded);	
 				
 				//System.out.println("dancersNeeded = " + this.noOfSquares * 8 + ", dancersSelected = " + this.dancersSelected);
