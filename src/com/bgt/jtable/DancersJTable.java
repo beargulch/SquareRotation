@@ -102,7 +102,7 @@ public class DancersJTable extends JTable implements MouseListener
 	
 	public Vector<Vector<Object>>getDancerData()
 	{
-		return ((DancersTableModel)DancersJTable.getInstance().getModel()).getDataVector();
+		return ((DancersTableModel)getModel()).getDataVector();
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

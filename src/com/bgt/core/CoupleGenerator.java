@@ -58,6 +58,22 @@ import com.bgt.jtable.DancersJTable;
 
 public class CoupleGenerator implements Serializable
 {
+	private class GenderCounts
+	{
+		private int singleBelle;
+		private int singleBeau; 
+		private int matchedBelles; 
+		private int matchedBeaux;
+		
+		protected GenderCounts()
+		{
+			singleBelle		= 0;
+			singleBeau		= 0; 
+			matchedBelles	= 0; 
+			matchedBeaux	= 0;
+		}
+	}
+	
 	// the CoupleGenerator class is instantiated once and only once when program 
 	// execution begins.
 	//
@@ -85,11 +101,13 @@ public class CoupleGenerator implements Serializable
 	private int dancersSelected     = 0;
 	private int coupleCt			= 0;
 	private int maxOuts             = 0;
-	private int singleBelle         = 0;
-	private int singleBeau          = 0; 
-	private int singleEither        = 0;
-	private int matchedBelles       = 0; 
-	private int matchedBeaux        = 0; 
+	//private int singleBelle         = 0;
+	//private int singleBeau          = 0; 
+	//private int singleEither        = 0;
+	//private int matchedBelles       = 0; 
+	//private int matchedBeaux        = 0; 
+	
+	
 
 	// maxActual keeps track of the maximum number of times any one dancer has
 	// danced with any other dancer.
@@ -157,16 +175,6 @@ public class CoupleGenerator implements Serializable
 	public static void loadSerializedInstance(CoupleGenerator cplGen)
 	{
 		if(cplGen != null) instance = cplGen;
-	
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-		// instance.allocateArrays();
-		/*
-		if(dancerData.size() > 0 && (partnerCt.size() == 0 || dancerCt.size() == 0))
-		{
-			allocateArrays();
-			for(Vector<Object>data : dancerData) data.set(Dancer.DANCER_OUTS_IX, 0);
-		}
-		*/
 	}
 	
 	public void allocateArrays() 
@@ -282,9 +290,7 @@ public class CoupleGenerator implements Serializable
 	// tip are those who have the least number of outs.
 
 	public boolean makeCouples()
-	{
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
-		
+	{	
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		int coupledCt			= 0;
@@ -292,11 +298,17 @@ public class CoupleGenerator implements Serializable
 		
 		this.dancersSelected     = 0; 
 		this.maxOuts             = 0;
-		this.singleBelle         = 0;
-		this.singleBeau          = 0; 
-		this.singleEither        = 0;
-		this.matchedBelles       = 0; 
-		this.matchedBeaux        = 0; 
+		//this.singleBelle         = 0;
+		//this.singleBeau          = 0; 
+		//this.singleEither        = 0;
+		//this.matchedBelles       = 0; 
+		//this.matchedBeaux        = 0; 
+		
+
+		int singleBelle         = 0;
+		int singleBeau          = 0; 
+		int singleEither        = 0;
+		
 		
 		participatingDancer = new short[dancerData.size()];
 		for(int ix = 0; ix < dancerData.size(); ix++) participatingDancer[ix] = -2;
@@ -344,13 +356,13 @@ public class CoupleGenerator implements Serializable
 			else
 			{
 				if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.BEAU_IX)
-					this.singleBeau += 1;
+					singleBeau += 1;
 				else
 				if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.BELLE_IX)
-					this.singleBelle += 1;
+					singleBelle += 1;
 				else
 				if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.EITHER_IX)
-					this.singleEither += 1;
+					singleEither += 1;
 			}
 		}
 		
@@ -361,32 +373,32 @@ public class CoupleGenerator implements Serializable
 		// 'either' dancers can make up for any extra belles or beaux.  extra 'either dancers 
 		// not needed to match with a specific role can also dance with other 'eithers'.
 		
-		if(this.singleBeau > this.singleBelle)
+		if(singleBeau > singleBelle)
 		{
-			if(this.singleBeau > (this.singleEither + this.singleBelle))
+			if(singleBeau > (singleEither + singleBelle))
 			{
-				noOfCouples += (this.singleEither + this.singleBelle);
+				noOfCouples += (singleEither + singleBelle);
 			}
 			else
 			{
-				noOfCouples += (this.singleBeau + (((this.singleBelle + this.singleEither) - this.singleBeau)/2));
+				noOfCouples += (singleBeau + (((singleBelle + singleEither) - singleBeau)/2));
 			}
 		}
 		else
-		if(this.singleBelle > this.singleBeau)
+		if(singleBelle > singleBeau)
 		{
-			if(this.singleBelle > (this.singleEither + this.singleBeau))
+			if(singleBelle > (singleEither + singleBeau))
 			{
-				noOfCouples += (this.singleEither + this.singleBeau);
+				noOfCouples += (singleEither + singleBeau);
 			}
 			else
 			{
-				noOfCouples += (this.singleBelle + (((this.singleBeau + this.singleEither) - this.singleBelle)/2));
+				noOfCouples += (singleBelle + (((singleBeau + singleEither) - singleBelle)/2));
 			}
 		}
 		else
 		{
-			noOfCouples += (this.singleBeau + (this.singleEither/2));
+			noOfCouples += (singleBeau + (singleEither/2));
 		}
 
 		this.coupleCt    = 0;
@@ -472,9 +484,9 @@ public class CoupleGenerator implements Serializable
 		if((eligibleDancers - this.dancersSelected) >= 8 && (Globals.singlesRotateWithCouplesThatAreOut() || Globals.singlesRotationCanTakeCouplesOut()))
 		{
 			//System.out.println("There are enough Out dancers (" + (eligibleDancers - this.dancersSelected) + ") that I'm going to try to make another square.");
-			this.singleBelle  	= 0;
-			this.singleBeau   	= 0;
-			this.singleEither 	= 0;
+			singleBelle  	= 0;
+			singleBeau   	= 0;
+			singleEither 	= 0;
 
 			for(Vector<Object>dancer : dancerData)
 			{
@@ -488,13 +500,13 @@ public class CoupleGenerator implements Serializable
 				//System.out.println("Examining single dancer remaining after first pass: " + dancer.get(Dancer.NAME_IX));
 				
 				if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.BEAU_IX)
-					this.singleBeau += 1;
+					singleBeau += 1;
 				else
 				if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.BELLE_IX)
-					this.singleBelle += 1;
+					singleBelle += 1;
 				else
 				if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.EITHER_IX)
-					this.singleEither += 1;		
+					singleEither += 1;		
 			}
 			
 			ArrayList<Integer>partnerList = new ArrayList<Integer>(dancerData.size());
@@ -503,8 +515,8 @@ public class CoupleGenerator implements Serializable
 			noOfCouples         = 0;
 			int couplesSplit    = 0;
 			int couplesIntact   = 0;
-			int unpairedBelles  = (this.singleBelle - (this.singleBeau +this.singleEither)) > 0 ? (this.singleBelle - (this.singleBeau +this.singleEither)) : 0;
-			int unpairedBeaux	= (this.singleBeau  - (this.singleBelle+this.singleEither)) > 0 ? (this.singleBeau  - (this.singleBelle+this.singleEither)) : 0;
+			int unpairedBelles  = (singleBelle - (singleBeau +singleEither)) > 0 ? (singleBelle - (singleBeau +singleEither)) : 0;
+			int unpairedBeaux	= (singleBeau  - (singleBelle+singleEither)) > 0 ? (singleBeau  - (singleBelle+singleEither)) : 0;
 			
 			for(int dx = 0; dx < dancerData.size(); dx++)
 			{
@@ -726,13 +738,23 @@ public class CoupleGenerator implements Serializable
 	}
 
 	private void selectDancersToCouple(ArrayList<Short>randomizedDancer, boolean breakupCouples, boolean singlesOnly, boolean firstPass, int currentMaxOuts, int dancersNeeded)
-	{		
-		// we know how many dancers we're looking for, so we start selecting them
-		// from the pool of available dancers.  the dancers who have the most outs are
-		// selected first.  we know the highest number of outs to start with from the
-		// this.maxOuts variable set above.
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+	{	
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
+		
+		// the number of dancers we're looking for is passed to us in dancersNeeded.  dancers
+		// are processed by the number of outs they have incurred; dancers with the highest
+		// number of outs are selected first (although that can be overridden in the first pass
+		// through the dancers if a given dancer "must dance."  the number of outs we're 
+		// currently processing is passed to us in currentMaxOuts.
+		
+		// genderCounts is a structure that contains the counts of belles and beaux available
+		// to dance at this level of outs -- that is, if we are currently looking for
+		// dancers with at least 2 outs, for example, we need to know the number of
+		// belles and beaux with that many outs.  those numbers are in the genderCounts 
+		// structure.
+		
+		GenderCounts genderCounts = new GenderCounts();
+		setGenderCounts(currentMaxOuts, genderCounts);
 		
 		boolean processDancer = false;
 		System.out.println("noOfSquares:  " + this.noOfSquares + ", dancersNeeded:  " + dancersNeeded);
@@ -740,11 +762,7 @@ public class CoupleGenerator implements Serializable
 		// the point of randomizedDancer is to be able to traverse dancerData randomly.
 		// it turns out to be important to shuffle things up between tips to remove 
 		// the feeling of predictability in couple and square formation.
-		
-		// ArrayList<Short>randomizedDancer = new ArrayList<Short>(dancerData.size());
-		// for(short ix = 0; ix < dancerData.size(); ix++) randomizedDancer.add(ix, ix);
-		// Collections.shuffle(randomizedDancer, new Random(new Random(System.nanoTime()).nextLong()));
-		
+
 		//System.out.println("\n======================> selectDancers, begin looking through roster of dancers.\n");
 		for(int iix = 0; iix < dancerData.size(); iix++)
 		{	
@@ -787,7 +805,7 @@ public class CoupleGenerator implements Serializable
 				
 			// skip anyone in a couple if we're just processing singles
 		
-			if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1 && singlesOnly) 
+			if(singlesOnly && (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) 
 			{
 				//System.out.println("   . . . processing for dancer skipped because they are in a couple, and we're doing singles only.");
 				continue;
@@ -801,7 +819,7 @@ public class CoupleGenerator implements Serializable
 			// 7/25/2015 -- try not breaking up couples here when selecting dancers.  only breakup couples
 			//              when trying to match a single.
 			
-			//if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1 && 			// this dancer is in a couple, and:
+			//if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1 && 		// this dancer is in a couple, and:
 			//    ( !breakupCouples || 												//   don't break up couples, or
 			//      !(Boolean)dancerData.get(ix).get(Dancer.WILLING_SINGLE_IX) || 	//   dancer or partner not willing to dance single
 			//      !(Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.WILLING_SINGLE_IX)
@@ -815,7 +833,7 @@ public class CoupleGenerator implements Serializable
 				if((Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.DANCER_SELECTED_IX) && 
 				   (Boolean)dancerData.get(ix).get(Dancer.WILLING_SINGLE_IX))
 				{
-					processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts);
+					processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts, genderCounts);
 				}
 				else
 				{
@@ -826,9 +844,9 @@ public class CoupleGenerator implements Serializable
 			else
 			{
 				// note that it's possible to reach processSingle on a dancer who is coupled, but only if the breakupCouples flag
-				// is set, and both the dancer and their partner are willing to dance single (see 'if' statement immediately above).
-				//System.out.println("   . . . processing as single.");
-				processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts);	// process the single (might be half of a couple willing 
+				// is set, and the dancer is willing to dance single (see 'if' statement immediately above).
+				System.out.println("Processing " + dancerData.get(ix).get(Dancer.NAME_IX) + " as single.");
+				processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts, genderCounts);	// process the single (might be half of a couple willing 
 			}															// to dance single)
 			if(this.dancersSelected >= dancersNeeded)
 			{
@@ -837,28 +855,53 @@ public class CoupleGenerator implements Serializable
 			}
 			//System.out.println("dancersSelected now " + dancersSelected);
 		}
-		/*
-		if(!firstPass)
+	}
+	
+	private void setGenderCounts(int currentMaxOuts, GenderCounts genderCounts)
+	{
+		// count gender of dancers with the specified number of outs (currentMaxOuts).
+		
+		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
+		
+		for(int ix = 0; ix < dancerData.size(); ix++)
 		{
-			boolean foundOut = false;
-			for(int iix = 0; iix < dancerData.size(); iix++)
-			{	
-				if(!(Boolean)dancerData.get(iix).get(Dancer.DANCER_SELECTED_IX))
-				{
-					foundOut = true;
-					System.out.println("dancer not selected.  currentMaxOuts: " + currentMaxOuts + ", this dancer outs:  " + 
-										(Integer)dancerData.get(iix).get(Dancer.DANCER_OUTS_IX) + ", dancer name:  " + 
-										(String) dancerData.get(iix).get(Dancer.NAME_IX));
-				}
+			Vector<Object>dancer  = dancerData.get(ix);
+		
+			if(!(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX)	|| 	// skip dancers not present at the dance
+			   !(Boolean)dancer.get(Dancer.PRESENT_IX)			||	// skip dancers voluntarily out
+				(Boolean)dancer.get(Dancer.DANCER_SELECTED_IX)	|| 	// skip dancers already selected
+				(Integer)dancer.get(Dancer.DANCER_OUTS_IX) < currentMaxOuts)	// skip dancers with out counts lower
+			{																	// than the current max
+				continue;
 			}
-			if(!foundOut) System.out.println("found no couple out when currentMaxOuts = " + currentMaxOuts);
+			
+			// we're only interested in single dancers.  for our purposes, a coupled
+			// dancer can be considered a single if their partner has been assigned
+			// to someone else, and the dancer is willing to act as a single.
+			
+			if((Integer)dancer.get(Dancer.PARTNER_IX) > -1)
+			{
+				// dancer is in a couple, and is not willing to act as a single.
+				if(!(Boolean)dancer.get(Dancer.WILLING_SINGLE_IX) ) continue;
+				
+				Vector<Object>partner = dancerData.get((Integer)dancer.get(Dancer.PARTNER_IX));
+				// partner has not been assigned to dance with someone else, so this dancer is still in a couple.
+				if(!(Boolean)partner.get(Dancer.DANCER_SELECTED_IX)) continue;
+			}
+			
+			if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.BEAU_IX)
+				genderCounts.singleBeau += 1;
+			else
+			if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.BELLE_IX)
+				genderCounts.singleBelle += 1;
+			//else
+			//if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.EITHER_IX)
+			//	genderCounts.singleEither += 1;
 		}
-		*/
 	}
 	
 	private void processCouple(int ix)
 	{
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		
 		// we can't use this couple if one of them has already been paired-up to dance with a single
@@ -869,9 +912,8 @@ public class CoupleGenerator implements Serializable
 		addCouple(ix, (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX), false);
 	}
 	
-	private void processSingle(boolean breakupCouples, int ix, ArrayList<Short>randomizedDancer, boolean firstPass, int currentMaxOuts)
+	private void processSingle(boolean breakupCouples, int ix, ArrayList<Short>randomizedDancer, boolean firstPass, int currentMaxOuts, GenderCounts genderCounts)
 	{
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		
 		// *****************************  SINGLES PROCESSING   ***************************** //
@@ -895,9 +937,9 @@ public class CoupleGenerator implements Serializable
 											// Dancer.BEAU_IX  = singles are heavy with beaux; 
 											// Dancer.BELLE_IX = singles are heavy with belles; 
 		
-		//System.out.println("in processSingle, working on dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + 
-		//		           ", breakupCouples = " + breakupCouples + 
-		//		           ", single is from couple = " + ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1));
+		System.out.println("in processSingle, working on dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + 
+				           ", breakupCouples = " + breakupCouples + 
+				           ", single is from couple = " + ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1));
 		
 		// note that "ix" refers to the original single; "jx" refers to the potential partner
 			
@@ -965,9 +1007,9 @@ public class CoupleGenerator implements Serializable
 					continue;
 			}
 				
-			//System.out.println("in processSingle, trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
-			//System.out.println("outs " + (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) + " / " + (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX));
-			//System.out.println("coupled " + ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) + " / " + ((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1));
+			System.out.println("in processSingle, trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+			System.out.println("outs " + (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) + " / " + (Integer)dancerData.get(jx).get(Dancer.DANCER_OUTS_IX));
+			System.out.println("coupled " + ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) + " / " + ((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1));
 				
 			// we found a candidate, but now we must be concerned about matching a belle to beau, or
 			// vice-versa; and we must also factor in the "eithers".
@@ -980,12 +1022,12 @@ public class CoupleGenerator implements Serializable
 			boolean mustMatchGender = false;
 			boolean selected        = false;
 				
-			if((this.singleBelle > this.singleBeau  && this.singleBelle > this.matchedBelles) ||
-			   (this.singleBeau  > this.singleBelle && this.singleBeau  > this.matchedBeaux))
+			if((genderCounts.singleBelle > genderCounts.singleBeau  && genderCounts.singleBelle > genderCounts.matchedBelles) ||
+			   (genderCounts.singleBeau  > genderCounts.singleBelle && genderCounts.singleBeau  > genderCounts.matchedBeaux))
 			{
-				//System.out.println("in processSingle, A trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+				System.out.println("in processSingle, A trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 				mustMatchGender = true;
-				if(this.singleBelle > this.singleBeau  && this.singleBelle > this.matchedBelles)
+				if(genderCounts.singleBelle > genderCounts.singleBeau  && genderCounts.singleBelle > genderCounts.matchedBelles)
 					roleHeavy = Dancer.BELLE_IX;	// singles are heavy with belles
 				else
 					roleHeavy = Dancer.BEAU_IX;		// singles are heavy with beaux
@@ -995,8 +1037,8 @@ public class CoupleGenerator implements Serializable
 				roleHeavy = -1;
 			}
 				
-			//System.out.println("roleHeavy is " + (roleHeavy == Dancer.BEAU_IX  ? "Beau"  : 
-			//		                                 (roleHeavy == Dancer.BELLE_IX ? "Belle" : "Neither")));
+			System.out.println("roleHeavy is " + (roleHeavy == Dancer.BEAU_IX  ? "Beau"  : 
+					                                 (roleHeavy == Dancer.BELLE_IX ? "Belle" : "Neither")));
 
 			// if the first dancer is an either, select this dancer if it is a beau and there is
 			// an excess of beaux (because the excess beaux over belles can only be handled by
@@ -1005,19 +1047,19 @@ public class CoupleGenerator implements Serializable
 				
 			if ((Integer)dancerData.get(ix).get(Dancer.ROLE_IX) == Dancer.EITHER_IX)	// 1st dancer is an either
 			{
-				//System.out.println("in processSingle, B trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+				System.out.println("in processSingle, B trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 				if(mustMatchGender)
 				{
-					if (((Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.BEAU_IX  && this.singleBeau  > this.singleBelle) || 
-						((Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.BELLE_IX && this.singleBelle > this.singleBeau))
+					if (((Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.BEAU_IX  && genderCounts.singleBeau  > genderCounts.singleBelle) || 
+						((Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.BELLE_IX && genderCounts.singleBelle > genderCounts.singleBeau))
 					{
-						//System.out.println("in processSingle, C trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+						System.out.println("in processSingle, C trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 						selected = true;
 					}
 				}
 				else	// not worried about matching genders, so either can match to anyone
 				{
-					//System.out.println("in processSingle, D trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+					System.out.println("in processSingle, D trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 					selected = true;
 				}
 			}
@@ -1029,12 +1071,12 @@ public class CoupleGenerator implements Serializable
 			if( (Integer)dancerData.get(ix).get(Dancer.ROLE_IX) == Dancer.BEAU_IX  && // Beau needs a belle, or either
 			      ( (Integer)dancerData.get(jx).get(Dancer.ROLE_IX)   == Dancer.BELLE_IX ||
 			        ( (Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.EITHER_IX && 
-			          (this.singleBeau > this.singleBelle || !mustMatchGender)
+			          (genderCounts.singleBeau > genderCounts.singleBelle || !mustMatchGender)
 			        )
 			      )
 			  )
 			{
-				//System.out.println("in processSingle, E trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+				System.out.println("in processSingle, E trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 				selected = true;
 			}
 			else
@@ -1045,12 +1087,12 @@ public class CoupleGenerator implements Serializable
 			if( (Integer)dancerData.get(ix).get(Dancer.ROLE_IX) == Dancer.BELLE_IX && // Belle needs beau, or either
 			      ( (Integer)dancerData.get(jx).get(Dancer.ROLE_IX)  == Dancer.BEAU_IX  ||
 			        ( (Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.EITHER_IX && 
-					  (this.singleBelle > this.singleBeau || !mustMatchGender)
+					  (genderCounts.singleBelle > genderCounts.singleBeau || !mustMatchGender)
 		            )
 			      )
 			  )
 			{
-				//System.out.println("in processSingle, F trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+				System.out.println("in processSingle, F trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 				selected = true;
 			}
 				
@@ -1058,26 +1100,26 @@ public class CoupleGenerator implements Serializable
 			  (Integer)dancerData.get(jx).get(Dancer.PARTNER_IX) > -1 && 														// and this dancer is part of a couple
 			 !(Boolean)dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.DANCER_SELECTED_IX))		// and their partner has not yet been selected
 			{
-				//System.out.println("Examining partner of selected dancer who is part of a couple.");
+				System.out.println("Examining partner of selected dancer who is part of a couple.");
 				// if this dancer has been selected, and is part of a couple, and singles are heavy in belles or beaux, then we only
 				// select them if their partner can also be matched to a remaining single, which means the partner cannot dance the 
 				// the role that singles are heavy in.
 				if(roleHeavy == Dancer.BEAU_IX  && (Integer)dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.BEAU_IX ||	
 				   roleHeavy == Dancer.BELLE_IX && (Integer)dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.BELLE_IX)
 				{
-					//System.out.println("roleHeavy = " + (roleHeavy == Dancer.BEAU_IX ? "Beau" : "Belle"));
-					//System.out.println("Dancer " + dancerData.get(jx).get(Dancer.NAME_IX) + " was selected, but has been de-selected because of partner " + 
-					//	dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.NAME_IX) + " has role " + 
-					//	((Integer)dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.BEAU_IX ? "Beau" : "Belle"));
+					System.out.println("roleHeavy = " + (roleHeavy == Dancer.BEAU_IX ? "Beau" : "Belle"));
+					System.out.println("Dancer " + dancerData.get(jx).get(Dancer.NAME_IX) + " was selected, but has been de-selected because of partner " + 
+						dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.NAME_IX) + " has role " + 
+						((Integer)dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.BEAU_IX ? "Beau" : "Belle"));
 					
 					selected = false;
 				}
 				else
 				{
-					//System.out.println("roleHeavy = " + (roleHeavy == Dancer.BEAU_IX ? "Beau" : "Belle"));
-					//System.out.println("Dancer " + dancerData.get(jx).get(Dancer.NAME_IX) + " was selected, and has an acceptable partner " + 
-					//	dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.NAME_IX) + " has role " + 
-					//	((Integer)dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.BEAU_IX ? "Beau" : "Belle"));
+					System.out.println("roleHeavy = " + (roleHeavy == Dancer.BEAU_IX ? "Beau" : "Belle"));
+					System.out.println("Dancer " + dancerData.get(jx).get(Dancer.NAME_IX) + " was selected, and has an acceptable partner " + 
+						dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.NAME_IX) + " has role " + 
+						((Integer)dancerData.get((Integer)dancerData.get(jx).get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.BEAU_IX ? "Beau" : "Belle"));
 					
 					matchCoupledPartner = true;
 				}
@@ -1090,50 +1132,50 @@ public class CoupleGenerator implements Serializable
 			// dancer because the partner we selected has more outs, and therefore is selected
 			// to dance before the potential partner with fewer outs.
 
-			//System.out.println("in processSingle, G trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+			System.out.println("in processSingle, G trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 			if(selected)
 			{
-				//System.out.println("in processSingle, H trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+				System.out.println("in processSingle, H trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 				if(selectedPartner < 0)	// if no partner selected yet, choose this one
 				{
-					//System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " matched with " + dancerData.get(jx).get(Dancer.NAME_IX));
+					System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " matched with " + dancerData.get(jx).get(Dancer.NAME_IX));
 					selectedPartner = jx;
 				}
 				else					// if partner already selected, choose this one instead if they've danced together less
 				{
-					//System.out.println("ix: " + ix + "jx: " + jx + ", selectedPartner" + selectedPartner);
-					//System.out.println("partnerCt.get(" + ix + ", " + jx              + "): " + partnerCt.get(ix, jx));
-					//System.out.println("partnerCt.get(" + ix + ", " + selectedPartner + "): " + partnerCt.get(ix, selectedPartner));
+					System.out.println("ix: " + ix + "jx: " + jx + ", selectedPartner" + selectedPartner);
+					System.out.println("partnerCt.get(" + ix + ", " + jx              + "): " + partnerCt.get(ix, jx));
+					System.out.println("partnerCt.get(" + ix + ", " + selectedPartner + "): " + partnerCt.get(ix, selectedPartner));
 					if(partnerCt.get(ix, jx) < partnerCt.get(ix, selectedPartner))
 					{
-						//System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " re-matched with " + dancerData.get(jx).get(Dancer.NAME_IX));
+						System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " re-matched with " + dancerData.get(jx).get(Dancer.NAME_IX));
 						selectedPartner = jx;
 					}
 					else{
-						//System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " NOT re-matched with " + dancerData.get(jx).get(Dancer.NAME_IX));
+						System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " NOT re-matched with " + dancerData.get(jx).get(Dancer.NAME_IX));
 					}
 				}
 			}
 			else {
-				//System.out.println("in processSingle, trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
+				System.out.println("in processSingle, trying to match dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " with " + dancerData.get(jx).get(Dancer.NAME_IX));
 			}
 		}
 			
 		if(selectedPartner > -1)
 		{	
-			//System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " MATCHED with " + dancerData.get(selectedPartner).get(Dancer.NAME_IX));
+			System.out.println("in processSingle, dancer " + dancerData.get(ix).get(Dancer.NAME_IX) + " MATCHED with " + dancerData.get(selectedPartner).get(Dancer.NAME_IX));
 			// examine each dancer in this couple to increment matched belle/beau counts.
 			if((Integer)dancerData.get(ix).get(Dancer.ROLE_IX) == Dancer.BELLE_IX) 
-				this.matchedBelles += 1;
+				genderCounts.matchedBelles += 1;
 			else
 			if((Integer)dancerData.get(ix).get(Dancer.ROLE_IX) == Dancer.BEAU_IX)  
-				this.matchedBeaux += 1;
+				genderCounts.matchedBeaux += 1;
 			
 			if((Integer)dancerData.get(selectedPartner).get(Dancer.ROLE_IX) == Dancer.BELLE_IX) 
-				this.matchedBelles += 1;
+				genderCounts.matchedBelles += 1;
 			else
 			if((Integer)dancerData.get(selectedPartner).get(Dancer.ROLE_IX) == Dancer.BEAU_IX)  
-				this.matchedBeaux += 1;
+				genderCounts.matchedBeaux += 1;
 
 			addCouple(ix, selectedPartner, true);
 			
@@ -1142,14 +1184,13 @@ public class CoupleGenerator implements Serializable
 				// passing ix (current single) so we know to avoid matching them again; the PARTNER_IX of
 				// the currently selected dancer that we want to match with a single; and the role of the
 				// single we're looking to pair up (roleHeavy).
-				matchCoupledPartnerToSingle(ix, (Integer)dancerData.get(selectedPartner).get(Dancer.PARTNER_IX), roleHeavy, randomizedDancer);		
+				matchCoupledPartnerToSingle(ix, (Integer)dancerData.get(selectedPartner).get(Dancer.PARTNER_IX), roleHeavy, randomizedDancer, genderCounts);		
 			}
 		}
 	}
 	
-	void matchCoupledPartnerToSingle(int singleIx, int partnerIx, int roleIx, ArrayList<Short>randomizedDancer)
+	void matchCoupledPartnerToSingle(int singleIx, int partnerIx, int roleIx, ArrayList<Short>randomizedDancer, GenderCounts genderCounts)
 	{
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		// we got here because a single was paired up with a dancer in a couple, and we
@@ -1174,16 +1215,16 @@ public class CoupleGenerator implements Serializable
 			//System.out.println("in matchPartnerToSingle, dancer " + dancerData.get(jx).get(Dancer.NAME_IX) + " MATCHED with " + dancerData.get(partnerIx).get(Dancer.NAME_IX));
 			// examine each dancer in this couple to increment matched belle/beau counts.
 			if((Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.BELLE_IX) 
-				this.matchedBelles += 1;
+				genderCounts.matchedBelles += 1;
 			else
 			if((Integer)dancerData.get(jx).get(Dancer.ROLE_IX) == Dancer.BEAU_IX)  
-				this.matchedBeaux  += 1;
+				genderCounts.matchedBeaux  += 1;
 			
 			if((Integer)dancerData.get(partnerIx).get(Dancer.ROLE_IX) == Dancer.BELLE_IX) 
-				this.matchedBelles += 1;
+				genderCounts.matchedBelles += 1;
 			else
 			if((Integer)dancerData.get(partnerIx).get(Dancer.ROLE_IX) == Dancer.BEAU_IX)  
-				this.matchedBeaux  += 1;
+				genderCounts.matchedBeaux  += 1;
 			
 			//System.out.println("in in matchPartnerToSingle, adding couple " + this.coupleCt);
 
@@ -1195,7 +1236,6 @@ public class CoupleGenerator implements Serializable
 	
 	private void addCouple(int d0, int d1, boolean countPairing)
 	{
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 	
 		//System.out.println("in addCouple, adding couple " + this.coupleCt + ", size of couple:  " + couples.getNoOfCouples());
@@ -1229,8 +1269,7 @@ public class CoupleGenerator implements Serializable
         // a way as to always leave the last two singles to dance with themselves.  as a result,
         // these two singles effectively become a couple.  this routine looks for that situation
         // and tries to remedy it.
-    	
-    	//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+  
     	Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
     	
     	int maxPartnerCt = -1;	// highest partner count between 2 singles
@@ -1371,8 +1410,7 @@ public class CoupleGenerator implements Serializable
 		//
 		// we also need to adjust the partnerCt -- how many times one single has
 		// danced with another single.
-
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
+		
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 		
 		// participatingDancer is an array of dancers that is built at the time couples are generated,
