@@ -729,6 +729,7 @@ public class CoupleGenerator implements Serializable
 		GenderCounts genderCounts = new GenderCounts();
 		setGenderCounts(currentMaxOuts, genderCounts);
 		
+		int targetOuts = this.maxOuts;
 		boolean processDancer = false;
 		System.out.println("noOfSquares:  " + this.noOfSquares + ", dancersNeeded:  " + dancersNeeded);
 		
@@ -737,86 +738,91 @@ public class CoupleGenerator implements Serializable
 		// the feeling of predictability in couple and square formation.
 
 		//System.out.println("\n======================> selectDancers, begin looking through roster of dancers.\n");
-		for(int iix = 0; iix < dancerData.size(); iix++)
-		{	
-			int ix = randomizedDancer.get(iix);	// randomize dancer selection
-			
-			//System.out.println("selectDancers, processing " + iix + ", which translates to " + ix + ", who is " + dancerData.get(ix).get(Dancer.NAME_IX));
-				
-			// first we check to see if this dancer is eligible to dance.  note that we go through the dancers
-			// multiple times, the first time selecting dancers who have been out the most, and decrementing
-			// the "out" count on each pass so as to select dancers who have been out the least after first 
-			// having selected dancers who have been out the most.
-				
-			if(firstPass)
-			{
-				// on the first pass, we process only dancers who must dance
-				processDancer = (Boolean)dancerData.get(ix).get(Dancer.MUST_DANCE_IX);
-			}
-			else
-			{
-				// on the second and subsequent pass, we continue to process dancers 
-				// who must dance, and we also process dancers who have been out the most
-				processDancer = (Boolean)dancerData.get(ix).get(Dancer.MUST_DANCE_IX) ||
-						        (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) >= currentMaxOuts;
-			}
-		
-			if(!processDancer)
-			{   
-				//System.out.println("   . . . processing for dancer skipped -- not enough outs, or not 'must dance'.  outs = " + (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) + ", currentMaxOuts = " + currentMaxOuts + ", firstPass = " + firstPass);
-				continue;	// not been out enough and not marked must dance?
-			}
-				
-			if(!(Boolean)dancerData.get(ix).get(Dancer.PRESENT_IX)			||	// voluntarily out?
-			   !(Boolean)dancerData.get(ix).get(Dancer.DANCER_AT_DANCE_IX)	|| 	// not at dance?
-				(Boolean)dancerData.get(ix).get(Dancer.DANCER_SELECTED_IX))		// already dancing?
-			{
-				// skip this dancer for now
-				//System.out.println("   . . . processing for dancer skipped -- not present, or deleted, or already selected to dance.");
-				continue;
-			}
-				
-			// skip anyone in a couple if we're just processing singles
-		
-			if(singlesOnly && (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) 
-			{
-				//System.out.println("   . . . processing for dancer skipped because they are in a couple, and we're doing singles only.");
-				continue;
-			}
-				
-			// we've found someone who is eligible.  if they are coupled, they are relatively easy to handle.  we 
-			// select them and their partner, even if the partner has fewer outs.  but . . . if we're permitted 
-			// to break up couples, and both of the partnered dancers have indicated a willingness to dance single, 
-			// we let this dancer fall through to singles processing.
-					
-			if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1)	// this dancer is in a couple
+		while(targetOuts >= currentMaxOuts)
+		{
+			for(int iix = 0; iix < dancerData.size(); iix++)
 			{	
-				// if this dancer's partner has already been selected to dance, it means the couple
-				// was split up.  if that's the case, then treat this dancer as a single.
-				if((Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.DANCER_SELECTED_IX) && 
-				   (Boolean)dancerData.get(ix).get(Dancer.WILLING_SINGLE_IX))
+				int ix = randomizedDancer.get(iix);	// randomize dancer selection
+			
+				//System.out.println("selectDancers, processing " + iix + ", which translates to " + ix + ", who is " + dancerData.get(ix).get(Dancer.NAME_IX));
+				
+				// first we check to see if this dancer is eligible to dance.  note that we go through the dancers
+				// multiple times, the first time selecting dancers who have been out the most, and decrementing
+				// the "out" count on each pass so as to select dancers who have been out the least after first 
+				// having selected dancers who have been out the most.
+				
+				if(firstPass)
 				{
-					processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts, genderCounts);
+					// on the first pass, we process only dancers who must dance
+					processDancer = (Boolean)dancerData.get(ix).get(Dancer.MUST_DANCE_IX);
 				}
 				else
 				{
-					//System.out.println("   . . . processing as couple.");
-					processCouple(ix);	// process the couple
+					// on the second and subsequent pass, we continue to process dancers 
+					// who must dance, and we also process dancers who have been out the most
+					processDancer = (Boolean)dancerData.get(ix).get(Dancer.MUST_DANCE_IX) ||
+						        	(Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) >= targetOuts;
 				}
+		
+				if(!processDancer)
+				{   
+					//System.out.println("   . . . processing for dancer skipped -- not enough outs, or not 'must dance'.  outs = " + (Integer)dancerData.get(ix).get(Dancer.DANCER_OUTS_IX) + ", currentMaxOuts = " + currentMaxOuts + ", firstPass = " + firstPass);
+					continue;	// not been out enough and not marked must dance?
+				}
+				
+				if(!(Boolean)dancerData.get(ix).get(Dancer.PRESENT_IX)			||	// voluntarily out?
+				   !(Boolean)dancerData.get(ix).get(Dancer.DANCER_AT_DANCE_IX)	|| 	// not at dance?
+				    (Boolean)dancerData.get(ix).get(Dancer.DANCER_SELECTED_IX))		// already dancing?
+				{
+					// skip this dancer for now
+					//System.out.println("   . . . processing for dancer skipped -- not present, or deleted, or already selected to dance.");
+					continue;
+				}
+				
+				// skip anyone in a couple if we're just processing singles
+		
+				if(singlesOnly && (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1) 
+				{
+					//System.out.println("   . . . processing for dancer skipped because they are in a couple, and we're doing singles only.");
+					continue;
+				}
+				
+				// we've found someone who is eligible.  if they are coupled, they are relatively easy to handle.  we 
+				// select them and their partner, even if the partner has fewer outs.  but . . . if we're permitted 
+				// to break up couples, and both of the partnered dancers have indicated a willingness to dance single, 
+				// we let this dancer fall through to singles processing.
+					
+				if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1)	// this dancer is in a couple
+				{	
+					// if this dancer's partner has already been selected to dance, it means the couple
+					// was split up.  if that's the case, then treat this dancer as a single.
+					if((Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.DANCER_SELECTED_IX) && 
+					   (Boolean)dancerData.get(ix).get(Dancer.WILLING_SINGLE_IX))
+					{
+						processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts, genderCounts);
+					}
+					else
+					{
+						//System.out.println("   . . . processing as couple.");
+						processCouple(ix);	// process the couple
+					}
+				}
+				else
+				{
+					// note that it's possible to reach processSingle on a dancer who is coupled, but only if the breakupCouples flag
+					// is set, and the dancer is willing to dance single (see 'if' statement immediately above).
+					System.out.println("Processing " + dancerData.get(ix).get(Dancer.NAME_IX) + " as single.");
+					processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts, genderCounts);	// process the single (might be half of a couple willing 
+				}															// to dance single)
+				if(this.dancersSelected >= dancersNeeded)
+				{
+					System.out.println("selectDancers, done because this.dancersSelected >= dancersNeeded:  " + this.dancersSelected + " >= " + dancersNeeded);
+					targetOuts = -1;
+					break;
+				}
+				//System.out.println("dancersSelected now " + dancersSelected);
 			}
-			else
-			{
-				// note that it's possible to reach processSingle on a dancer who is coupled, but only if the breakupCouples flag
-				// is set, and the dancer is willing to dance single (see 'if' statement immediately above).
-				System.out.println("Processing " + dancerData.get(ix).get(Dancer.NAME_IX) + " as single.");
-				processSingle(breakupCouples, ix, randomizedDancer, firstPass, currentMaxOuts, genderCounts);	// process the single (might be half of a couple willing 
-			}															// to dance single)
-			if(this.dancersSelected >= dancersNeeded)
-			{
-				System.out.println("selectDancers, done because this.dancersSelected >= dancersNeeded:  " + this.dancersSelected + " >= " + dancersNeeded);
-				break;
-			}
-			//System.out.println("dancersSelected now " + dancersSelected);
+			targetOuts -= 1;
 		}
 	}
 	
