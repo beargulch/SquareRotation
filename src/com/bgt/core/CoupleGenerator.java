@@ -98,20 +98,12 @@ public class CoupleGenerator implements Serializable
 	private short currentTip 	=  0;
 	private short noOfSquares	=  0;
 
-	private int dancersSelected     = 0;
-	private int coupleCt			= 0;
-	private int maxOuts             = 0;
-	//private int singleBelle         = 0;
-	//private int singleBeau          = 0; 
-	//private int singleEither        = 0;
-	//private int matchedBelles       = 0; 
-	//private int matchedBeaux        = 0; 
+	private int dancersSelected	= 0;
+	private int coupleCt		= 0;
+	private int maxOuts			= 0;
 	
-	
-
 	// maxActual keeps track of the maximum number of times any one dancer has
 	// danced with any other dancer.
-
 	private short maxActual = 0;
 	
 	// "dancer number" in the comments below is the index into the DancersTableModel vector for a
@@ -294,21 +286,14 @@ public class CoupleGenerator implements Serializable
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		int coupledCt			= 0;
-		int eligibleDancers     = 0;
+		int eligibleDancers		= 0;
 		
-		this.dancersSelected     = 0; 
-		this.maxOuts             = 0;
-		//this.singleBelle         = 0;
-		//this.singleBeau          = 0; 
-		//this.singleEither        = 0;
-		//this.matchedBelles       = 0; 
-		//this.matchedBeaux        = 0; 
+		this.dancersSelected	= 0; 
+		this.maxOuts			= 0;
 		
-
 		int singleBelle         = 0;
 		int singleBeau          = 0; 
 		int singleEither        = 0;
-		
 		
 		participatingDancer = new short[dancerData.size()];
 		for(int ix = 0; ix < dancerData.size(); ix++) participatingDancer[ix] = -2;
@@ -439,18 +424,11 @@ public class CoupleGenerator implements Serializable
 				
 				// ok, it's all skate
 				selectDancersToCouple(randomizedDancer, doBreakUpCouples,    doSinglesAndCouples, firstPass, currentMaxOuts, dancersNeeded);	
-				
-				//System.out.println("dancersNeeded = " + this.noOfSquares * 8 + ", dancersSelected = " + this.dancersSelected);
-			
-				//if(this.noOfSquares * 8 > this.dancersSelected) selectDancers(doBreakUpCouples, true);
 			}							
 			else
 			{	
-				// this is probably the most common way to select dancers -- couples stay couples,
-				// and singles rotate only with other singles.
-			
-
 				// 'doNotBreakUpCouples' means that we do not break up couples to pair with singles.
+				// couples stay couples, and singles rotate only with other singles.
 				selectDancersToCouple(randomizedDancer, doNotBreakUpCouples, doSinglesAndCouples, firstPass, currentMaxOuts, dancersNeeded);	
 			}
 		
@@ -476,8 +454,8 @@ public class CoupleGenerator implements Serializable
 		// be paired from splitting up the willing couples to match with singles to make another 
 		// square.
 		
-		// remove any 'extra' couples to correct the value of this.dancersSelected for the following
-		// if statement.
+		// remove any 'extra' couples -- that is, couples selected beyond those needed to exactly
+		// fill out 'n' squares -- to correct the value of this.dancersSelected.
 		removeExtraCouples(dancerData);
 		
 		//System.out.println("Total eligible dancers = " + eligibleDancers + ", dancersSelected = " + this.dancersSelected);
@@ -591,11 +569,6 @@ public class CoupleGenerator implements Serializable
 			System.out.println("I think I can make   " + noOfCouples + " couples from the remaining " + (eligibleDancers - this.dancersSelected) + " dancers");
 			System.out.println("couples left intact: " + couplesIntact);
 			System.out.println("couples split:       " + couplesSplit);
-			//System.out.println("singleBeau:          " + singleBeau);
-			//System.out.println("singleBelle:         " + singleBelle);
-			//System.out.println("singleEither:        " + singleEither);
-			//System.out.println("noOfCouples:         " + noOfCouples);
-			//System.out.println("noOfSquares:         " + noOfSquares);
 			
 			/*==============================================================================================*/
 			
@@ -815,16 +788,6 @@ public class CoupleGenerator implements Serializable
 			// select them and their partner, even if the partner has fewer outs.  but . . . if we're permitted 
 			// to break up couples, and both of the partnered dancers have indicated a willingness to dance single, 
 			// we let this dancer fall through to singles processing.
-		
-			// 7/25/2015 -- try not breaking up couples here when selecting dancers.  only breakup couples
-			//              when trying to match a single.
-			
-			//if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1 && 		// this dancer is in a couple, and:
-			//    ( !breakupCouples || 												//   don't break up couples, or
-			//      !(Boolean)dancerData.get(ix).get(Dancer.WILLING_SINGLE_IX) || 	//   dancer or partner not willing to dance single
-			//      !(Boolean)dancerData.get((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).get(Dancer.WILLING_SINGLE_IX)
-			//    )
-			//  )
 					
 			if( (Integer)dancerData.get(ix).get(Dancer.PARTNER_IX) > -1)	// this dancer is in a couple
 			{	
@@ -894,9 +857,6 @@ public class CoupleGenerator implements Serializable
 			else
 			if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.BELLE_IX)
 				genderCounts.singleBelle += 1;
-			//else
-			//if((Integer)dancer.get(Dancer.ROLE_IX) == Dancer.EITHER_IX)
-			//	genderCounts.singleEither += 1;
 		}
 	}
 	
