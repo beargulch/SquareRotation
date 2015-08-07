@@ -321,7 +321,7 @@ public class CoupleGenerator implements Serializable
 			// skip dancers voluntarily out, and set participatingDancer to -1.
 			// depending on options settings, we may increment the out count for these dancers.
 			
-			if(!(Boolean)dancer.get(Dancer.PRESENT_IX)) 
+			if(!(Boolean)dancer.get(Dancer.DANCING_IX)) 
 			{
 				participatingDancer[ix] = -1;
 				continue;
@@ -469,7 +469,7 @@ public class CoupleGenerator implements Serializable
 			for(Vector<Object>dancer : dancerData)
 			{
 				// skip absent or deleted dancers, and dancers already selected
-				if(!(Boolean)dancer.get(Dancer.PRESENT_IX)        	||		// voluntarily out
+				if(!(Boolean)dancer.get(Dancer.DANCING_IX)        	||		// voluntarily out
 				   !(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX) 	|| 		// not at dance
 					(Boolean)dancer.get(Dancer.DANCER_SELECTED_IX) 	|| 		// selected
 					(Integer)dancer.get(Dancer.PARTNER_IX) > -1)			// coupled
@@ -501,7 +501,7 @@ public class CoupleGenerator implements Serializable
 				Vector<Object>dancer = dancerData.get(dx);
 				
 				// skip absent or deleted dancers, and dancers already selected
-				if(!(Boolean)dancer.get(Dancer.PRESENT_IX)        	||		// voluntarily out
+				if(!(Boolean)dancer.get(Dancer.DANCING_IX)        	||		// voluntarily out
 				   !(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX) 	|| 		// not at dance
 					(Boolean)dancer.get(Dancer.DANCER_SELECTED_IX) 	||		// selected
 					(Integer)dancer.get(Dancer.PARTNER_IX) < 0)				// single
@@ -770,7 +770,7 @@ public class CoupleGenerator implements Serializable
 					continue;	// not been out enough and not marked must dance?
 				}
 				
-				if(!(Boolean)dancerData.get(ix).get(Dancer.PRESENT_IX)			||	// voluntarily out?
+				if(!(Boolean)dancerData.get(ix).get(Dancer.DANCING_IX)			||	// voluntarily out?
 				   !(Boolean)dancerData.get(ix).get(Dancer.DANCER_AT_DANCE_IX)	|| 	// not at dance?
 				    (Boolean)dancerData.get(ix).get(Dancer.DANCER_SELECTED_IX))		// already dancing?
 				{
@@ -837,7 +837,7 @@ public class CoupleGenerator implements Serializable
 			Vector<Object>dancer  = dancerData.get(ix);
 		
 			if(!(Boolean)dancer.get(Dancer.DANCER_AT_DANCE_IX)	|| 	// skip dancers not present at the dance
-			   !(Boolean)dancer.get(Dancer.PRESENT_IX)			||	// skip dancers voluntarily out
+			   !(Boolean)dancer.get(Dancer.DANCING_IX)			||	// skip dancers voluntarily out
 				(Boolean)dancer.get(Dancer.DANCER_SELECTED_IX)	|| 	// skip dancers already selected
 				(Integer)dancer.get(Dancer.DANCER_OUTS_IX) < currentMaxOuts)	// skip dancers with out counts lower
 			{																	// than the current max
@@ -933,7 +933,7 @@ public class CoupleGenerator implements Serializable
 				continue;	// not been out enough and not marked must dance?
 			}
 				
-			if(!(Boolean)dancerData.get(jx).get(Dancer.PRESENT_IX)			 || // voluntarily out?
+			if(!(Boolean)dancerData.get(jx).get(Dancer.DANCING_IX)			 || // voluntarily out?
 			   !(Boolean)dancerData.get(jx).get(Dancer.DANCER_AT_DANCE_IX)	 || // not at dance?
 				(Boolean)dancerData.get(jx).get(Dancer.DANCER_SELECTED_IX)	 ||	// already dancing? 
 			   

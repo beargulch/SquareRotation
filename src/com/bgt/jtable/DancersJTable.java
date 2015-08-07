@@ -123,7 +123,7 @@ public class DancersJTable extends JTable implements MouseListener
 		sorter.setRowFilter(activeFilter);
 		*/
 		
-		sorter.setSortable(Dancer.PRESENT_IX, false);
+		sorter.setSortable(Dancer.DANCING_IX, false);
 		sorter.setSortable(Dancer.MUST_DANCE_IX, false);
 		sorter.setSortable(Dancer.WILLING_SINGLE_IX, false);
 		sorter.setSortable(Dancer.DANCER_OUTS_IX, false);
@@ -176,7 +176,7 @@ public class DancersJTable extends JTable implements MouseListener
 		this.getColumn(Dancer.PARTNER_STR).setCellEditor(jcEditor);
 		
 		// Present is a button
-		this.getColumn(Dancer.PRESENT_STR).setCellEditor(new ButtonColumnEditor(this, new PresentAction(), Dancer.PRESENT_IX, "Dancing", "Out", Globals.HIGHLIGHT_OFF_BTN));
+		this.getColumn(Dancer.DANCING_STR).setCellEditor(new ButtonColumnEditor(this, new PresentAction(), Dancer.DANCING_IX, "Dancing", "Out", Globals.HIGHLIGHT_OFF_BTN));
 		
 		// Must Dance is a radio button
 		this.getColumn(Dancer.MUST_DANCE_STR).setCellEditor(new ButtonColumnEditor(this, new MustDanceAction(), Dancer.MUST_DANCE_IX, "Dance!", "Normal", Globals.HIGHLIGHT_ON_BTN));

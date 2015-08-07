@@ -375,7 +375,7 @@ public class EditDancerFrame extends JFrame
 		if(this.dancer1RowIX > -1)
 		{
 			dancer1.setText((String)dancer1Row.get(Dancer.NAME_IX));
-			if((Boolean)dancer1Row.get(Dancer.PRESENT_IX)) 
+			if((Boolean)dancer1Row.get(Dancer.DANCING_IX)) 
 				jPresent1.setSelected(true);       
 			else 
 				jPresent1.setSelected(false);
@@ -399,7 +399,7 @@ public class EditDancerFrame extends JFrame
 		if(this.dancer2RowIX > -1)
 		{
 			dancer2.setText((String)dancer2Row.get(Dancer.NAME_IX));
-			if((Boolean)dancer2Row.get(Dancer.PRESENT_IX)) 
+			if((Boolean)dancer2Row.get(Dancer.DANCING_IX)) 
 				jPresent2.setSelected(true);       
 			else 
 				jPresent2.setSelected(false);

@@ -56,7 +56,7 @@ public class SelectDancerListener implements ActionListener
 		
 		if(dancer2Row != null)
 		{
-			if((Boolean)dancer2Row.get(Dancer.PRESENT_IX)) 
+			if((Boolean)dancer2Row.get(Dancer.DANCING_IX)) 
 				frame.getJPresent2().setSelected(true);       
 			else 
 				frame.getJPresent2().setSelected(false);

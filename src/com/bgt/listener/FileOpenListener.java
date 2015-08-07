@@ -89,7 +89,7 @@ public class FileOpenListener implements ActionListener
 								recObj[jx] = cols[ix].toString();
 								break;
 					
-							case Dancer.PRESENT_IX:
+							case Dancer.DANCING_IX:
 							case Dancer.MUST_DANCE_IX:
 							case Dancer.WILLING_SINGLE_IX:
 							case Dancer.DANCER_DANCED_IX:

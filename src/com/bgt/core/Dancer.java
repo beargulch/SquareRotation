@@ -28,7 +28,7 @@ public class Dancer extends Vector
 	public static final int    NAME_IX			   =  0;
 	public static final int    ROLE_IX			   =  1;
 	public static final int    PARTNER_IX		   =  2;
-	public static final int    PRESENT_IX		   =  3;
+	public static final int    DANCING_IX		   =  3;
 	public static final int    MUST_DANCE_IX	   =  4;
 	public static final int    WILLING_SINGLE_IX   =  5;
 	public static final int    DANCER_OUTS_IX      =  6;
@@ -39,7 +39,7 @@ public class Dancer extends Vector
 	public static final String NAME_STR		   	   = "Name";
 	public static final String ROLE_STR		   	   = "Beau/Belle";
 	public static final String PARTNER_STR		   = "Partner";
-	public static final String PRESENT_STR		   = "Present";
+	public static final String DANCING_STR		   = "Dancing";
 	public static final String MUST_DANCE_STR	   = "Must Dance";
 	public static final String WILLING_SINGLE_STR  = "Willing Single";
 	public static final String DANCER_OUTS_STR     = "Dancer Outs";
@@ -59,7 +59,7 @@ public class Dancer extends Vector
 	String dancerCol[] = { NAME_STR,        	// "Name"
 					   	   ROLE_STR,			// "Beau/Belle"
 					   	   PARTNER_STR, 		// "Partner"
-					   	   PRESENT_STR, 		// "Present"
+					   	   DANCING_STR, 		// "Dancing"
 					   	   MUST_DANCE_STR, 		// "Must Dance"
 					   	   WILLING_SINGLE_STR,	// "Willing Single"
 					   	   DANCER_OUTS_STR,		// "Dancer Outs"
@@ -86,7 +86,7 @@ public class Dancer extends Vector
         	case NAME_IX:
         		return String.class;
                 
-            case PRESENT_IX:
+            case DANCING_IX:
             case MUST_DANCE_IX:
             case WILLING_SINGLE_IX:
             case DANCER_DANCED_IX:
@@ -115,7 +115,7 @@ public class Dancer extends Vector
         		return false;
 
         	case PARTNER_IX:  
-            case PRESENT_IX:
+            case DANCING_IX:
             case MUST_DANCE_IX:
             case WILLING_SINGLE_IX:
             case DANCER_AT_DANCE_IX:

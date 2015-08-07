@@ -96,6 +96,28 @@
 
     This button will cause all counts — the current tip count, and all “out” counts — to be reset to their initial values, as if no tips have yet been danced.
 
+  Statistics under the buttons down the left column of the Main screen:
+
+  - Current Tip
+
+    The number of the current tip.  This number will increment each time the "Generate New Tip" button is pressed, but will not increment when the "Regenerate Tip" button is pressed.  If the "Reset to Tip 1" button is pressed, the number will be reset to 0.
+
+  - Dancers Present
+
+    The number of dancers who are "At the Dance", regardless of whether they are dancing.
+
+  - Requested Outs
+
+    The number of dancers who are "At the Dance" but are "Out", meaning they are sitting out the tip by request.
+
+  - Dancers Dancing
+
+    The actual number of dancers who are dancing.  This number should always equal "Dancers Present" minus "Requested Outs".
+
+  - Projected Squares
+
+    This is "Dancers Dancing" divided by 8, which means it may not be accurate.  If the number of "Dancers Dancing" is 8, for example, then this number will always be 1, since 8 dancers make a square.  If 6 of those dancers indicate that they only dance belle, however, then the program will be unable to make a square because it will be unable to find partners for every dancer.  This number should therefore be considered an optimistic estimate.
+
   Some column headings on the right hand side of the Main screen can be used to order the display.  If you click on Name, for example, the list will sort alphabetically by Name.  Clicking on Name a second time will reverse the sort.  Clicking on Belle/Beau or Partner will similarly order the display by the chosen column.
     
   Columns down the right of the the Main screen are:
@@ -120,9 +142,9 @@
 
     - You can also use this column to change partners:  click on the column to bring up a list of dancers, and click on the dancer who should be partnered with the current dancer.  If the selected dancer is different from the current partner, the old partner will become single, and the selected dancer will become the current dancer’s new partner.
 
-  - Present
+  - Dancing
 
-    If a dancer leaves or wishes to sit out during a tip, click on the Present button to change the dancer’s status to Absent.  If the dancer has a partner, the partner will also be marked Absent.  Dancers marked absent will be excluded from the tip generation process.
+    If a dancer leaves the floor or wishes to sit out during a tip, click on the Dancing button to change the dancer’s status to Out.  If the dancer has a partner, the partner will also be marked Out.  Dancers marked Out will be excluded from the tip generation process.  Whether or not a voluntary Out counts when determining who should dance in the next tip is optional; see section 5, Tip Generation Options.
 
     If a dancer is coupled with another dancer, and one dancer wants to keep dancing while the other dancer wants to sit out, the dancers must be uncoupled before their Present/Absent status can be individually adjusted.
 
@@ -138,6 +160,10 @@
 
     Dancer Outs are calculated by the computer, and track how many times a person has not been selected to dance in a tip.  The count does not increment for people marked Absent during the tip generation process.
 
+  - At the Dance
+
+    If a dancer leaves the floor or is not at the dance, he/she can be removed from the rotation by changing clicking on the associated button in the "At the Dance" column to change "Yes" to "No".  Dancers with a value of "No" in this column are excluded from the rotation, and their outs are not counted.
+
 4. Tip Display Screen
 
   This screen is used to display the squares generated for the current tip, listing square numbers and the dancers assigned to them.  Dancers are list in alphabetical order, both in the overall list, and within each couple.  
@@ -148,17 +174,30 @@
 
 5. Tip Generation Options
 
-  The menu bar at the top of the screen includes an item labeled Tools.  The last menu item in the list under Tools is “Set Options”.  If you select “Set Options”, you are presented with a dialog box with a drop-down list labeled “Singles Handling” that gives 2 choices for handling singles when tips are generated.  
+  The menu bar at the top of the screen includes an item labeled Tools.  The last menu item in the list under Tools is “Set Options”.  If you select “Set Options”, you are presented with a dialog box with a drop-down list labeled “Singles Handling” that gives 3 choices for handling singles when tips are generated, plus 2 check boxes.  
 
-  The 2 choices are:
+  The 3 choices in the drop-down list are:
 
-  - Singles dance only with singles.
+  - Singles rotate only with Singles.
 
-    This choice is the default option, and is currently the option that is most thoroughly tested and believed to be working well.  If this choice is selected, couples will always remain couples, and singles will be assigned to dance only with other singles.  Couples will will never be “taken apart” to dance with singles, even if one or both dancers in the couple is marked as “Willing to fill in as single if couple is out”.
+    This choice is the default option.  If this choice is selected, couples will always remain couples, and singles will be assigned to dance only with other singles.  Couples will will never be “taken apart” to dance with singles, even if one or both dancers in the couple is marked as “Willing to fill in as single if couple is out”.
 
-  - Singles can dance with Out Couples.
+  - Singles can rotate with Out Couples.
 
-    If this choice is selected, tip generation will take place in two phases.  The first phase will proceed as usual, scanning through the list of available dancers, selecting couples and pairing singles as usual, without “taking apart” any couples.  At the completion of this phase, it is possible that there will be enough “out” dancers to make a square, but only if some couples are split apart (for example:  3 couples, some of whom can dance “Either” and are willing to be split apart if they happen to be out, plus 2 singles who dance “belle” only so cannot be matched to each other.).
+    If this choice is selected, tip generation will take place in two phases.  The first phase will proceed as usual, scanning through the list of available dancers, selecting couples and pairing singles as usual, without “taking apart” any couples.  At the completion of this phase, it is possible that there will be enough “out” dancers to make a square, but only if some couples are split apart.  For example:  3 couples, some of whom can dance “Either” and are willing to be split apart if they happen to be out; plus 2 singles who dance “belle” only so cannot be matched to each other, but could be matched to to dancers in the couples willing to be split apart.
 
-    In the second phase, an attempt is made to match the single dancers who are out by “taking apart” couples who are also out to see if it’s possible to make a square.  As development progressed, it became evident that this option only works when there are couples made up of dancers who both dance "Either," and who both are willing to dance single, so it has limited utility.
+    In the second phase, an attempt is made to match the single dancers who are out by “taking apart” couples who are also out to see if it’s possible to make another square.  This option only works when there are couples made up of dancers who both dance "Either," and who both are willing to dance single, so it is expected to have limited utility.
 
+  - Singles can rotate with Any Couple.
+
+    If this choice is selected, tip generation is based strictly on the number of outs, meaning dancers with the highest number of outs are selected first when building the squares for a tip.  Note that this option only works if there are couples who indicate that they are willing to be "taken apart" to dance single if necessary to keep the single(s) from being out more than other dancers.  If most of the couples are unwilling to be split up, then this option could easily be perceived as unfair by the few couples who are willing to accommodate singles, since they could spend most of their time dancing with someone other than their preferred partner, and some dancers might dance less than dancers in couples who are unwilling to be split apart.
+  
+  The 2 check boxes are:
+  
+  - Voluntary out counts as involuntary out.
+
+    As the program generates each tip, it keeps track of how many times a dancer has not been selected to dance, which is counted as an "out."  When a new tip is generated, dancers with the highest out counts are selected first to make sure all dancers are given equal dance time.  If a dancer asks to be taken out of the rotation for a given tip, this option determines whether that out is counted for the purpose of dancer selection for subsequent tips.  If the check box is checked, voluntary outs are treated the same as involuntary outs, meaning they are counted when choosing dancers for subsequent tips (this is the default setting).  If the box is unchecked, voluntary outs will not be counted when choosing dancers.
+ 
+  - Load serialized data (mostly for debugging)
+
+    When the current dance configuration is saved, two files are created:  one with the suffix ".dnc", and one with the suffix ".ser".  The ".dnc" file is the one that is used to capture dancer information for use at another time.  The ".ser" file contains internal program data that is useful for debugging purposes if something goes wrong.  If you discover a bug and wish to report it, it would be a good idea to save the current configuration, then send both the ".dnc" and the ".ser" file to me in an e-mail, along with a description of the bug.  The ".ser" file is useful to help recreate and understand the program behavior that triggered the bug report.  Bug reports should be sent to fred@beargulch.com.

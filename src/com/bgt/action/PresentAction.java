@@ -38,14 +38,14 @@ public class PresentAction extends AbstractAction
 	    
 	    // toggle the present/absent setting
 	    
-	    Boolean present = (Boolean)dancersTmdl.getValueAt(jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.PRESENT_IX);
+	    Boolean present = (Boolean)dancersTmdl.getValueAt(jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.DANCING_IX);
 	    present = !present;		// toggle value
-	    dancersTmdl.setValueAt((Boolean)present, jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.PRESENT_IX);
+	    dancersTmdl.setValueAt((Boolean)present, jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.DANCING_IX);
 	    
 	    // if this dancer has a partner, set the partner present/absent value to match.
 	    
 	    int partnerIx = (Integer)dancersTmdl.getValueAt(jTable.convertRowIndexToModel(jTable.getSelectedRow()), Dancer.PARTNER_IX);
-	    if (partnerIx > -1) dancersTmdl.setValueAt((Boolean)present, partnerIx, Dancer.PRESENT_IX);
+	    if (partnerIx > -1) dancersTmdl.setValueAt((Boolean)present, partnerIx, Dancer.DANCING_IX);
 	    
 	    // if we just marked this dancer (and partner, if one exists) not present, we turn off the must dance flag if it is set.
 	    

@@ -67,7 +67,7 @@ public class SaveDancerListener implements ActionListener
 			{
 				tblModel.setValueAt(this.frame.getDancer1().getText(), 				  this.frame.getDancer1RowIX(), Dancer.NAME_IX);
 				tblModel.setValueAt(this.frame.getOuts1Value(), 				  	  this.frame.getDancer1RowIX(), Dancer.DANCER_OUTS_IX);
-				tblModel.setValueAt(this.frame.getJPresent1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.PRESENT_IX);
+				tblModel.setValueAt(this.frame.getJPresent1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.DANCING_IX);
 				tblModel.setValueAt(this.frame.getJMustDance1().isSelected(), 		  this.frame.getDancer1RowIX(), Dancer.MUST_DANCE_IX);
 				tblModel.setValueAt(this.frame.getJWillingSingle1().isSelected(), 	  this.frame.getDancer1RowIX(), Dancer.WILLING_SINGLE_IX);
 				tblModel.setValueAt(this.frame.getBeauBelleBox1().getSelectedIndex(), this.frame.getDancer1RowIX(), Dancer.ROLE_IX);
@@ -83,7 +83,7 @@ public class SaveDancerListener implements ActionListener
 				v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer1().getText());
 				v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox1().getSelectedIndex()));
 				v.add(Dancer.PARTNER_IX, 			new Integer(-1));
-				v.add(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
+				v.add(Dancer.DANCING_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
 				v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance1().isSelected()));
 				v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
 				v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
@@ -125,7 +125,7 @@ public class SaveDancerListener implements ActionListener
 				if(this.frame.isDancer2TextBox()) 
 					tblModel.setValueAt(this.frame.getDancer2().getText(),			  this.frame.getDancer2RowIX(), Dancer.NAME_IX);
 				tblModel.setValueAt(this.frame.getOuts2Value(), 					  this.frame.getDancer2RowIX(), Dancer.DANCER_OUTS_IX);
-				tblModel.setValueAt(this.frame.getJPresent2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.PRESENT_IX);
+				tblModel.setValueAt(this.frame.getJPresent2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.DANCING_IX);
 				tblModel.setValueAt(this.frame.getJMustDance2().isSelected(), 		  this.frame.getDancer2RowIX(), Dancer.MUST_DANCE_IX);
 				tblModel.setValueAt(this.frame.getJWillingSingle2().isSelected(), 	  this.frame.getDancer2RowIX(), Dancer.WILLING_SINGLE_IX);
 				tblModel.setValueAt(this.frame.getBeauBelleBox2().getSelectedIndex(), this.frame.getDancer2RowIX(), Dancer.ROLE_IX);
@@ -141,7 +141,7 @@ public class SaveDancerListener implements ActionListener
 				v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer2().getText());
 				v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox2().getSelectedIndex()));
 				v.add(Dancer.PARTNER_IX, 			new Integer(-1));
-				v.add(Dancer.PRESENT_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
+				v.add(Dancer.DANCING_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
 				v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
 				v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
 				v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
@@ -168,7 +168,7 @@ public class SaveDancerListener implements ActionListener
 			{
 				this.frame.getDancer1Row().set(Dancer.PARTNER_IX, this.frame.getDancer2RowIX());
 				this.frame.getDancer2Row().set(Dancer.PARTNER_IX, this.frame.getDancer1RowIX());
-				this.frame.getDancer2Row().set(Dancer.PRESENT_IX, this.frame.getDancer1Row().get(Dancer.PRESENT_IX));	// partners must both be in or out
+				this.frame.getDancer2Row().set(Dancer.DANCING_IX, this.frame.getDancer1Row().get(Dancer.DANCING_IX));	// partners must both be in or out
 			}
 			else
 				clearPartners();

@@ -427,7 +427,7 @@ public class MainFrame extends JFrame
 			
 			dancersPresent += 1;
 			//System.out.println("mainframe, dancersPresent = " + dancersPresent);
-			if((Boolean)dancerData.get(ix).get(Dancer.PRESENT_IX))
+			if((Boolean)dancerData.get(ix).get(Dancer.DANCING_IX))
 			{
 				dancersDancing += 1;
 				//System.out.println("mainframe, dancersDancing = " + dancersDancing);

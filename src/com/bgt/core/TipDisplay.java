@@ -91,7 +91,7 @@ public class TipDisplay {
 	    	short d1 = ((Integer)dancerData.get(ix).get(Dancer.PARTNER_IX)).shortValue();
 	    	dancersToDisplay[d0] = 1;					// processed dancer d0
 	    	
-	    	if((Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX) || (Boolean)dancerData.get(d0).get(Dancer.PRESENT_IX))
+	    	if((Boolean)dancerData.get(d0).get(Dancer.DANCING_IX) || (Boolean)dancerData.get(d0).get(Dancer.DANCING_IX))
 	    		this.screenData.get(line).set(0, Globals.OUT);
 	    	else
 	    		this.screenData.get(line).set(0, Globals.REQUESTED_OUT);
