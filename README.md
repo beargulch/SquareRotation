@@ -22,13 +22,17 @@
 
     The program will disallow 2 dancers with identical names, so add something like a last initial to the names to make them unique:  “Michael L” and “Michael W”, for example.  If there are 2  Michaels with a last name that begins with “L”, add as many characters as necessary to establish uniqueness.
   
-  - Present
+  - Dancing
 
-    This check box is used to indicate whether a dancer is currently present and available to dance.  The value of “Present” can be changed here, or can also be changed on the main dancer screen.
+    This check box is used to indicate whether a dancer is currently present and available to dance.  The value of “Dancgin” can be changed here, or can also be changed on the main dancer screen.
 
   - Dancer 1 Outs
 
     Dancers Outs is used by the program to select dancers for the next tip (dancers with higher Out counts will be selected first when building the squares in a tip).  This field is normally computed by the program and should not be changed, but during program development it was determined that there was a bug computing this field if a square is regenerated.  It was added to this screen so the Out count can be adjusted if the bug reappears, but will likely be removed in future releases as the code stabilizes.
+
+  - At the Dance
+
+    There may be times when a dancer has been entered, but is not currently at the dance.  Use this field to indicate if a dancer is not actually present, and is therefore not part of the dance rotation.
 
   - Must Dance
 
@@ -146,7 +150,7 @@
 
     If a dancer leaves the floor or wishes to sit out during a tip, click on the Dancing button to change the dancer’s status to Out.  If the dancer has a partner, the partner will also be marked Out.  Dancers marked Out will be excluded from the tip generation process.  Whether or not a voluntary Out counts when determining who should dance in the next tip is optional; see section 5, Tip Generation Options.
 
-    If a dancer is coupled with another dancer, and one dancer wants to keep dancing while the other dancer wants to sit out, the dancers must be uncoupled before their Present/Absent status can be individually adjusted.
+    If a dancer is coupled with another dancer, and one dancer wants to keep dancing while the other dancer wants to sit out, the dancers must be un-coupled before their Present/Absent status can be individually adjusted.
 
   - Must Dance
 
