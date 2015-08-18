@@ -1,4 +1,4 @@
-/*  Copyright 2015 Bear Gulch Technologies, Inc.  All Rights Reserved.
+ /*  Copyright 2015 Bear Gulch Technologies, Inc.  All Rights Reserved.
  * 
  *  This file is part of SquareRotation.
  *
@@ -39,6 +39,7 @@ import javax.swing.JTextField;
 
 import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
+import com.bgt.core.Globals;
 import com.bgt.dialog.OptionsDialog;
 import com.bgt.jtable.DancersJTable;
 import com.bgt.listener.DisplayTipListener;
@@ -59,6 +60,7 @@ public class MainFrame extends JFrame
 	private JTextField txtDancersDancing   = null;
 	private JTextField txtDancersOut       = null;
 	private JTextField txtProjectedSquares = null;
+	private JTextField txtSingleRotation   = null;
 	
 	private static MainFrame instance;
 
@@ -94,6 +96,7 @@ public class MainFrame extends JFrame
         pack();
         setSize(960, 800);
         setVisible(true);
+        setDancerStatistics();
     }
 	
 	public static MainFrame getInstance()
@@ -187,35 +190,42 @@ public class MainFrame extends JFrame
         txtTipNo.setPreferredSize(new Dimension(40,30));
         txtTipNo.setMaximumSize  (new Dimension(40,30));
         txtTipNo.setHorizontalAlignment(JTextField.CENTER);
-        JLabel tipLable = new JLabel("Current Tip");
+        JLabel tipLabel = new JLabel("Current Tip");
         
     	txtDancersPresent = new JTextField();
     	txtDancersPresent.setMinimumSize  (new Dimension(40,30));
     	txtDancersPresent.setPreferredSize(new Dimension(40,30));
     	txtDancersPresent.setMaximumSize  (new Dimension(40,30));
     	txtDancersPresent.setHorizontalAlignment(JTextField.CENTER);
-        JLabel dancersPresentLable = new JLabel("Dancers Present");
+        JLabel dancersPresentLabel = new JLabel("Dancers Present");
         
         txtDancersDancing   = new JTextField();
         txtDancersDancing.setMinimumSize  (new Dimension(40,30));
         txtDancersDancing.setPreferredSize(new Dimension(40,30));
         txtDancersDancing.setMaximumSize  (new Dimension(40,30));
         txtDancersDancing.setHorizontalAlignment(JTextField.CENTER);
-        JLabel dancersDancingLable = new JLabel("Dancers Dancing");
+        JLabel dancersDancingLabel = new JLabel("Dancers Dancing");
         
     	txtDancersOut       = new JTextField();
     	txtDancersOut.setMinimumSize  (new Dimension(40,30));
     	txtDancersOut.setPreferredSize(new Dimension(40,30));
     	txtDancersOut.setMaximumSize  (new Dimension(40,30));
     	txtDancersOut.setHorizontalAlignment(JTextField.CENTER);
-        JLabel dancersOutLable = new JLabel("Requested Outs");
+        JLabel dancersOutLabel = new JLabel("Requested Outs");
         
     	txtProjectedSquares = new JTextField();
     	txtProjectedSquares.setMinimumSize  (new Dimension(40,30));
     	txtProjectedSquares.setPreferredSize(new Dimension(40,30));
     	txtProjectedSquares.setMaximumSize  (new Dimension(40,30));
     	txtProjectedSquares.setHorizontalAlignment(JTextField.CENTER);
-        JLabel projectedSquaresLable = new JLabel("Projected Squares");
+        JLabel projectedSquaresLabel = new JLabel("Projected Squares");
+        
+        txtSingleRotation = new JTextField();
+        txtSingleRotation.setMinimumSize  (new Dimension(140,30));
+        txtSingleRotation.setPreferredSize(new Dimension(140,30));
+        txtSingleRotation.setMaximumSize  (new Dimension(140,30));
+        txtSingleRotation.setHorizontalAlignment(JTextField.CENTER);
+        JLabel singleRotationLabel = new JLabel("Singles Rotate With:");
         
         btn1.setPreferredSize(new Dimension(160,30));
         btn2.setPreferredSize(new Dimension(160,30));
@@ -295,7 +305,7 @@ public class MainFrame extends JFrame
         c9.weightx = .8;
         c9.anchor  = GridBagConstraints.LINE_START;
         c9.insets = new Insets(40,8,0,0);  //top padding
-        leftHandPanel.add(tipLable, c9);
+        leftHandPanel.add(tipLabel, c9);
         
         GridBagConstraints c10 = new GridBagConstraints();
         c10.gridx = 1;
@@ -313,7 +323,7 @@ public class MainFrame extends JFrame
         c11.weightx = .8;
         c11.anchor  = GridBagConstraints.LINE_START;
         c11.insets = new Insets(10,8,0,0);  //top padding
-        leftHandPanel.add(dancersPresentLable, c11);
+        leftHandPanel.add(dancersPresentLabel, c11);
         
         GridBagConstraints c12 = new GridBagConstraints();
         c12.gridx = 1;
@@ -331,7 +341,7 @@ public class MainFrame extends JFrame
         c13.weightx = .8;
         c13.anchor  = GridBagConstraints.LINE_START;
         c13.insets = new Insets(10,8,0,0);  //top padding
-        leftHandPanel.add(dancersOutLable, c13);
+        leftHandPanel.add(dancersOutLabel, c13);
         
         GridBagConstraints c14 = new GridBagConstraints();
         c14.gridx = 1;
@@ -349,7 +359,7 @@ public class MainFrame extends JFrame
         c15.weightx = .8;
         c15.anchor  = GridBagConstraints.LINE_START;
         c15.insets = new Insets(10,8,0,0);  //top padding
-        leftHandPanel.add(dancersDancingLable, c15);
+        leftHandPanel.add(dancersDancingLabel, c15);
         
         GridBagConstraints c16 = new GridBagConstraints();
         c16.gridx = 1;
@@ -367,7 +377,7 @@ public class MainFrame extends JFrame
         c17.weightx = .8;
         c17.anchor  = GridBagConstraints.LINE_START;
         c17.insets = new Insets(10,8,0,0);  //top padding
-        leftHandPanel.add(projectedSquaresLable, c17);
+        leftHandPanel.add(projectedSquaresLabel, c17);
         
         GridBagConstraints c18 = new GridBagConstraints();
         c18.gridx = 1;
@@ -377,6 +387,22 @@ public class MainFrame extends JFrame
         c18.anchor  = GridBagConstraints.LINE_START;
         c18.insets = new Insets(10,0,0,0);  //top padding
         leftHandPanel.add(txtProjectedSquares, c18);
+        
+        GridBagConstraints c19 = new GridBagConstraints();
+        c19.gridx = 0;
+        c19.gridy = 19;
+        c19.gridwidth = 2;
+        c19.anchor = GridBagConstraints.LINE_START;
+        c19.insets = new Insets(10,8,0,0);  //top padding
+        leftHandPanel.add(singleRotationLabel, c19);
+
+        GridBagConstraints c20 = new GridBagConstraints();
+        c20.gridx = 0;
+        c20.gridy = 20;
+        c20.gridwidth = 2;
+        c20.anchor = GridBagConstraints.CENTER;
+        c20.insets = new Insets(10,0,0,0);  //top padding
+        leftHandPanel.add(txtSingleRotation, c20);
         
         btn1.addActionListener(new FileOpenListener());
         btn2.addActionListener(new FileSaveListener());
@@ -442,5 +468,12 @@ public class MainFrame extends JFrame
 		txtProjectedSquares.setText(Integer.toString(dancersDancing/8));
 		txtProjectedSquares.validate();
 		txtProjectedSquares.repaint();
+		if(Globals.singlesRotateOnlyWithSingles())
+			txtSingleRotation.setText("Other Singles");
+		else
+		if(Globals.singlesRotateWithCouplesThatAreOut())
+			txtSingleRotation.setText("Out Couples");
+		else
+			txtSingleRotation.setText("Any Couple");
 	}
 }

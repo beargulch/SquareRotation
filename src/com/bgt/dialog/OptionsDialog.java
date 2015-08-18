@@ -106,6 +106,7 @@ public class OptionsDialog extends JDialog
 	    	{	
 	    		Globals.setSelectedOption(getFrame().getOptionsBox().getSelectedIndex());
 	    		Globals.setLoadSerializedData(getFrame().getLoadSerializedData().isSelected());
+	    		MainFrame.getInstance().setDancerStatistics();
 	    		getFrame().dispose();
 	    	}
 	    });
