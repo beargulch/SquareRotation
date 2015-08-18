@@ -26,7 +26,8 @@ import java.util.Vector;
 import com.bgt.frame.MainFrame;
 import com.bgt.jtable.DancersJTable;
 
-// the Tip class is very tightly coupled to the SquareGenerator class.
+// the CoupleGenerator class is very tightly coupled to the SquareGenerator 
+// class.
 //
 // the SquareGenerator class invokes methods in the CoupleGenerator class 
 // to select dancers and build couples.  the SquareGenerator class then 
@@ -173,10 +174,10 @@ public class CoupleGenerator implements Serializable
 	{	
 		this.currentTip  =  0;
 		this.noOfSquares =  0;
-
-		//System.out.println("allocateArrays(), Globals.getInstance().getDancersJTable().getRowCount() = " + Globals.getInstance().getDancersJTable().getRowCount());
 		
 		DancersJTable tbl = DancersJTable.getInstance();
+
+		// System.out.println("allocateArrays(), tbl.getRowCount() = " + tbl.getRowCount());
 		
 		dancerCt  = new DancerCounts(tbl.getRowCount());
 		partnerCt = new DancerCounts(tbl.getRowCount());
@@ -1429,9 +1430,8 @@ public class CoupleGenerator implements Serializable
 			//    participatingDancer[ix] will be set to -1.
 			// if a dancer was eligible but not selected to dance, participatingDancer[ix] will be 0,
 			// indicating their out counts need to be adjusted.
-			if(participatingDancer[ix] == 0  ||										// this dancer was out (not selected), so he/she is a dancer whose
-			  (participatingDancer[ix] == -1 && Globals.getCountVountaryOuts()))	// 'out count' needs to be adjusted.	
-			{																		
+			if(participatingDancer[ix] == 0 || participatingDancer[ix] == -1)	// this dancer was out (not selected), so their
+			{																	// 'out count' needs to be adjusted																	
 				
 				// whether or not a dancer was present and not deleted is a factor that was considered when
 				// building the couple array when the tip was generated.  although the status may have changed

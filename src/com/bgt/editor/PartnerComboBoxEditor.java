@@ -31,13 +31,14 @@ import com.bgt.jtable.DancersJTable;
 import com.bgt.model.DanceComboBoxModel;
 import com.bgt.model.DancersTableModel;
 
-public class JComboBoxEditor extends DefaultCellEditor
+public class PartnerComboBoxEditor extends DefaultCellEditor
 {
 	private static final long serialVersionUID = 1L;
 	
-	public JComboBoxEditor(final JComboBox<String>comboBox) 
+	public PartnerComboBoxEditor(final JComboBox<String>comboBox) 
 	{	
 		super(comboBox);
+		System.out.println("instantiate PartnerComboBoxEditor");
 		
 		// the delegate is used to translate the selectedIndex, retrieved from the comboBox,
 		// to a pointer to the correct entry in the jtable's data model.  if this were not
@@ -59,10 +60,9 @@ public class JComboBoxEditor extends DefaultCellEditor
 
 			public Object getCellEditorValue() 
 		    {
-				// System.out.println("EditorDelegate()");
+				System.out.println("PartnerComboBoxEditor EditorDelegate()");
 				DanceComboBoxModel comboBoxModel = (DanceComboBoxModel)comboBox.getModel();
 				ConcurrentHashMap<Integer, Integer>cmap = comboBoxModel.getComboMap();
-				//DancersTableModel dancersTmdl = Globals.getInstance().getDancersTableModel();
 				DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();
 				
 				// cmap makes it possible to translate the selectedIndex to a pointer to 
@@ -78,8 +78,7 @@ public class JComboBoxEditor extends DefaultCellEditor
 				}
 				
 				// set the partner of the new partner to the current dancer.
-				
-				//int row = table.convertRowIndexToModel(comboBoxModel.getCurrentRow());
+
 				int row = comboBoxModel.getCurrentRow();
 				if(selectedPartnerIx > -1 && (Integer)dancersTmdl.getValueAt(selectedPartnerIx, Dancer.PARTNER_IX) != row)
 					dancersTmdl.setValueAt(row, selectedPartnerIx, Dancer.PARTNER_IX);	
@@ -92,9 +91,9 @@ public class JComboBoxEditor extends DefaultCellEditor
 
 	public Component getTableCellEditorComponent(JTable jTable, Object value, boolean isSelected, int row, int column) 
 	{
-		//System.out.println("getTableCellEditorComponent, value = " + (value == null ? "null" : value.toString())  + 
-		//		           ", isSelected: " + isSelected + ", row/col " + row + "/" + column + ", got jTable =  " + 
-		//		           (table == null ? "No" : "Yes"));
+		System.out.println("PartnerComboBoxEditor getTableCellEditorComponent, value = " + (value == null ? "null" : value.toString())  + 
+				           ", isSelected: " + isSelected + ", row/col " + row + "/" + column + ", got jTable =  " + 
+				           (jTable == null ? "No" : "Yes"));
 
 		@SuppressWarnings("unchecked")
 		JComboBox<String>comboBox = (JComboBox<String>)this.getComponent();

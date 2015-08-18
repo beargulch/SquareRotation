@@ -55,6 +55,8 @@ public class Dancer extends Vector
 	public static final String BELLE_STR  = "BELLE";
 	public static final String EITHER_STR = "EITHER";
 	
+	public static final String[] beauBelleOptions = {BEAU_STR, BELLE_STR, EITHER_STR};
+	
 	public final static
 	String dancerCol[] = { NAME_STR,        	// "Name"
 					   	   ROLE_STR,			// "Beau/Belle"
@@ -110,10 +112,10 @@ public class Dancer extends Vector
         switch (column) 
         {
         	case NAME_IX:
-        	case ROLE_IX:
         	case DANCER_OUTS_IX:
         		return false;
 
+        	case ROLE_IX:
         	case PARTNER_IX:  
             case DANCING_IX:
             case MUST_DANCE_IX:

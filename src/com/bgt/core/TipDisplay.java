@@ -20,7 +20,6 @@ public class TipDisplay {
 	{
 		if(noOfSquares == 0) return new ArrayList<ArrayList<Object>>(0);
 		
-		//Vector<Vector<Object>> dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		Vector<Vector<Object>>dancerData = DancersJTable.getInstance().getDancerData();
 
 		short dancersToDisplay[] = new short[dancerData.size()];
@@ -37,8 +36,8 @@ public class TipDisplay {
 		}
 		
 	    // loop goes through all squares in the tip
-    	int squareNo = new Random(System.nanoTime()).nextInt(noOfSquares);	// randomly assign
-    	int line     = 0;													// beginning square no
+    	int squareNo = new Random().nextInt(noOfSquares);	// randomly assign beginning square no
+    	int line     = 0;
 	    for(short sx = 0; sx < noOfSquares; sx++)
 	    {
 	    	squareNo += 1;

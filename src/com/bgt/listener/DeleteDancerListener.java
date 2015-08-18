@@ -54,7 +54,6 @@ public class DeleteDancerListener implements ActionListener
 	private void doTheDelete(int row)
 	{
 		DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();
-		//Vector<Vector<Object>>dancerData = Globals.getInstance().getDancersTableModel().getDataVector();
 		Vector<Vector<Object>>dancerData = dancersTmdl.getDataVector();
 		
 		int returnVal = JOptionPane.showConfirmDialog(null, "Are you certain you wish to delete dancer " + 

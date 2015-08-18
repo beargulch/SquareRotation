@@ -50,8 +50,7 @@ import com.bgt.model.DancersTableModel;
 public class EditDancerFrame extends JFrame
 {
 	private static final long     serialVersionUID = 1L;
-	private static final String[] beauBelleOptions = {Dancer.BEAU_STR, Dancer.BELLE_STR, Dancer.EITHER_STR};
-
+	
 	private int dancer1RowIX = -1;
 	private int dancer2RowIX = -1;
 	
@@ -122,7 +121,7 @@ public class EditDancerFrame extends JFrame
 		outs1  			= new JTextField(2);
 		jMustDance1 	= new JCheckBox("Must Dance");
 		jWillingSingle1 = new JCheckBox("Willing to fill in as single if couple is out");
-		beauBelleBox1 	= new JComboBox<String>(beauBelleOptions);
+		beauBelleBox1 	= new JComboBox<String>(Dancer.beauBelleOptions);
         JButton btnd1   = new JButton("Delete 1");
 		jPartners 		= new JCheckBox("Are Dancer 1 and Dancer 2 dance partners?");
 		dancer2 		= new JTextField(20);
@@ -132,7 +131,7 @@ public class EditDancerFrame extends JFrame
 		outs2  			= new JTextField(2);
 		jMustDance2 	= new JCheckBox("Must Dance");
 		jWillingSingle2 = new JCheckBox("Willing to fill in as single if couple is out");
-		beauBelleBox2 	= new JComboBox<String>(beauBelleOptions);
+		beauBelleBox2 	= new JComboBox<String>(Dancer.beauBelleOptions);
         JButton btnd2   = new JButton("Delete 2");
 		dancerError 	= new JLabel("Duplicate Name");
 		dancerError.setForeground(Color.RED);

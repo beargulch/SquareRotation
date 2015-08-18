@@ -45,7 +45,6 @@ public class OptionsFrame extends JFrame
 												  };
 	
 	private JComboBox<String>optionsBox = new JComboBox<String>(singleOptions);
-	private JCheckBox jCountVountaryOuts;
 	private JCheckBox jLoadSerializedData;
 	
 	public OptionsFrame()
@@ -55,7 +54,6 @@ public class OptionsFrame extends JFrame
 
 	private void setUpPanel()
 	{
-		jCountVountaryOuts = new JCheckBox("Voluntary out counts as involuntary out");
 		jLoadSerializedData = new JCheckBox("Load serialized data (mostly for debugging)");
 		
 		JPanel mainPanel   = new JPanel(new GridBagLayout());
@@ -76,14 +74,9 @@ public class OptionsFrame extends JFrame
 		pane1.add(optionsBox);
 		mainPanel.add(pane1);
 		
-		GridBagConstraints c1 = new GridBagConstraints();
-	    c1.gridy  = 3;
-	    c1.anchor = GridBagConstraints.LINE_START;
-		mainPanel.add(jCountVountaryOuts, c1);
-		
 		GridBagConstraints c2 = new GridBagConstraints();
-	    c1.gridy  = 4;
-	    c1.anchor = GridBagConstraints.LINE_START;
+	    c2.gridy  = 3;
+	    c2.anchor = GridBagConstraints.LINE_START;
 		mainPanel.add(jLoadSerializedData, c2);
 		
 		JPanel pane2 = new JPanel();
@@ -97,10 +90,7 @@ public class OptionsFrame extends JFrame
         mainPanel.add(pane2);
 		
 		optionsBox.setSelectedIndex(Globals.getSelectedOption());
-		if(Globals.getCountVountaryOuts())
-			jCountVountaryOuts.setSelected(true);
-		else
-			jCountVountaryOuts.setSelected(false);
+		
 		if(Globals.getLoadSerializedData())
 			jLoadSerializedData.setSelected(true);
 		else
@@ -112,7 +102,6 @@ public class OptionsFrame extends JFrame
 	    	public void actionPerformed(ActionEvent e) 
 	    	{	
 	    		Globals.setSelectedOption(getFrame().getOptionsBox().getSelectedIndex());
-	    		Globals.setCountVountaryOuts(getFrame().getCountVountaryOuts().isSelected());
 	    		Globals.setLoadSerializedData(getFrame().getLoadSerializedData().isSelected());
 	    		getFrame().dispose();
 	    	}
@@ -141,11 +130,6 @@ public class OptionsFrame extends JFrame
 	public JComboBox<String>getOptionsBox()
     {
     	return this.optionsBox;
-    }
-	
-    public JCheckBox getCountVountaryOuts()
-    {
-    	return this.jCountVountaryOuts;
     }
 	
     public JCheckBox getLoadSerializedData()

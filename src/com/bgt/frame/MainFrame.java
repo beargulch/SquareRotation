@@ -81,7 +81,6 @@ public class MainFrame extends JFrame
         c2.gridx   = 1;
         c2.gridy   = 0;
         c2.fill    = GridBagConstraints.BOTH;
-        //JScrollPane pane = new JScrollPane(Globals.getInstance().getDancersJTable());
         JScrollPane pane = new JScrollPane(DancersJTable.getInstance());
 		pane.setColumnHeader(new HeaderViewport()); 
         add(new JScrollPane(pane), c2);
@@ -298,7 +297,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(tipLable, c9);
         
         GridBagConstraints c10 = new GridBagConstraints();
-        //c10.fill = GridBagConstraints.EAST;
         c10.gridx = 1;
         c10.gridy = 13;
         c10.gridwidth = 1;
@@ -308,7 +306,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(txtTipNo, c10);
                
         GridBagConstraints c11 = new GridBagConstraints();
-        //c11.fill = GridBagConstraints.WEST;
         c11.gridx = 0;
         c11.gridy = 14;
         c11.gridwidth = 1;
@@ -318,7 +315,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(dancersPresentLable, c11);
         
         GridBagConstraints c12 = new GridBagConstraints();
-        //c12.fill = GridBagConstraints.EAST;
         c12.gridx = 1;
         c12.gridy = 14;
         c12.gridwidth = 1;
@@ -328,7 +324,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(txtDancersPresent, c12);
        
         GridBagConstraints c13 = new GridBagConstraints();
-        //c13.fill = GridBagConstraints.WEST;
         c13.gridx = 0;
         c13.gridy = 15;
         c13.gridwidth = 1;
@@ -338,7 +333,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(dancersOutLable, c13);
         
         GridBagConstraints c14 = new GridBagConstraints();
-        //c14.fill = GridBagConstraints.EAST;
         c14.gridx = 1;
         c14.gridy = 15;
         c14.gridwidth = 1;
@@ -348,7 +342,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(txtDancersOut, c14);
         
         GridBagConstraints c15 = new GridBagConstraints();
-        //c1.fill = GridBagConstraints.WEST;
         c15.gridx = 0;
         c15.gridy = 16;
         c15.gridwidth = 1;
@@ -358,7 +351,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(dancersDancingLable, c15);
         
         GridBagConstraints c16 = new GridBagConstraints();
-        //c16.fill = GridBagConstraints.EAST;
         c16.gridx = 1;
         c16.gridy = 16;
         c16.gridwidth = 1;
@@ -368,7 +360,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(txtDancersDancing, c16);
         
         GridBagConstraints c17 = new GridBagConstraints();
-        //c17.fill = GridBagConstraints.WEST;
         c17.gridx = 0;
         c17.gridy = 17;
         c17.gridwidth = 1;
@@ -378,7 +369,6 @@ public class MainFrame extends JFrame
         leftHandPanel.add(projectedSquaresLable, c17);
         
         GridBagConstraints c18 = new GridBagConstraints();
-        //c18.fill = GridBagConstraints.EAST;
         c18.gridx = 1;
         c18.gridy = 17;
         c18.gridwidth = 1;
@@ -401,7 +391,7 @@ public class MainFrame extends JFrame
 	
 	public void setTipNo()
 	{
-		//System.out.println("mainframe, setting tip to " + Globals.getInstance().getTip().getCurrentTip());
+		//System.out.println("mainframe, setting tip to " + CoupleGenerator.getInstance().getCurrentTip());
 		short tipNo = CoupleGenerator.getInstance().getCurrentTip();
 		if(tipNo < 0) tipNo = 0;
 		//System.out.println("tipNo is now " + tipNo);

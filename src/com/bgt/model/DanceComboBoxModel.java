@@ -28,7 +28,6 @@ import javax.swing.DefaultComboBoxModel;
 import com.bgt.core.Dancer;
 import com.bgt.jtable.DancersJTable;
 
-//@SuppressWarnings("rawtypes")
 public class DanceComboBoxModel extends DefaultComboBoxModel<String>
 {
 	// the model for the combo box is hijacked to communicate between the comboBoxEditor
@@ -114,7 +113,6 @@ public class DanceComboBoxModel extends DefaultComboBoxModel<String>
 		this.currentRow = currentRow;
 	}
 
-	//@SuppressWarnings("unchecked")
 	public void populateModel(int currentDancerRow)
 	{
 		DancersTableModel dancersTmdl = (DancersTableModel)DancersJTable.getInstance().getModel();

@@ -24,57 +24,42 @@ import java.io.Serializable;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import com.bgt.core.Dancer;
+import com.bgt.core.Globals;
 
-public class BeauBelleRenderer implements TableCellRenderer, Serializable
+public class BeauBelleComboBoxRenderer implements TableCellRenderer, Serializable
 {
 	private static final long serialVersionUID = 1L;
-	
-	private final static Color VERY_LIGHT_GREY = new Color(245, 245, 245);
-	private final static Color VERY_LIGHT_BLUE = new Color(0, 0, 255, 30);
-    
+
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
 	{
-		// this method has 2 functions:  turn off the grid around the text field, which gets turned on
-		// by adding a grid to the enclosing jTable; and set the alternating gray/blue backgrounds.
+		// turn "value", which should be an integer, into a name retrieved from the table model,
+		// and set the alternating gray/blue backgrounds.
+		
+		System.out.println("BeauBelleComboBoxRenderer, value = " + value + ", row = " + row + ", column = " + column);
 		
 		JTextField jTextField = new JTextField();
-	
-		jTextField.setBorder(new EmptyBorder(jTextField.getBorder().getBorderInsets(jTextField)));
-		
+
 		if(isSelected)
-			jTextField.setBackground(VERY_LIGHT_BLUE);
+			jTextField.setBackground(Globals.VERY_LIGHT_BLUE);
 		else
 			if(row%2 == 0)
-				jTextField.setBackground(VERY_LIGHT_GREY);
+				jTextField.setBackground(Globals.VERY_LIGHT_GREY);
 			else
 				jTextField.setBackground(Color.white);
 		
-		int beauBelleIx = -1;
+		int beauBelleIx = Dancer.beauBelleOptions.length - 1;	// default is last value in array
 		try
 		{
 			beauBelleIx = (Integer)value;
 		}
-		catch(Exception e) {}	// if it's not an integer, leave beauBelleIx at -1
+		catch(Exception e) {}	// if it's not an integer, leave beauBelleIx at last value in array
+
+		jTextField.setText((String)Dancer.beauBelleOptions[beauBelleIx]);
 		
-		switch (beauBelleIx)
-		{
-			case Dancer.BEAU_IX:
-				jTextField.setText(Dancer.BEAU_STR);
-				break;
-			case Dancer.BELLE_IX:
-				jTextField.setText(Dancer.BELLE_STR);
-				break;
-			case Dancer.EITHER_IX:
-				jTextField.setText(Dancer.EITHER_STR);
-				break;
-			default:
-				jTextField.setText("");
-		}
 		return jTextField;
 	}
 }

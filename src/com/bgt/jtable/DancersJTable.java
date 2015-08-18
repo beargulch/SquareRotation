@@ -34,16 +34,17 @@ import com.bgt.action.MustDanceAction;
 import com.bgt.action.PresentAction;
 import com.bgt.core.Dancer;
 import com.bgt.core.Globals;
+import com.bgt.editor.BeauBelleComboBoxEditor;
 import com.bgt.editor.ButtonColumnEditor;
-import com.bgt.editor.JComboBoxEditor;
+import com.bgt.editor.PartnerComboBoxEditor;
 import com.bgt.frame.EditDancerFrame;
 import com.bgt.model.DanceComboBoxModel;
 import com.bgt.model.DancersTableModel;
-import com.bgt.renderer.BeauBelleRenderer;
+import com.bgt.renderer.BeauBelleComboBoxRenderer;
 import com.bgt.renderer.HeaderCellRenderer;
 import com.bgt.renderer.JCheckBoxRenderer;
-import com.bgt.renderer.JTableCellComboBoxRenderer;
 import com.bgt.renderer.JTextFieldRenderer;
+import com.bgt.renderer.PartnerComboBoxRenderer;
 
 public class DancersJTable extends JTable implements MouseListener
 {
@@ -162,30 +163,34 @@ public class DancersJTable extends JTable implements MouseListener
 		
 		// Name is a simple text field
 		this.getColumn(Dancer.NAME_STR).setCellRenderer(new JTextFieldRenderer());
-		
-		// Beau/Belle requires translation from stored Integer value to String.
-		this.getColumn(Dancer.ROLE_STR).setCellRenderer(new BeauBelleRenderer());
 
+		// Beau/Belle is a drop-down that requires translation from a stored Integer value to String.
+		this.getColumn(Dancer.ROLE_STR).setCellRenderer(new BeauBelleComboBoxRenderer());
+		JComboBox<String>beauBelleBox = new JComboBox<String>(Dancer.beauBelleOptions);
+		BeauBelleComboBoxEditor beauBelleEditor = new BeauBelleComboBoxEditor(beauBelleBox);
+		beauBelleEditor.setClickCountToStart(2);
+		this.getColumn(Dancer.ROLE_STR).setCellEditor(beauBelleEditor);
+		
 		// Partner is a drop-down
-		this.getColumn(Dancer.PARTNER_STR).setCellRenderer(new JTableCellComboBoxRenderer());
+		this.getColumn(Dancer.PARTNER_STR).setCellRenderer(new PartnerComboBoxRenderer());
 		JComboBox partnerBox = new JComboBox();
 		DanceComboBoxModel partnerBoxMdl = new DanceComboBoxModel();
 		partnerBox.setModel(partnerBoxMdl);
-		JComboBoxEditor jcEditor = new JComboBoxEditor(partnerBox);
-		jcEditor.setClickCountToStart(2);
-		this.getColumn(Dancer.PARTNER_STR).setCellEditor(jcEditor);
-		
+		PartnerComboBoxEditor partnerEditor = new PartnerComboBoxEditor(partnerBox);
+		partnerEditor.setClickCountToStart(2);
+		this.getColumn(Dancer.PARTNER_STR).setCellEditor(partnerEditor);
+
 		// Present is a button
 		this.getColumn(Dancer.DANCING_STR).setCellEditor(new ButtonColumnEditor(this, new PresentAction(), Dancer.DANCING_IX, "Dancing", "Out", Globals.HIGHLIGHT_OFF_BTN));
 		
-		// Must Dance is a radio button
+		// Must Dance is a button
 		this.getColumn(Dancer.MUST_DANCE_STR).setCellEditor(new ButtonColumnEditor(this, new MustDanceAction(), Dancer.MUST_DANCE_IX, "Dance!", "Normal", Globals.HIGHLIGHT_ON_BTN));
 		
 		// Willing Single is a checkbox
 		this.getColumn(Dancer.WILLING_SINGLE_STR).setCellRenderer(new JCheckBoxRenderer());
 		
 		// Dancer Outs is a simple text field, with text centered
-		this.getColumn(Dancer.DANCER_OUTS_STR).setCellRenderer(new JTextFieldRenderer(true));
+		this.getColumn(Dancer.DANCER_OUTS_STR).setCellRenderer(new JTextFieldRenderer(true, false));
 		
 		// At Dance is a radio button
 		this.getColumn(Dancer.DANCER_AT_DANCE_STR).setCellEditor(new ButtonColumnEditor(this, new AtDanceAction(), Dancer.DANCER_AT_DANCE_IX, "Yes", "No", Globals.HIGHLIGHT_OFF_BTN));
@@ -202,11 +207,13 @@ public class DancersJTable extends JTable implements MouseListener
 	
     public void mousePressed(MouseEvent e)
     {
+    	JTable target = (JTable)e.getSource();
+		System.out.println("mouseclick, clickCount = " + e.getClickCount() + ", getSelectedColumn() = " + getSelectedColumn());
     	if (e.getClickCount() == 2) 
     	{	
-    		JTable target = (JTable)e.getSource();
-    		
-    		if(target.getSelectedColumn() < 2)
+    		//JTable target = (JTable)e.getSource();
+    		// System.out.println("mouseclick, clickCount = " + e.getClickCount());
+    		if(target.getSelectedColumn() < 1)
     		{    			
     			new EditDancerFrame(target.convertRowIndexToModel(target.getSelectedRow()));
     		}

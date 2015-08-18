@@ -84,7 +84,6 @@ public class Globals
 	public final static Color LIGHT_YELLOW    = new Color(255, 255,   0,  60);
 	
 	private static int selectedOption		  = SINGLES_ROTATE_ONLY_WITH_SINGLES;
-	private static boolean countVountaryOuts  = true;
 	private static boolean loadSerializedData = false;
 	private static TipFrame tipFrame  		  = null;
 	private static int tipFrameHeight  		  = 0;
@@ -126,17 +125,7 @@ public class Globals
 	{
 		return selectedOption == SINGLES_ROTATION_CAN_TAKE_COUPLES_OUT;
 	}
-	
-	public static void setCountVountaryOuts(boolean pCountVountaryOuts)
-	{
-		countVountaryOuts = pCountVountaryOuts;
-	}
-	
-	public static boolean getCountVountaryOuts()
-	{
-		return countVountaryOuts;
-	}
-	
+
 	public static void setLoadSerializedData(boolean pLoadSerializedData)
 	{
 		loadSerializedData = pLoadSerializedData;

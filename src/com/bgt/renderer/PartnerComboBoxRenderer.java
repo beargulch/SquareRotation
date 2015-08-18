@@ -27,26 +27,26 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import com.bgt.core.Dancer;
+import com.bgt.core.Globals;
 import com.bgt.model.DancersTableModel;
 
-public class JTableCellComboBoxRenderer implements TableCellRenderer
-{
-	private final static Color VERY_LIGHT_GREY = new Color(245, 245, 245);
-	private final static Color VERY_LIGHT_BLUE = new Color(0, 0, 255, 30);
-    
+public class PartnerComboBoxRenderer implements TableCellRenderer
+{   
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
 	{
 		// turn "value", which should be an integer, into a name retrieved from the table model,
 		// and set the alternating gray/blue backgrounds.
 		
+		// System.out.println("PartnerComboBoxRenderer, value = " + value + ", row = " + row + ", column = " + column);
+		
 		JTextField jTextField = new JTextField();
 
 		if(isSelected)
-			jTextField.setBackground(VERY_LIGHT_BLUE);
+			jTextField.setBackground(Globals.VERY_LIGHT_BLUE);
 		else
 			if(row%2 == 0)
-				jTextField.setBackground(VERY_LIGHT_GREY);
+				jTextField.setBackground(Globals.VERY_LIGHT_GREY);
 			else
 				jTextField.setBackground(Color.white);
 		

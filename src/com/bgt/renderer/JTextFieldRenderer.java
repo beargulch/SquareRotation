@@ -28,37 +28,54 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
+import com.bgt.core.Dancer;
 import com.bgt.core.Globals;
+import com.bgt.model.DancersTableModel;
 
 public class JTextFieldRenderer implements TableCellRenderer, Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	private boolean centerText;
+	private boolean redHighLight;
 	
 	public JTextFieldRenderer()
 	{
 		super();
-		this.centerText = false;
+		this.centerText   = false;
+		this.redHighLight = true;
 	}
 	
-	public JTextFieldRenderer(boolean centerText)
+	public JTextFieldRenderer(boolean centerText, boolean redHighLight)
 	{
 		super();
-		this.centerText = centerText;
+		this.centerText	  = centerText;
+		this.redHighLight = redHighLight;
 	}
 	
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
+	public Component getTableCellRendererComponent(JTable jTable, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
 	{
 		// this method has 2 functions:  turn off the grid around the text field, which gets turned on
 		// by adding a grid to the enclosing jTable; and set the alternating gray/blue backgrounds.
-				
+		
 		JTextField jTextField = new JTextField();
 		jTextField.setBorder(new EmptyBorder(jTextField.getBorder().getBorderInsets(jTextField)));
 		
 		if(value == null) return jTextField;
 		
+		DancersTableModel dancersTmdl = (DancersTableModel)jTable.getModel();
+		Boolean dancing = true;
+		
+		if(!(Boolean)dancersTmdl.getValueAt(jTable.convertRowIndexToModel(row), Dancer.DANCER_AT_DANCE_IX) || 
+		   !(Boolean)dancersTmdl.getValueAt(jTable.convertRowIndexToModel(row), Dancer.DANCING_IX))
+		{
+			dancing = false;	
+		}
+		
+		if(!dancing && this.redHighLight) 
+			jTextField.setBackground(Globals.VERY_LIGHT_RED);
+		else
 		if(isSelected)
 			jTextField.setBackground(Globals.VERY_LIGHT_BLUE);
 		else

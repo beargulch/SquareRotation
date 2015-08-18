@@ -18,25 +18,26 @@
 
 package com.bgt.core;
 
-// the SquareGenerator class is very tightly coupled to the Tip class.
+// the SquareGenerator class is very tightly coupled to the CoupleGenerator 
+// class.
 //
-// the SquareGenerator class invokes methods in the Tip class to select
-// dancers and build couples.  see the Tip class for notes on how it builds
-// couples.  
+// the SquareGenerator class invokes methods in the CoupleGenerator class to 
+// select dancers and build couples.  see the CoupleGenerator class for notes
+// on how it builds couples.  
 //
-// the process of building couples in the Tip class populates the "couple" 
-// ArrayList.  each element of the couple ArrayList is another ArrayList with
-// 2 elements that represent the couple (2 dancer numbers that make up the
+// the process of building couples in the CoupleGenerator class populates the 
+// "couple" ArrayList.  each element of the couple ArrayList is another ArrayList 
+// with 2 elements that represent the couple (2 dancer numbers that make up the
 // the couple), plus a 3rd element that is a flag to indicate whether the 
 // couple has been selected yet to be in a square.
 //
 // SquareGenerator iterates through the couple array, which is a member of 
-// the Tip class, to build the couplesInSquare array, also in the Tip class.
-// in its first pass at building squares, SquareGenerator looks for couples
-// who have danced together the least number of times.  since couples are
-// not static (some couples are built from singles, so are "new" couples
-// each time squares are generated), SquareGenerator looks at the number of
-// times individual dancers within a couple have danced with the individuals
+// the CoupleGenerator class, to build the couplesInSquare array, also in the 
+// CoupleGenerator class.  in its first pass at building squares, SquareGenerator 
+// looks for couples who have danced together the least number of times.  since 
+// couples are not static (some couples are built from singles, so are "new" 
+// couples each time squares are generated), SquareGenerator looks at the number
+// of times individual dancers within a couple have danced with the individuals
 // that make up each other couple.
 //
 // the first pass at building couples has no look-ahead capability; it just
@@ -45,8 +46,8 @@ package com.bgt.core;
 // pass, it is possible that the dancers leftover for the last square have
 // danced with each other more than desired, and that it would be possible to
 // lower the overall danced-together count by moving some couples around.
-// this is called grooming, and after the squares are built for a tip, the
-// squares are groomed in an effort to make sure the arrangement of couples
+// this is called grooming, and after the squares are built for a CoupleGenerator,
+// the squares are groomed in an effort to make sure the arrangement of couples
 // in squares minimizes the number of times individual dancers have danced
 // together.  this process does not care about how many times the individuals
 // that make up a given couple have danced together; that issue is dealt
@@ -73,15 +74,15 @@ public class SquareGenerator
 
 	public boolean generateNextTip()
 	{	
-		CoupleGenerator tip = CoupleGenerator.getInstance();
+		CoupleGenerator cplGen = CoupleGenerator.getInstance();
 		
-		if(tip.makeCouples())
+		if(cplGen.makeCouples())
 		{
-			tip.incrementTip();
+			cplGen.incrementTip();
 			generateTip();
 			groomTip();
-			// for(short sx = 0; sx < tip.getNoOfSquares(); sx++) tip.computeDanceCounts(sx, true);
-			tip.adjustCounts((short)+1);
+			// for(short sx = 0; sx < cplGen.getNoOfSquares(); sx++) cplGen.computeDanceCounts(sx, true);
+			cplGen.adjustCounts((short)+1);
 			// printCountChart();
 			return true;
 		}
@@ -300,11 +301,7 @@ public class SquareGenerator
 		   	{	
 		 		// System.out.println("getSquareMaxCt for square " + square + ", examining position = " + psn1);
 		 		if(psn1 == position) continue;	// eliminate this couple?
-		 		
-		   		//short cp1 = Tip.getInstance().getCouplesInSquare().get(square).get(psn1);
-		   		//short d10 = Tip.getInstance().getCouple().get(cp1).get(0);
-		   		//short d11 = Tip.getInstance().getCouple().get(cp1).get(1);
-		 		
+
 		   		short cp1 = cplGen.getCouplesInSquare().getCoupleNo(square, psn1);
 		   		short d10 = cplGen.getCouples().getDancer0(cp1);
 		   		short d11 = cplGen.getCouples().getDancer1(cp1);
@@ -423,7 +420,7 @@ public class SquareGenerator
 	private void printCountChart()
 	{
 		CoupleGenerator cplGen = CoupleGenerator.getInstance();
-		Vector<Vector<Object>>dancerVector = Globals.getInstance().getDancersTableModel().getDataVector();
+		Vector<Vector<Object>>dancerVector = DancersJTable.getInstance().getDancerData();
   
 		printSquares((short)-1);
 		
