@@ -23,14 +23,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import com.bgt.core.Dancer;
-import com.bgt.frame.EditDancerFrame;
+import com.bgt.dialog.EditDancerDialog;
 
 public class ConnectDancersAction extends AbstractAction
 {
 	private static final long serialVersionUID = 1L;
-	private EditDancerFrame frame;
+	private EditDancerDialog frame;
 	
-	public ConnectDancersAction(EditDancerFrame frame)
+	public ConnectDancersAction(EditDancerDialog frame)
 	{
 		this.frame = frame;
 	}

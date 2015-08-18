@@ -26,16 +26,16 @@ import javax.swing.JOptionPane;
 
 import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
-import com.bgt.frame.EditDancerFrame;
+import com.bgt.dialog.EditDancerDialog;
 import com.bgt.jtable.DancersJTable;
 import com.bgt.model.DancersTableModel;
 
 public class DeleteDancerListener implements ActionListener 
 {	
-	private EditDancerFrame frame;
+	private EditDancerDialog frame;
 	private int dancer;
 	
-	public DeleteDancerListener(EditDancerFrame frame, int dancer)
+	public DeleteDancerListener(EditDancerDialog frame, int dancer)
 	{
 		this.frame  = frame;
 		this.dancer = dancer;

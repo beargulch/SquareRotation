@@ -16,10 +16,11 @@
  *  along with SquareRotation.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.bgt.frame;
+package com.bgt.dialog;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -33,13 +34,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
 import com.bgt.core.Dancer;
+import com.bgt.frame.MainFrame;
 import com.bgt.jtable.DancersJTable;
 import com.bgt.listener.DeleteDancerListener;
 import com.bgt.listener.SaveDancerListener;
@@ -47,7 +49,7 @@ import com.bgt.listener.SelectDancerListener;
 import com.bgt.model.DanceComboBoxModel;
 import com.bgt.model.DancersTableModel;
 
-public class EditDancerFrame extends JFrame
+public class EditDancerDialog extends JDialog
 {
 	private static final long     serialVersionUID = 1L;
 	
@@ -81,15 +83,17 @@ public class EditDancerFrame extends JFrame
 	private JComboBox<String>beauBelleBox2;
 	private JComboBox<String>partnerBox;
 	
-	public EditDancerFrame()
+	public EditDancerDialog()
 	{
+		super(MainFrame.getInstance(), "", Dialog.ModalityType.DOCUMENT_MODAL);
 		this.setDancer1RowIX(-1);
 		this.setDancer2RowIX(-1);
 		setUpPanel();
 	}
 	
-	public EditDancerFrame(int row) 
+	public EditDancerDialog(int row) 
 	{
+		super(MainFrame.getInstance(), "", Dialog.ModalityType.DOCUMENT_MODAL);
 		this.setDancer1RowIX(row);
 		
 		// note that in this constructor, the dancer in the row that is
@@ -446,7 +450,7 @@ public class EditDancerFrame extends JFrame
 	    	@Override 
 	    	public void actionPerformed(ActionEvent e) 
 	    	{			
-	    		EditDancerFrame.this.dispose();
+	    		EditDancerDialog.this.dispose();
 	    	}
 	    });
 

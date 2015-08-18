@@ -25,14 +25,14 @@ import java.util.Vector;
 import javax.swing.JComboBox;
 
 import com.bgt.core.Dancer;
-import com.bgt.frame.EditDancerFrame;
+import com.bgt.dialog.EditDancerDialog;
 import com.bgt.model.DanceComboBoxModel;
 
 public class SelectDancerListener implements ActionListener 
 {	
-	private EditDancerFrame frame;
+	private EditDancerDialog frame;
 	
-	public SelectDancerListener(EditDancerFrame frame)
+	public SelectDancerListener(EditDancerDialog frame)
 	{
 		this.frame = frame;
 	}

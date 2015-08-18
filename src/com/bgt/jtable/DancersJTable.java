@@ -34,10 +34,10 @@ import com.bgt.action.MustDanceAction;
 import com.bgt.action.PresentAction;
 import com.bgt.core.Dancer;
 import com.bgt.core.Globals;
+import com.bgt.dialog.EditDancerDialog;
 import com.bgt.editor.BeauBelleComboBoxEditor;
 import com.bgt.editor.ButtonColumnEditor;
 import com.bgt.editor.PartnerComboBoxEditor;
-import com.bgt.frame.EditDancerFrame;
 import com.bgt.model.DanceComboBoxModel;
 import com.bgt.model.DancersTableModel;
 import com.bgt.renderer.BeauBelleComboBoxRenderer;
@@ -215,7 +215,7 @@ public class DancersJTable extends JTable implements MouseListener
     		// System.out.println("mouseclick, clickCount = " + e.getClickCount());
     		if(target.getSelectedColumn() < 1)
     		{    			
-    			new EditDancerFrame(target.convertRowIndexToModel(target.getSelectedRow()));
+    			new EditDancerDialog(target.convertRowIndexToModel(target.getSelectedRow()));
     		}
         }
     }

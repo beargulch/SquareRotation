@@ -23,15 +23,15 @@ import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import com.bgt.core.Dancer;
-import com.bgt.frame.EditDancerFrame;
+import com.bgt.dialog.EditDancerDialog;
 import com.bgt.jtable.DancersJTable;
 import com.bgt.model.DancersTableModel;
 
 public class SaveDancerListener implements ActionListener 
 {	
-	private EditDancerFrame frame;
+	private EditDancerDialog frame;
 
-	public SaveDancerListener(EditDancerFrame frame)
+	public SaveDancerListener(EditDancerDialog frame)
 	{
 		this.frame = frame;
 	}

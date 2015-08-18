@@ -21,7 +21,7 @@ package com.bgt.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.bgt.frame.EditDancerFrame;
+import com.bgt.dialog.EditDancerDialog;
 import com.bgt.jtable.DancersJTable;
 
 public class EditDancerListener implements ActionListener 
@@ -41,6 +41,6 @@ public class EditDancerListener implements ActionListener
 		int row = -1;
 		if(this.edit && jTable.getSelectedRow() > -1) row = jTable.convertRowIndexToModel(jTable.getSelectedRow());
 		
-	    new EditDancerFrame(row);
+	    new EditDancerDialog(row);
 	}
 }

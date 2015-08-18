@@ -39,6 +39,7 @@ import javax.swing.JTextField;
 
 import com.bgt.core.CoupleGenerator;
 import com.bgt.core.Dancer;
+import com.bgt.dialog.OptionsDialog;
 import com.bgt.jtable.DancersJTable;
 import com.bgt.listener.DisplayTipListener;
 import com.bgt.listener.EditDancerListener;
@@ -151,7 +152,7 @@ public class MainFrame extends JFrame
 	    	@Override
 	    	public void actionPerformed(ActionEvent evt) 
 	    	{
-	    		new OptionsFrame();
+	    		new OptionsDialog();
 	    	}
 	    });
         toolsMenu.add(setOptions);

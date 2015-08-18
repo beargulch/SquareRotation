@@ -15,9 +15,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with SquareRotation.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.bgt.frame;
+package com.bgt.dialog;
 
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,13 +30,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.bgt.core.Globals;
+import com.bgt.frame.MainFrame;
 
-public class OptionsFrame extends JFrame
+public class OptionsDialog extends JDialog
 {
 	private static final long     serialVersionUID = 1L;
 	
@@ -47,8 +49,9 @@ public class OptionsFrame extends JFrame
 	private JComboBox<String>optionsBox = new JComboBox<String>(singleOptions);
 	private JCheckBox jLoadSerializedData;
 	
-	public OptionsFrame()
+	public OptionsDialog()
 	{
+		super(MainFrame.getInstance(), "", Dialog.ModalityType.DOCUMENT_MODAL);
 		setUpPanel();
 	}
 
@@ -137,7 +140,7 @@ public class OptionsFrame extends JFrame
     	return this.jLoadSerializedData;
     }
     
-    public OptionsFrame getFrame()
+    public OptionsDialog getFrame()
     {
     	return this;
     }
