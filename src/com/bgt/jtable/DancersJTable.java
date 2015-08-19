@@ -207,11 +207,9 @@ public class DancersJTable extends JTable implements MouseListener
 	
     public void mousePressed(MouseEvent e)
     {
-    	JTable target = (JTable)e.getSource();
-		System.out.println("mouseclick, clickCount = " + e.getClickCount() + ", getSelectedColumn() = " + getSelectedColumn());
     	if (e.getClickCount() == 2) 
     	{	
-    		//JTable target = (JTable)e.getSource();
+    		JTable target = (JTable)e.getSource();
     		// System.out.println("mouseclick, clickCount = " + e.getClickCount());
     		if(target.getSelectedColumn() < 1)
     		{    			

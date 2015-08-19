@@ -39,7 +39,7 @@ public class BeauBelleComboBoxRenderer implements TableCellRenderer, Serializabl
 		// turn "value", which should be an integer, into a name retrieved from the table model,
 		// and set the alternating gray/blue backgrounds.
 		
-		System.out.println("BeauBelleComboBoxRenderer, value = " + value + ", row = " + row + ", column = " + column);
+		// System.out.println("BeauBelleComboBoxRenderer, value = " + value + ", row = " + row + ", column = " + column);
 		
 		JTextField jTextField = new JTextField();
 

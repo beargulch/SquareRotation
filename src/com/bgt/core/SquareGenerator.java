@@ -66,7 +66,7 @@ public class SquareGenerator
 	{
 		if(instance == null)
 		{
-			System.out.println("instantiate SquareGenerator");
+			// System.out.println("instantiate SquareGenerator");
 			instance = new SquareGenerator();
 		}
 		return instance;
