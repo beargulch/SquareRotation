@@ -77,7 +77,7 @@ public class Globals
 	public static final String OUT            = "Out";
 	public static final String REQUESTED_OUT  = "Out*";
 	
-	public final static Color VERY_LIGHT_RED  = new Color(255,   0,   0,  30);	
+	public final static Color VERY_LIGHT_RED  = new Color(255,   0,   0,  60);	
 	public final static Color VERY_LIGHT_GREY = new Color(235, 235, 235     );
 	public final static Color VERY_LIGHT_BLUE = new Color(  0,   0, 255,  30);
 	public final static Color MEDIUM_BLUE     = new Color(  0,   0, 255,  36);
