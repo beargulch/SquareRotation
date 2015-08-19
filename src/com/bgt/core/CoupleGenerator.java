@@ -492,8 +492,8 @@ public class CoupleGenerator implements Serializable
 			for(int ax = 0; ax < dancerData.size(); ax++) partnerList.add(ax, 0);
 			
 			noOfCouples         = 0;
-			int couplesSplit    = 0;
-			int couplesIntact   = 0;
+			//int couplesSplit    = 0;
+			//int couplesIntact   = 0;
 			int unpairedBelles  = (singleBelle - (singleBeau +singleEither)) > 0 ? (singleBelle - (singleBeau +singleEither)) : 0;
 			int unpairedBeaux	= (singleBeau  - (singleBelle+singleEither)) > 0 ? (singleBeau  - (singleBelle+singleEither)) : 0;
 			
@@ -533,7 +533,7 @@ public class CoupleGenerator implements Serializable
 						     (Integer)dancerData.get((Integer)dancer.get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.EITHER_IX) )
 						{	
 							noOfCouples    += 2;	// splitting this couple to pair up with 2 singles makes 2 new couples	
-							couplesSplit   += 1;	// we split one couple
+							//couplesSplit   += 1;	// we split one couple
 							unpairedBeaux  -= 2;	// and we matched 2 single beaux
 							splitCouple     = true;
 							//System.out.println("A");
@@ -548,7 +548,7 @@ public class CoupleGenerator implements Serializable
 						     (Integer)dancerData.get((Integer)dancer.get(Dancer.PARTNER_IX)).get(Dancer.ROLE_IX) == Dancer.EITHER_IX) )
 						{	
 							noOfCouples    += 2;	// splitting this couple to pair up with 2 singles makes 2 new couples	
-							couplesSplit   += 1;	// we split one couple
+							//couplesSplit   += 1;	// we split one couple
 							unpairedBelles -= 2;	// and we matched 2 single belles
 							splitCouple     = true;
 							//System.out.println("B");
@@ -562,7 +562,7 @@ public class CoupleGenerator implements Serializable
 					// the wrong role to make a difference, or the remaining singles have already been matched to dancers in
 					// another couple.  if that's the case, we just count this couple as a couple.
 					noOfCouples   += 1;
-					couplesIntact += 1;
+					//couplesIntact += 1;
 					//System.out.println("D");
 				}
 			}

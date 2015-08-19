@@ -24,7 +24,7 @@
   
   - Dancing
 
-    This check box is used to indicate whether a dancer is currently present and available to dance.  The value of “Dancgin” can be changed here, or can also be changed on the main dancer screen.
+    This check box is used to indicate whether a dancer is currently present and available to dance.  The value of “Dancing” can be changed here, or can also be changed on the main dancer screen.  When a dancers sits out because this check box has been checked, it will be counted as an 'out' for the purposes of determining who is selected to dance in the next tip.  Contrast this behavior with the 'At the Dance' check box.
 
   - Dancer 1 Outs
 
@@ -32,7 +32,7 @@
 
   - At the Dance
 
-    There may be times when a dancer has been entered, but is not currently at the dance.  Use this field to indicate if a dancer is not actually present, and is therefore not part of the dance rotation.
+    There may be times when a dancer has been entered, but is not currently at the dance.  Use this field to indicate if a dancer is not actually present, and is therefore not part of the dance rotation.  When a dancers sits out because this check box has been checked, it will NOT be counted as an 'out' for the purposes of determining who is selected to dance in the next tip.  Contrast this behavior with the 'Dancing' check box.
 
   - Must Dance
 
@@ -40,7 +40,7 @@
 
   - Willing to fill in as single if couple is out
 
-    This check box applies to dancers who are coupled with another dancer.  It should be checked if the couple is willing to be split apart and paired with a single if the couple would otherwise not be selected to dance in a tip.  Note that the setting is per dancer, so one dancer in a couple can indicate a willingness to dance with singles, while the other dancer in the couple can choose to remain sitting out if their couple is not selected to dance in a tip.
+    This check box applies to dancers who are coupled with another dancer.  It should be checked if the couple is willing to be split apart and paired with a single if the couple would otherwise not be selected to dance in a tip.  Note that the setting is per dancer, so one dancer in a couple can indicate a willingness to dance with singles, while the other dancer in the couple can choose to remain sitting out if their couple is not selected to dance in a tip.  Also note that this setting will be respected even when the option is set to 'take apart' couples to dance with singles -- that is, anyone who is coupled and who does not have the Willing Single check box checked will never be paired with a single.
 
   - Preferred position as single
 
@@ -132,7 +132,7 @@
 
   - Beau/Belle
 
-    Indicates whether a dancer dances only Beau, only Belle, or Either.  Used during tip generation to pair singles.
+    Indicates whether a dancer dances only Beau, only Belle, or Either.  Used during tip generation to pair singles.  Double-click on this field to change the setting.
 
   - Partner
 
@@ -148,7 +148,7 @@
 
   - Dancing
 
-    If a dancer leaves the floor or wishes to sit out during a tip, click on the Dancing button to change the dancer’s status to Out.  If the dancer has a partner, the partner will also be marked Out.  Dancers marked Out will be excluded from the tip generation process.  Whether or not a voluntary Out counts when determining who should dance in the next tip is optional; see section 5, Tip Generation Options.
+    If a dancer leaves the floor or wishes to sit out during a tip, click on the Dancing button to change the dancer’s status to Out.  If the dancer has a partner, the partner will also be marked Out.  Dancers marked Out will be excluded from the tip generation process.  Voluntary outs will be counted when determining who should dance in the next tip.
 
     If a dancer is coupled with another dancer, and one dancer wants to keep dancing while the other dancer wants to sit out, the dancers must be un-coupled before their Present/Absent status can be individually adjusted.
 
@@ -162,7 +162,7 @@
 
   - Dancer Outs
 
-    Dancer Outs are calculated by the computer, and track how many times a person has not been selected to dance in a tip.  The count does not increment for people marked Absent during the tip generation process.
+    Dancer Outs are calculated by the computer, and track how many times a person has not been selected to dance in a tip.  The count does not increment for dancers who are marked No in the 'At the Dance' column, but the count *does* increment for dancers who are marked Out in the 'Dancing' column.
 
   - At the Dance
 
@@ -196,12 +196,8 @@
 
     If this choice is selected, tip generation is based strictly on the number of outs, meaning dancers with the highest number of outs are selected first when building the squares for a tip.  Note that this option only works if there are couples who indicate that they are willing to be "taken apart" to dance single if necessary to keep the single(s) from being out more than other dancers.  If most of the couples are unwilling to be split up, then this option could easily be perceived as unfair by the few couples who are willing to accommodate singles, since they could spend most of their time dancing with someone other than their preferred partner, and some dancers might dance less than dancers in couples who are unwilling to be split apart.
   
-  The 2 check boxes are:
-  
-  - Voluntary out counts as involuntary out.
+  The check box is:
 
-    As the program generates each tip, it keeps track of how many times a dancer has not been selected to dance, which is counted as an "out."  When a new tip is generated, dancers with the highest out counts are selected first to make sure all dancers are given equal dance time.  If a dancer asks to be taken out of the rotation for a given tip, this option determines whether that out is counted for the purpose of dancer selection for subsequent tips.  If the check box is checked, voluntary outs are treated the same as involuntary outs, meaning they are counted when choosing dancers for subsequent tips (this is the default setting).  If the box is unchecked, voluntary outs will not be counted when choosing dancers.
- 
   - Load serialized data (mostly for debugging)
 
     When the current dance configuration is saved, two files are created:  one with the suffix ".dnc", and one with the suffix ".ser".  The ".dnc" file is the one that is used to capture dancer information for use at another time.  The ".ser" file contains internal program data that is useful for debugging purposes if something goes wrong.  If you discover a bug and wish to report it, it would be a good idea to save the current configuration, then send both the ".dnc" and the ".ser" file to me in an e-mail, along with a description of the bug.  The ".ser" file is useful to help recreate and understand the program behavior that triggered the bug report.  Bug reports should be sent to fred@beargulch.com.
