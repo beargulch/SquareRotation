@@ -107,7 +107,7 @@ public class SaveDancerListener implements ActionListener
 		{	
 			String name = this.frame.getDancer2().getText();
 			if(this.frame.isDancer2TextBox())	// if dancer 2 entered in text box, make sure the name
-			{								// is not used elsewhere
+			{									// is not used elsewhere
 				for(int rowCt = 0; rowCt < dancerData.size(); rowCt++)
 				{
 					if(rowCt == this.frame.getDancer2RowIX()) continue;
