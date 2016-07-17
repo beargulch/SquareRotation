@@ -48,14 +48,17 @@ public class SelectDancerListener implements ActionListener
 		// of the item in the dancer table model.
 		int partnerIx = (Integer)((DanceComboBoxModel)partnerBox.getModel()).getComboMap().get(partnerBox.getSelectedIndex());
 		
-		System.out.println("comboBox index " + partnerBox.getSelectedIndex() + " translates to dancer model index " + partnerIx);
-		
+		//System.out.println("comboBox index " + partnerBox.getSelectedIndex() + " translates to dancer model index " + partnerIx);
 		
 		this.frame.setDancer2RowIX(partnerIx);
 		Vector<Object>dancer2Row = frame.getDancer2Row();
 		
 		if(dancer2Row != null)
 		{
+			//System.out.println("connecting dancers, dancer2 ix " + partnerIx + ", dancer1 ix " +  this.frame.getDancer1RowIX());
+			frame.getDancer1Row().set(Dancer.PARTNER_IX, partnerIx);
+			frame.getDancer2Row().set(Dancer.PARTNER_IX, this.frame.getDancer1RowIX());
+			
 			if((Boolean)dancer2Row.get(Dancer.DANCING_IX)) 
 				frame.getJPresent2().setSelected(true);       
 			else 
@@ -74,14 +77,19 @@ public class SelectDancerListener implements ActionListener
 				frame.getJWillingSingle2().setSelected(false);
 			if((Integer)dancer2Row.get(Dancer.ROLE_IX) > -1) 
 				frame.getBeauBelleBox2().setSelectedIndex((Integer)dancer2Row.get(Dancer.ROLE_IX));
+			frame.getOuts2().setText(((Integer)dancer2Row.get(Dancer.DANCER_OUTS_IX)).toString());
+			frame.getJPartners().setSelected(true);
 		}
 		else
 		{
+			//System.out.println("NOT connecting dancers");
 			frame.getJPresent2().setSelected(false);
 			frame.getJAtDance2().setSelected(false);
 			frame.getJMustDance2().setSelected(false);
 			frame.getJWillingSingle2().setSelected(false);
 			frame.getBeauBelleBox2().setSelectedIndex(0);
+			frame.getOuts2().setText("");
+			frame.getJPartners().setSelected(false);
 		}
 	}
 }
