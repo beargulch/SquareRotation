@@ -48,22 +48,8 @@ public class SaveDancerListener implements ActionListener
 		if(this.frame.getDancer1RowIX() > -1)	// editing existing dancer 1
 		{
 			String name = this.frame.getDancer1().getText();
-			for(int rowCt = 0; rowCt < dancerData.size(); rowCt++)
-			{
-				if(rowCt == this.frame.getDancer1RowIX()) continue;
-				if(name.equals((String)dancerData.get(rowCt).get(Dancer.NAME_IX)))
-				{
-					err1 = true;
-					break;
-				}
-			}
-			if(err1)
-			{
-				this.frame.dancer1Error();
-				this.frame.validate();
-				this.frame.repaint();
-			}
-			else
+			err1 = checkForDuplicateName(this.frame.getDancer1RowIX(), name, dancerData);
+			if(!err1)
 			{
 				tblModel.setValueAt(this.frame.getDancer1().getText(), 				  this.frame.getDancer1RowIX(), Dancer.NAME_IX);
 				tblModel.setValueAt(this.frame.getOuts1Value(), 				  	  this.frame.getDancer1RowIX(), Dancer.DANCER_OUTS_IX);
@@ -79,19 +65,24 @@ public class SaveDancerListener implements ActionListener
 			String name = this.frame.getDancer1().getText();
 			if(name != null && !name.equals(""))
 			{
-				Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
-				v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer1().getText());
-				v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox1().getSelectedIndex()));
-				v.add(Dancer.PARTNER_IX, 			new Integer(-1));
-				v.add(Dancer.DANCING_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
-				v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance1().isSelected()));
-				v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
-				v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
-				v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
-				v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
-				v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-				tblModel.addRow(v);
-				this.frame.setDancer1RowIX(tblModel.getLastRow());
+				err1 = checkForDuplicateName(this.frame.getDancer1RowIX(), name, dancerData);
+				if(!err1)
+				{
+					Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
+					v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer1().getText());
+					v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox1().getSelectedIndex()));
+					v.add(Dancer.PARTNER_IX, 			new Integer(-1));
+					v.add(Dancer.DANCING_IX, 			new Boolean(this.frame.getJPresent1().isSelected()));
+					v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance1().isSelected()));
+					v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle1().isSelected()));
+					v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
+					v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance1().isSelected()));
+					v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
+					v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
+					this.frame.getOuts1().setText("0");
+					tblModel.addRow(v);
+					this.frame.setDancer1RowIX(tblModel.getLastRow());
+				}
 			}
 		}
 
@@ -101,6 +92,7 @@ public class SaveDancerListener implements ActionListener
 		// if there is, i don't see it, since they each reference specific elements (e.g., 
 		// getDancer1() vs getDancer2(), or getJPresent1() vs getJPresent2()).
 		
+		dancerData   = tblModel.getDataVector();
 		boolean err2 = false;
 		
 		if(this.frame.getDancer2RowIX() > -1)	// editing existing dancer 2
@@ -108,15 +100,7 @@ public class SaveDancerListener implements ActionListener
 			String name = this.frame.getDancer2().getText();
 			if(this.frame.isDancer2TextBox())	// if dancer 2 entered in text box, make sure the name
 			{									// is not used elsewhere
-				for(int rowCt = 0; rowCt < dancerData.size(); rowCt++)
-				{
-					if(rowCt == this.frame.getDancer2RowIX()) continue;
-					if(name.equals((String)dancerData.get(rowCt).get(Dancer.NAME_IX)))
-					{
-						err2 = true;
-						break;
-					}
-				}
+				err2 = checkForDuplicateName(this.frame.getDancer2RowIX(), name, dancerData);
 			}
 			if(!err2)
 			{
@@ -134,30 +118,58 @@ public class SaveDancerListener implements ActionListener
 		}
 		else	// adding new dancer 2
 		{
-			String name = this.frame.getDancer2().getText();
+			String name = this.frame.getDancer2().getText();		
 			if(name != null && !name.equals(""))
 			{
-				Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
-				v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer2().getText());
-				v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox2().getSelectedIndex()));
-				v.add(Dancer.PARTNER_IX, 			new Integer(-1));
-				v.add(Dancer.DANCING_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
-				v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
-				v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
-				v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
-				v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
-				v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
-				v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
-				tblModel.addRow(v);
-				this.frame.setDancer2RowIX(tblModel.getLastRow());
+				err2 = checkForDuplicateName(this.frame.getDancer2RowIX(), name, dancerData);
+				if(!err2)
+				{
+					Vector<Object>v = new Vector<Object>(Dancer.getColumnCount());
+					v.add(Dancer.NAME_IX, 				(String)this.frame.getDancer2().getText());
+					v.add(Dancer.ROLE_IX, 				new Integer(this.frame.getBeauBelleBox2().getSelectedIndex()));
+					v.add(Dancer.PARTNER_IX, 			new Integer(-1));
+					v.add(Dancer.DANCING_IX, 			new Boolean(this.frame.getJPresent2().isSelected()));
+					v.add(Dancer.MUST_DANCE_IX, 		new Boolean(this.frame.getJMustDance2().isSelected()));
+					v.add(Dancer.WILLING_SINGLE_IX,		new Boolean(this.frame.getJWillingSingle2().isSelected()));
+					v.add(Dancer.DANCER_OUTS_IX,		new Integer(0));
+					v.add(Dancer.DANCER_AT_DANCE_IX, 	new Boolean(this.frame.getJAtDance2().isSelected()));
+					v.add(Dancer.DANCER_DANCED_IX,		new Boolean(false));
+					v.add(Dancer.DANCER_SELECTED_IX,	new Boolean(false));
+					this.frame.getOuts2().setText("0");
+					tblModel.addRow(v);
+					this.frame.setDancer2RowIX(tblModel.getLastRow());
+				}
 			}
 		}
 		
-		if(!err1 && !err2)
+		if(err1) this.frame.dancer1Error();
+		if(err2) this.frame.dancer2Error();
+		if(err1 || err2)
+		{
+			this.frame.validate();
+			this.frame.repaint();
+		}
+		else
 		{
 			connectDancers();
 			frame.dispose();
 		}
+	}
+	
+	private boolean checkForDuplicateName(int nameIx, String name, Vector<Vector<Object>>dancerData)
+	{
+		boolean err = false;
+		
+		for(int rowCt = 0; rowCt < dancerData.size(); rowCt++)
+		{
+			if(rowCt == nameIx) continue;
+			if(name.equals((String)dancerData.get(rowCt).get(Dancer.NAME_IX)))
+			{
+				err = true;
+				break;
+			}
+		}
+		return err;
 	}
 	
 	private void connectDancers()
