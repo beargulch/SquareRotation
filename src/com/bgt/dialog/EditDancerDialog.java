@@ -458,7 +458,7 @@ public class EditDancerDialog extends JDialog
 		
 	    // add content to the window.
 	    this.add(mainPanel);
-	    this.setPreferredSize(new Dimension(430,500));   
+	    this.setPreferredSize(new Dimension(480,500));
 	    
 	    // display the window
 	    this.pack();
